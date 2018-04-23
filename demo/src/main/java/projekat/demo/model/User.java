@@ -1,17 +1,39 @@
 package projekat.demo.model;
 
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+
 import projekat.demo.validator.EmailAnnotation;
 import projekat.demo.validator.PasswordAnnotation;
 
-public class User {
+@Entity
+public class User  implements Serializable{
+	
+	@Column(nullable=false)
 	private String name;
+	
+	@Column(nullable=false)
 	private String surname;
+	
+	@Column(nullable=false)
+	@Id
 	@EmailAnnotation
 	private String email;
 	@PasswordAnnotation
+	@Column(nullable=false)
 	private String password;
 	private Address address;
+	
+	@Column(nullable=false)
 	private String phone;
+	
+	@Column(nullable=false)
+	@Enumerated(EnumType.ORDINAL)
 	private RoleType type;
 
 	public User() {

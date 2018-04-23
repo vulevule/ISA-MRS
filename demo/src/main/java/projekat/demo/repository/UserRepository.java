@@ -1,12 +1,14 @@
 package projekat.demo.repository;
 
 
+import org.springframework.data.repository.Repository;
+
 import projekat.demo.model.User;
 
 
-public interface UserRepository {
+public interface UserRepository extends Repository<User, String>{
 
-	boolean createUser(User u);
+	User save(User u);
 	
-	User login(String username, String password);
+	User findAllByEmailAndPassword(String username, String password);
 }
