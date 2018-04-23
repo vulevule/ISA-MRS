@@ -2,6 +2,8 @@
 <html>
 <head>
 <title>Theaterize</title>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
 <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
@@ -62,61 +64,19 @@
 			<div class="carousel-inner">
 				<div class="active item">
 				
+					<c:forEach items="${places}" var="place">
+						<div class="movie">
+					  <div class="movie-image"> <span class="play"><span class="name">{$place.name}</span></span> <a href="#"><img src="css/images/croped.jpg" alt="" /></a> </div>
+					  <div class="rating">
+						<p>RATING</p>
+						<div class="stars">
+						  <div class="stars-in"> </div>
+						</div>
+						<span class="comments">12</span> </div>
+					</div>
+					</c:forEach>
 				
-					<div class="movie">
-					  <div class="movie-image"> <span class="play"><span class="name">CINEMA1</span></span> <a href="#"><img src="css/images/croped.jpg" alt="" /></a> </div>
-					  <div class="rating">
-						<p>RATING</p>
-						<div class="stars">
-						  <div class="stars-in"> </div>
-						</div>
-						<span class="comments">12</span> </div>
-					</div>
-					<div class="movie">
-					  <div class="movie-image"> <span class="play"><span class="name">CINEMA2</span></span> <a href="#"><img src="css/images/croped2.jpg" alt="" /></a> </div>
-					  <div class="rating">
-						<p>RATING</p>
-						<div class="stars">
-						  <div class="stars-in"> </div>
-						</div>
-						<span class="comments">12</span> </div>
-					</div>
-					<div class="movie">
-					  <div class="movie-image"> <span class="play"><span class="name">CINEMA3</span></span> <a href="#"><img src="css/images/croped1.jpg" alt="" /></a> </div>
-					  <div class="rating">
-						<p>RATING</p>
-						<div class="stars">
-						  <div class="stars-in"> </div>
-						</div>
-						<span class="comments">12</span> </div>
-					</div>
-					<div class="movie">
-					  <div class="movie-image"> <span class="play"><span class="name">CINEMA4</span></span> <a href="#"><img src="css/images/croped3.jpg" alt="" /></a> </div>
-					  <div class="rating">
-						<p>RATING</p>
-						<div class="stars">
-						  <div class="stars-in"> </div>
-						</div>
-						<span class="comments">12</span> </div>
-					</div>
-					<div class="movie">
-					  <div class="movie-image"> <span class="play"><span class="name">CINEMA5</span></span> <a href="#"><img src="css/images/croped4.jpg" alt="" /></a> </div>
-					  <div class="rating">
-						<p>RATING</p>
-						<div class="stars">
-						  <div class="stars-in"> </div>
-						</div>
-						<span class="comments">12</span> </div>
-					</div>
-					<div class="movie last">
-					  <div class="movie-image"> <span class="play"><span class="name">CINEMA6</span></span> <a href="#"><img src="css/images/croped5.jpg" alt="" /></a> </div>
-					  <div class="rating">
-						<p>RATING</p>
-						<div class="stars">
-						  <div class="stars-in"> </div>
-						</div>
-						<span class="comments">12</span> </div>
-					</div>
+					
 					
 					
 				</div>	
