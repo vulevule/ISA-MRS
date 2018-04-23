@@ -22,7 +22,9 @@ public class UserServiceImpl implements UserService {
 			v.setActivate(false);
 			create = userService.createUser(v);
 		}
-		//create = userService.createUser(u);
+		else {
+			create = userService.createUser(u);
+		}
 		if(create){
 			return true;
 		}

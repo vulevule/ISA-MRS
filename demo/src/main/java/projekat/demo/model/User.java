@@ -1,9 +1,14 @@
 package projekat.demo.model;
 
+import projekat.demo.validator.EmailAnnotation;
+import projekat.demo.validator.PasswordAnnotation;
+
 public class User {
 	private String name;
 	private String surname;
+	@EmailAnnotation
 	private String email;
+	@PasswordAnnotation
 	private String password;
 	private Address address;
 	private String phone;
