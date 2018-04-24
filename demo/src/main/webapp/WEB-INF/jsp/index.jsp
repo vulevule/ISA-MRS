@@ -53,7 +53,7 @@
 		<div id="wrapper" class="container">
 			<section class="navbar main-menu">
 				<div class="navbar-inner main-menu">				
-					<a href="index.html" class="logo pull-left"><img src="<c:url value="/resouces/themes/images/logo.png"/>" class="site_logo" alt=""></a>
+					<a href="index.html" class="logo pull-left"><img src="<c:url value="resources/themes/images/logo.png"/>" class="site_logo" alt=""></a>
 					<nav id="menu" class="pull-right">
 						<ul>
 							<li><a href="./products.html">Thematic Props</a>					
@@ -94,7 +94,7 @@
 												<li class="span3">
 													<div class="product-box">
 														<span class="sale_tag"></span>
-														<p><a href="product_detail.html"><img src="themes/images/cinemas/croped.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="resources/themes/images/cinemas/croped.jpg" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Cinema1</a><br/>
 														<a href="products.html" class="category">Novi Sad</a>
 													</div>
@@ -102,21 +102,21 @@
 												<li class="span3">
 													<div class="product-box">
 														<span class="sale_tag"></span>
-														<p><a href="product_detail.html"><img src="themes/images/cinemas/croped1.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="resources/themes/images/cinemas/croped1.jpg" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Cinema2</a><br/>
 														<a href="products.html" class="category">Subotica</a>
 													</div>
 												</li>
 												<li class="span3">
 													<div class="product-box">
-														<p><a href="product_detail.html"><img src="themes/images/cinemas/croped2.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="resources/themes/images/cinemas/croped2.jpg" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Cinema3</a><br/>
 														<a href="products.html" class="category">Beograd</a>
 													</div>
 												</li>
 												<li class="span3">
 													<div class="product-box">
-														<p><a href="product_detail.html"><img src="themes/images/cinemas/croped3.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="resources/themes/images/cinemas/croped3.jpg" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Cinema4</a><br/>
 														<a href="products.html" class="category">Las Vegas</a>
 													</div>
@@ -127,28 +127,28 @@
 											<ul class="thumbnails">
 												<li class="span3">
 													<div class="product-box">
-														<p><a href="product_detail.html"><img src="themes/images/cinemas/croped4.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="resources/themes/images/cinemas/croped4.jpg" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Cinema5</a><br/>
 														<a href="products.html" class="category">London</a>
 													</div>
 												</li>
 												<li class="span3">
 													<div class="product-box">
-														<p><a href="product_detail.html"><img src="themes/images/cinemas/croped5.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="resources/themes/images/cinemas/croped5.jpg" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Cinema6</a><br/>
 														<a href="products.html" class="category">New York</a>
 													</div>
 												</li>
 												<li class="span3">
 													<div class="product-box">
-														<p><a href="product_detail.html"><img src="themes/images/cinemas/croped.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="resources/themes/images/cinemas/croped.jpg" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Cinema7</a><br/>
 														<a href="products.html" class="category">Paris</a>
 													</div>
 												</li>
 												<li class="span3">
 													<div class="product-box">
-														<p><a href="product_detail.html"><img src="themes/images/cinemas/croped2.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="resources/themes/images/cinemas/croped2.jpg" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Cinema8</a><br/>
 														<a href="products.html" class="category">Dubai</a>
 													</div>
@@ -166,7 +166,7 @@
 							<div class="span4">
 								<div class="service">
 									<div class="responsive">	
-										<img src="themes/images/feature_img_2.png" alt="" />
+										<img src="resources/themes/images/feature_img_2.png" alt="" />
 										<h4>MODERN <strong>DESIGN</strong></h4>
 										<p>Lorem Ipsum is simply dummy text of the printing and printing industry unknown printer.</p>									
 									</div>
@@ -175,7 +175,7 @@
 							<div class="span4">	
 								<div class="service">
 									<div class="customize">			
-										<img src="themes/images/feature_img_1.png" alt="" />
+										<img src="resources/themes/images/feature_img_1.png" alt="" />
 										<h4>FREE <strong>SHIPPING</strong></h4>
 										<p>Lorem Ipsum is simply dummy text of the printing and printing industry unknown printer.</p>
 									</div>
@@ -184,7 +184,7 @@
 							<div class="span4">
 								<div class="service">
 									<div class="support">	
-										<img src="themes/images/feature_img_3.png" alt="" />
+										<img src="resources/themes/images/feature_img_3.png" alt="" />
 										<h4>24/7 LIVE <strong>SUPPORT</strong></h4>
 										<p>Lorem Ipsum is simply dummy text of the printing and printing industry unknown printer.</p>
 									</div>
@@ -217,7 +217,7 @@
 						</ul>
 					</div>
 					<div class="span5">
-						<p class="logo"><img src="themes/images/logo.png" class="site_logo" alt=""></p>
+						<p class="logo"><img src="resources/themes/images/logo.png" class="site_logo" alt=""></p>
 						<p>Theateriza is a site for viewing and reserving tickets in cinemas and theaters.</p>
 						<br/>
 						<span class="social_icons">
@@ -233,8 +233,8 @@
 				<span>Copyright 2018 All right reserved.</span>
 			</section>
 		</div>
-		<script src="themes/js/common.js"></script>
-		<script src="themes/js/jquery.flexslider-min.js"></script>
+		<script src="resources/themes/js/common.js"></script>
+		<script src="resources/themes/js/jquery.flexslider-min.js"></script>
 		<script type="text/javascript">
 			$(function() {
 				$(document).ready(function() {
