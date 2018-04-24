@@ -1,17 +1,29 @@
 package projekat.demo.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Address {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+	
+	@Column
 	private String street;
-	private String number;
+	@Column
 	private String city;
+	@Column
 	private String country;
 	
 	public Address(){}
 	
-	public Address(String street, String number, String city, String country) {
+	public Address(String street, String city, String country) {
 		this();
 		this.street = street;
-		this.number = number;
 		this.city = city;
 		this.country = country;
 	}
@@ -20,12 +32,6 @@ public class Address {
 	}
 	public void setStreet(String street) {
 		this.street = street;
-	}
-	public String getNumber() {
-		return number;
-	}
-	public void setNumber(String number) {
-		this.number = number;
 	}
 	public String getCity() {
 		return city;

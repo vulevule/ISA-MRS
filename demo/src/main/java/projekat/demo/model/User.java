@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import projekat.demo.validator.EmailAnnotation;
 import projekat.demo.validator.PasswordAnnotation;
@@ -24,9 +25,12 @@ public class User  implements Serializable{
 	@Id
 	@EmailAnnotation
 	private String email;
+	
 	@PasswordAnnotation
 	@Column(nullable=false)
 	private String password;
+	
+	@ManyToOne(optional = false)
 	private Address address;
 	
 	@Column(nullable=false)

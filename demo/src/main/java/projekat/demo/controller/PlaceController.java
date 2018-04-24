@@ -28,11 +28,11 @@ public class PlaceController {
 	public ModelAndView getPlaces(){
 		logger.info("> getPlaces");
 		
-		ArrayList<Place> places = placeService.findAll();
+		//ArrayList<Place> places = placeService.findAll();
 		
 		logger.info("< getPlaces");
 		
-		return new ModelAndView("index", "places", places);
+		return new ModelAndView("index");
 	}
 	
 }
