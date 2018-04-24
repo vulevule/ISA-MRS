@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.persistence.Column;
 
+
 public class Visitor extends User {
 	private ArrayList<Visitor> friends;
 	
