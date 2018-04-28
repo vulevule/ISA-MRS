@@ -1,7 +1,7 @@
-package projekat.demo.model;
+	package projekat.demo.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +9,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Projection implements Serializable{
@@ -27,10 +28,10 @@ public class Projection implements Serializable{
 	
 	@Column(nullable=false)
 	@ManyToMany
-	private ArrayList<Place> placesOfProjection;
+	private Set<Place> placesOfProjection;
 	
 	@Column(nullable=false)
-	private ArrayList<String> actors;
+	private String cast;
 	
 	@Column(nullable=false)
 	private String genre;
@@ -50,16 +51,30 @@ public class Projection implements Serializable{
 	@Column(nullable=false)
 	private String description;
 	
-	@Column(nullable=false)
-	private ArrayList<String> rooms;
-	
-	@Column(nullable=false)
-	private ArrayList<String> termsOfProjection;
-	
-	@Column(nullable=false)
-	private double price;
+	@OneToMany(mappedBy="projection")
+	private Set<Term> term;
 	
 	public Projection() {}
+	
+	
+
+	public Projection(String name, ProjectionType type, Set<Place> placesOfProjection, String cast, String genre,
+			String director, int duration, String banner, double averageRating, String description, Set<Term> term) {
+		this();
+		this.name = name;
+		this.type = type;
+		this.placesOfProjection = placesOfProjection;
+		this.cast = cast;
+		this.genre = genre;
+		this.director = director;
+		this.duration = duration;
+		this.banner = banner;
+		this.averageRating = averageRating;
+		this.description = description;
+		this.term = term;
+	}
+
+
 
 	public String getName() {
 		return name;
@@ -77,12 +92,21 @@ public class Projection implements Serializable{
 		this.type = type;
 	}
 
-	public ArrayList<String> getActors() {
-		return actors;
+
+	public String getCast() {
+		return cast;
 	}
 
-	public void setActors(ArrayList<String> actors) {
-		this.actors = actors;
+	public void setCast(String cast) {
+		this.cast = cast;
+	}
+
+	public Set<Term> getTerm() {
+		return term;
+	}
+
+	public void setTerm(Set<Term> term) {
+		this.term = term;
 	}
 
 	public String getGenre() {
@@ -133,56 +157,16 @@ public class Projection implements Serializable{
 		this.description = description;
 	}
 
-	public ArrayList<String> getRooms() {
-		return rooms;
-	}
 
-	public void setRooms(ArrayList<String> rooms) {
-		this.rooms = rooms;
-	}
 
-	public ArrayList<String> getTermsOfProjection() {
-		return termsOfProjection;
-	}
-
-	public void setTermsOfProjection(ArrayList<String> termsOfProjection) {
-		this.termsOfProjection = termsOfProjection;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
-	public ArrayList<Place> getPlacesOfProjection() {
+	public Set<Place> getPlacesOfProjection() {
 		return placesOfProjection;
 	}
 
-	public void setPlacesOfProjection(ArrayList<Place> placesOfProjection) {
+	public void setPlacesOfProjection(Set<Place> placesOfProjection) {
 		this.placesOfProjection = placesOfProjection;
 	}
 
-	public Projection(String name, ProjectionType type, ArrayList<Place> placesOfProjection, ArrayList<String> actors,
-			String genre, String director, int duration, String banner, double averageRating, String description,
-			ArrayList<String> rooms, ArrayList<String> termsOfProjection, double price) {
-		super();
-		this.name = name;
-		this.type = type;
-		this.placesOfProjection = placesOfProjection;
-		this.actors = actors;
-		this.genre = genre;
-		this.director = director;
-		this.duration = duration;
-		this.banner = banner;
-		this.averageRating = averageRating;
-		this.description = description;
-		this.rooms = rooms;
-		this.termsOfProjection = termsOfProjection;
-		this.price = price;
-	}
 
 	
 	

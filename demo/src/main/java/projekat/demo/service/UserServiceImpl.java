@@ -35,10 +35,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User login(String username, String password) {
 		// TODO Auto-generated method stub
-		User loginUser = userRepository.findAllByEmailAndPassword(username, password);
-		if (loginUser != null){
+	//	User loginUser = userRepository.findLoginUser(username, password);
+	/*	if (loginUser != null){
 			return loginUser;
-		}
+		}*/
 		return null;
 	}
 

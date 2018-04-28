@@ -3,8 +3,13 @@ package projekat.demo.model;
 import java.util.ArrayList;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
+import net.bytebuddy.dynamic.loading.ClassReloadingStrategy.Strategy;
 
+@Entity
 public class Visitor extends User {
 	private ArrayList<Visitor> friends;
 	

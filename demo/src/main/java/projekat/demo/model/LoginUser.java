@@ -1,6 +1,8 @@
 package projekat.demo.model;
 
-public class LoginUser {
+import java.io.Serializable;
+
+public class LoginUser implements Serializable {
 	private String username;
 	private String password;
 

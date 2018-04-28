@@ -7,14 +7,19 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 
 import projekat.demo.validator.EmailAnnotation;
 import projekat.demo.validator.PasswordAnnotation;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class User  implements Serializable{
 	
+	private static final long serialVersionUID = -2230328594830389946L;
+
 	@Column(nullable=false)
 	private String name;
 	
