@@ -9,6 +9,7 @@ body{
 	background:url(../images/bg.gif) repeat 0 0 fixed;
 }
 label, input, button, select, textarea{
+	color:#ce3c5a;
 	font-size: 12px;
 }
 ul li a,a{
@@ -21,10 +22,10 @@ ul li a,a{
     transition: all 0.2s linear;
 }
 a{
-	color:#fd0404;
+	color:#ce3c5a;
 }
 a:hover{
-	color:#fd0404;
+	color:#ce3c5a;
 	text-decoration:none;
 }
 .img-al{
@@ -163,7 +164,6 @@ iframe{
 	display: inline-block;
 	*display: inline;
 	zoom: 1;
-	border-right: 1px solid #eee;
 	padding: 5px 12px;
 }
 #top-bar .user-menu li:last-child{
@@ -301,7 +301,7 @@ section#copyright{
 }
 #menu > ul > li > a {
 	font-size: 11px;
-	color: #111;
+	color: #ce3c5a;
 	display: block;
 	text-transform: uppercase;
 	font-weight: bold;
@@ -366,7 +366,7 @@ section#copyright{
     top: 0px;
 }
 #menu li.sfHover > a{
-	color:#eb4800;
+	color:#ff1f4c;
 }
 #menu .sf-sub-indicator{
 	display:none;
@@ -478,19 +478,21 @@ h4.title.m{
 	width:100%;
 }
 h4.title strong{
-	color:#eb4800;
+	color:#ce3c5a;
 }
 h4.title span.text{
 	background: url(../images/bg.gif) repeat 0 0 fixed;
-	color: #FF1F4C;
+	color: #ce3c5a;
 	padding-right:10px;
 }
 h4.title .left{
-	background: url(../images/arrow-pleft.png) #eee no-repeat center center;	
+	background: url(../images/back.png) #eee no-repeat center center;	
+	background-color: #262626;
 	margin-right:2px;	
 }
 h4.title .right{
-	background: url(../images/arrow-p.png) #eee no-repeat center center;	
+	background: url(../images/next.png) #eee no-repeat center center;
+	background-color: #262626;	
 }
 h4.title .pull-right{
 	background: url(../images/bg.gif) repeat 0 0 fixed;
@@ -503,7 +505,7 @@ h4.title .left,h4.title .right{
 	cursor: pointer;
 }
 h4.title .left:hover,h4.title .right:hover{
-	background-color:#eb4800;
+	background-color:#ff1f4c;
 }
 h4.title .button:hover{
 	text-decoration: none;
@@ -524,7 +526,7 @@ section.our_client .row{
 }
 .search_form input{
 	background: url(../images/search.png) #fff no-repeat 97% 6px;
-	color:#fff;
+	color:#000000;
 	text-shadow:none;
 	padding-right:25px;	
 	border:1px solid #eee;
@@ -627,7 +629,7 @@ section.our_client .row{
 	text-align: center;
 	padding: 7px;
 	border: 1px solid #ddd;
-	border-top: 3px solid #eb4800;
+	border-top: 3px solid #a03e52;
 	-moz-box-shadow: 0 0 3px 0 #ccc;
 	-webkit-box-shadow: 0 0 3px 0 #ccc;
 	box-shadow: 0 0 3px 0 #ccc;
@@ -671,7 +673,7 @@ section.our_client .row{
 }
 .nav-list > .active > a, .nav-list > .active > a:hover{
 	background-color: transparent;
-	color:#eb4800;
+	color:#ce3c5a;
 	text-shadow: none;	
 	font-weight: bold;
 }
