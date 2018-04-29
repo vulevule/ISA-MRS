@@ -1,6 +1,5 @@
 package projekat.demo.model;
 
-import java.util.ArrayList;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -9,7 +8,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 
 @Entity
 public class Place {
@@ -20,8 +18,8 @@ public class Place {
 	@Column(nullable = false)
 	private String description;
 	
-	@ManyToOne(optional = false)
-	private Address address;
+	@Column(nullable=false)
+	private String address;
 	
 	@Column(nullable = false)
 	@Enumerated(EnumType.ORDINAL)
@@ -34,7 +32,7 @@ public class Place {
 	public Place() {
 	}
 
-	public Place(String name, String description, Address address, PlaceType type, Set<Projection> projections) {
+	public Place(String name, String description, String address, PlaceType type, Set<Projection> projections) {
 		this();
 		this.name = name;
 		this.description = description;
@@ -73,11 +71,11 @@ public class Place {
 		this.description = description;
 	}
 
-	public Address getAddress() {
+	public String getAddress() {
 		return address;
 	}
 
-	public void setAddress(Address address) {
+	public void setAddress(String address) {
 		this.address = address;
 	}
 

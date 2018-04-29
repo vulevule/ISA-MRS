@@ -36,23 +36,27 @@ public class UserController {
 		return new ModelAndView("registration");
 	}
 
-	@RequestMapping(
-			value = "/registrationUser",
-			method = RequestMethod.POST,
+	@PostMapping(
+			value = "users/registrationUser",
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ModelAndView registrationUser(@Valid @RequestBody User u){
-		logger.info("> registration user");
-		
-		
-		boolean create = userService.createUser(u);
-		
-		if (create==false){
-			return new ModelAndView("registration");
+	public ResponseEntity<User> registrationUser(@RequestBody User u){
+		logger.info("> registration");
+		User createUser = null;
+		try{
+			createUser = userService.createUser(u);
+		}catch (Exception e){
+			
 		}
 		
-		logger.info("< registration user");
-		return new ModelAndView("redirect/places");
+		if (createUser == null)
+		{
+			logger.info("< registration ");
+			return new ResponseEntity<User>(u, HttpStatus.BAD_REQUEST);
+		}
+		
+		logger.info("> registration");
+		return new ResponseEntity<User>(createUser, HttpStatus.CREATED);
 		
 	}
 	
@@ -72,18 +76,15 @@ public class UserController {
 	public ResponseEntity<User> loginUser(@RequestBody LoginUser lu){
 		logger.info("> login");
 		
-		logger.info("> " + lu.getPassword());
 		User u = userService.login(lu.getUsername(), lu.getPassword());
-		if(lu.getUsername().equals("111") && lu.getPassword().equals("111")){
-			return new ResponseEntity<User>(u, HttpStatus.OK);
-
-		}
+		
 		if(u == null)
 		{
-			return null;
+			logger.info("< login");
+			return new ResponseEntity<User>(u, HttpStatus.NOT_FOUND);
 		} 
 		logger.info("< login");
-		return new ResponseEntity<User>(u, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<User>(u, HttpStatus.OK);
 	}
 	
 }

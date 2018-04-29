@@ -15,7 +15,7 @@ import projekat.demo.validator.EmailAnnotation;
 import projekat.demo.validator.PasswordAnnotation;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+
 public class User  implements Serializable{
 	
 	private static final long serialVersionUID = -2230328594830389946L;
@@ -35,8 +35,8 @@ public class User  implements Serializable{
 	@Column(nullable=false)
 	private String password;
 	
-	@ManyToOne(optional = false)
-	private Address address;
+	@Column
+	private String address;
 	
 	@Column(nullable=false)
 	private String phone;
@@ -48,7 +48,7 @@ public class User  implements Serializable{
 	public User() {
 	}
 
-	public User(String name, String surname, String email, String password, Address address, String phone,
+	public User(String name, String surname, String email, String password, String address, String phone,
 			RoleType type) {
 		super();
 		this.name = name;
@@ -92,11 +92,11 @@ public class User  implements Serializable{
 		this.password = password;
 	}
 
-	public Address getAddress() {
+	public String getAddress() {
 		return address;
 	}
 
-	public void setAddress(Address address) {
+	public void setAddress(String address) {
 		this.address = address;
 	}
 

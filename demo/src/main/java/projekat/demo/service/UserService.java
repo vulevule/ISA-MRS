@@ -4,7 +4,7 @@ import projekat.demo.model.User;
 
 public interface UserService {
 	
-	boolean createUser(User u);
+	User createUser(User u);
 	
 	User login(String username, String password);
 	
