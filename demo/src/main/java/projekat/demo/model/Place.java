@@ -25,8 +25,8 @@ public class Place {
 	@Enumerated(EnumType.ORDINAL)
 	private PlaceType type;
 	
-	@ManyToMany
-	private Set<Projection> projections;
+	/*@ManyToMany
+	private Set<Projection> projections;*/
 	
 
 	public Place() {
@@ -38,18 +38,18 @@ public class Place {
 		this.description = description;
 		this.address = address;
 		this.type = type;
-		this.projections = projections;
+		//this.projections = projections;
 	}
 	
 	
 	
-	public Set<Projection> getProjections() {
+	/*public Set<Projection> getProjections() {
 		return projections;
 	}
 
 	public void setProjections(Set<Projection> projections) {
 		this.projections = projections;
-	}
+	}*/
 
 	public Place(String name){
 		this.name = name;

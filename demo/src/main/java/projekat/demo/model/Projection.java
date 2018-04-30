@@ -1,4 +1,4 @@
-	package projekat.demo.model;
+package projekat.demo.model;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -12,58 +12,59 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Projection implements Serializable{
+public class Projection implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	@Id
 	private String name;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	@Enumerated(EnumType.ORDINAL)
 	private ProjectionType type;
-	
-	@Column(nullable=false)
-	@ManyToMany
-	private Set<Place> placesOfProjection;
-	
-	@Column(nullable=false)
+
+	/*
+	 * @Column(nullable=false)
+	 * 
+	 * @ManyToMany private Set<Place> placesOfProjection;
+	 */
+
+	@Column(nullable = false)
 	private String cast;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	private String genre;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	private String director;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	private int duration;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	private String banner;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	private double averageRating;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	private String description;
-	
-	@OneToMany(mappedBy="projection")
+
+	@OneToMany(mappedBy = "projection")
 	private Set<Term> term;
-	
-	public Projection() {}
-	
-	
+
+	public Projection() {
+	}
 
 	public Projection(String name, ProjectionType type, Set<Place> placesOfProjection, String cast, String genre,
 			String director, int duration, String banner, double averageRating, String description, Set<Term> term) {
 		this();
 		this.name = name;
 		this.type = type;
-		this.placesOfProjection = placesOfProjection;
+		// this.placesOfProjection = placesOfProjection;
 		this.cast = cast;
 		this.genre = genre;
 		this.director = director;
@@ -73,8 +74,6 @@ public class Projection implements Serializable{
 		this.description = description;
 		this.term = term;
 	}
-
-
 
 	public String getName() {
 		return name;
@@ -91,7 +90,6 @@ public class Projection implements Serializable{
 	public void setType(ProjectionType type) {
 		this.type = type;
 	}
-
 
 	public String getCast() {
 		return cast;
@@ -157,18 +155,11 @@ public class Projection implements Serializable{
 		this.description = description;
 	}
 
+	/*
+	 * public Set<Place> getPlacesOfProjection() { return placesOfProjection; }
+	 * 
+	 * public void setPlacesOfProjection(Set<Place> placesOfProjection) {
+	 * this.placesOfProjection = placesOfProjection; }
+	 */
 
-
-	public Set<Place> getPlacesOfProjection() {
-		return placesOfProjection;
-	}
-
-	public void setPlacesOfProjection(Set<Place> placesOfProjection) {
-		this.placesOfProjection = placesOfProjection;
-	}
-
-
-	
-	
-	
 }

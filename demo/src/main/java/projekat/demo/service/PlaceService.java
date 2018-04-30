@@ -5,5 +5,6 @@ import java.util.ArrayList;
 import projekat.demo.model.Place;
 
 public interface PlaceService {
-	ArrayList<Place> findAll();
+
+	Place createPlace(Place p);
 }
