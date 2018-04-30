@@ -29,6 +29,8 @@ import projekat.demo.model.User;
 public class UserControllerTest {
 	private static final String URL_REGISTRATION = "/users/registrationUser";
 	private static final String URL_LOGIN = "/users/loginUser";
+	private static final String URL_UPDATE = "/users/updateAccount";
+
 
 	private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
 			MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
@@ -77,6 +79,24 @@ public class UserControllerTest {
 		String json = TestUtil.json(user);
 		this.mockMvc.perform(post(URL_REGISTRATION).contentType(contentType).content(json))
 				.andExpect(status().isCreated());
+	}
+	
+	@Test
+	@Transactional
+	@Rollback
+	public void testUpdateUser() throws Exception {
+		User user = new User();
+		user.setName(UserConstants.NEW_FIRST_NAME1);
+		user.setSurname(UserConstants.NEW_LAST_NAME);
+		user.setEmail(UserConstants.NEW_EMAIL);
+		user.setEmail(UserConstants.NEW_EMAIL);
+		user.setPassword(UserConstants.NEW_PASSWORD1);
+		user.setPhone(UserConstants.NEW_PHONE);
+		user.setType(UserConstants.NEW_TYPE1);
+
+		String json = TestUtil.json(user);
+		this.mockMvc.perform(post(URL_UPDATE).contentType(contentType).content(json))
+				.andExpect(status().isOk());
 	}
 
 	/*

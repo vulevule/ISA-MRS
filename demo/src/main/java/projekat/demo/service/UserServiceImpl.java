@@ -65,4 +65,10 @@ public class UserServiceImpl implements UserService {
 		return null;
 	}
 
+	@Override
+	public User updateUser(User user) {
+		// TODO Auto-generated method s
+		return this.userRepository.save(user);
+	}
+
 }

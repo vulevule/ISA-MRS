@@ -3,6 +3,10 @@ package projekat.demo.model;
 import java.io.Serializable;
 
 public class LoginUser implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7156252099034232288L;
 	private String username;
 	private String password;
 

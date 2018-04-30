@@ -12,6 +12,9 @@ public class UserConstants {
 	public static final String NEW_PHONE = "06722256";
 	public static final RoleType NEW_TYPE = RoleType.VISITOR;
 	public static final RoleType NEW_TYPE1 = RoleType.SYSTEM_ADMIN;
+	//---------------------------------------------------
+	public static final String NEW_PASSWORD1 = "peraperic4";
+	public static final String NEW_FIRST_NAME1 = "Petar";
 
 	// login users
 	public static final String LOGIN_EMAIL = "perap@gmail.com";

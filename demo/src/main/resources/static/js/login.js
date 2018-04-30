@@ -15,7 +15,7 @@ function login_submit(){
 	
 	$.ajax({
 		type : "POST",		
-		url : "../users/loginUser",
+		url : "/users/loginUser",
 		data : JSON.stringify(login),
 		dataType : 'application/json',
 		cache : false,

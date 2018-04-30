@@ -12,4 +12,6 @@ public interface UserService {
 
 	User activateUser(String email, String activateString);
 
+	User updateUser(User user);
+
 }

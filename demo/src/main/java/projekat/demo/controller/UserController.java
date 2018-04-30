@@ -117,5 +117,22 @@ public class UserController {
 		logger.info("< login");
 		return new ResponseEntity<UserException>(ue, HttpStatus.OK);
 	}
+	
+	@PostMapping(value = "users/updateAccount", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UserException> updateAccount(@RequestBody User user) {
+		User u = this.userService.updateUser(user);
+		UserException ue = new UserException(u, "");
+		
+		if (u == null) {
+			ue.setMessage("User does not exists");
+			return new ResponseEntity<UserException>(ue, HttpStatus.ALREADY_REPORTED);
+		} else {
+			ue.setMessage("Successful update account");
+		}
+
+		return new ResponseEntity<UserException>(ue, HttpStatus.OK);
+
+	}
+	
 
 }
