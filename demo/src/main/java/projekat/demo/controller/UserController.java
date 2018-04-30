@@ -1,7 +1,5 @@
 package projekat.demo.controller;
 
-import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,13 +8,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import projekat.demo.model.ActivateAccount;
 import projekat.demo.model.LoginUser;
+import projekat.demo.model.RoleType;
 import projekat.demo.model.User;
+import projekat.demo.model.UserException;
+import projekat.demo.service.EmailService;
 import projekat.demo.service.UserService;
 
 @RestController
@@ -26,6 +26,8 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private EmailService emailService;
 
 	@GetMapping("users/register")
 	public ModelAndView registration() {
@@ -38,25 +40,64 @@ public class UserController {
 
 	@PostMapping(
 			value = "users/registrationUser",
-			consumes = MediaType.APPLICATION_JSON_VALUE,
+			consumes = "application/json",
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<User> registrationUser(@RequestBody User u){
+	public ResponseEntity<UserException> registrationUser(@RequestBody User u){
 		logger.info("> registration");
+		
 		User createUser = null;
+		UserException ue = new UserException(createUser, "");
 		try{
 			createUser = userService.createUser(u);
+			if (createUser == null){
+				ue.setMessage("Already exist user with enterd username or email");
+				ue.setUser(createUser);
+				return new ResponseEntity<UserException>(ue, HttpStatus.ALREADY_REPORTED);
+			}
+			ue.setUser(createUser);
+			ue.setMessage("User has been successfully created");
+			if(createUser.getType() == RoleType.VISITOR){
+				sendActivateMail(createUser);
+			}
 		}catch (Exception e){
-			
-		}
-		
-		if (createUser == null)
-		{
-			logger.info("< registration ");
-			return new ResponseEntity<User>(u, HttpStatus.BAD_REQUEST);
+			ue.setMessage(e.getMessage());
+			return new ResponseEntity<UserException>(ue, HttpStatus.EXPECTATION_FAILED);
 		}
 		
 		logger.info("> registration");
-		return new ResponseEntity<User>(createUser, HttpStatus.CREATED);
+		return new ResponseEntity<UserException>(ue, HttpStatus.CREATED);
+		
+	}
+	
+	
+	
+	private void sendActivateMail(User createUser) {
+		// TODO Auto-generated method stub
+
+		//send mail to activate account
+		if(createUser.getType() == RoleType.VISITOR)
+		{
+			try{
+				emailService.sendNotification(createUser);
+				//uneti u bazu aktivacioni string 
+				userService.setActivateString(createUser);
+			}catch(Exception e){
+				logger.info("Error when sending email: " + e.getMessage());
+			}
+		}
+	}
+
+	@PostMapping(value = "users/activateAccount", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UserException> activateAccount( ActivateAccount aa ){
+		User u = this.userService.activateUser(aa.getEmail(),aa.getActivateAccount());
+		UserException ue = new UserException(u, "");
+		if (u == null){
+			ue.setMessage("Unsuccessful activation");
+		}else{
+			ue.setMessage("Successful activation");
+		}
+		
+		return new ResponseEntity<UserException>(ue, HttpStatus.OK);
 		
 	}
 	
@@ -73,18 +114,18 @@ public class UserController {
 			value = "users/loginUser",
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<User> loginUser(@RequestBody LoginUser lu){
+	public ResponseEntity<UserException> loginUser(@RequestBody LoginUser lu){
 		logger.info("> login");
 		
 		User u = userService.login(lu.getUsername(), lu.getPassword());
-		
+		UserException ue = new UserException(u, "Successful login");
 		if(u == null)
 		{
-			logger.info("< login");
-			return new ResponseEntity<User>(u, HttpStatus.NOT_FOUND);
+			ue.setMessage("Invalidate username or password");
+			return new ResponseEntity<UserException>(ue, HttpStatus.BAD_REQUEST);
 		} 
 		logger.info("< login");
-		return new ResponseEntity<User>(u, HttpStatus.OK);
+		return new ResponseEntity<UserException>(ue, HttpStatus.OK);
 	}
 	
 }

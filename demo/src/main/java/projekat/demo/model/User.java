@@ -7,9 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.ManyToOne;
 
 import projekat.demo.validator.EmailAnnotation;
 import projekat.demo.validator.PasswordAnnotation;
@@ -44,12 +41,18 @@ public class User  implements Serializable{
 	@Column(nullable=false)
 	@Enumerated(EnumType.ORDINAL)
 	private RoleType type;
+	
+	@Column(nullable=false)
+	private boolean activate;
+	
+	@Column
+	private String activateString;
 
 	public User() {
 	}
 
 	public User(String name, String surname, String email, String password, String address, String phone,
-			RoleType type) {
+			RoleType type, boolean activate, String activateString) {
 		super();
 		this.name = name;
 		this.surname = surname;
@@ -58,6 +61,8 @@ public class User  implements Serializable{
 		this.address = address;
 		this.phone = phone;
 		this.type = type;
+		this.activate = activate;
+		this.activateString = activateString;
 	}
 
 	public String getName() {
@@ -116,4 +121,21 @@ public class User  implements Serializable{
 		this.type = type;
 	}
 
+	public boolean isActivate() {
+		return activate;
+	}
+
+	public void setActivate(boolean activate) {
+		this.activate = activate;
+	}
+
+	public String getActivateString() {
+		return activateString;
+	}
+
+	public void setActivateString(String activateString) {
+		this.activateString = activateString;
+	}
+
+	
 }
