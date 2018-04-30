@@ -11,14 +11,14 @@ import javax.validation.Payload;
 
 @Documented
 @Constraint(validatedBy = PasswordConstraintValidator.class)
-@Target( { ElementType.METHOD, ElementType.FIELD })
+@Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PasswordAnnotation {
 
 	String message() default "Field must contain at least 8 characters";
-	
+
 	Class<?>[] groups() default {};
-	
+
 	Class<? extends Payload>[] payload() default {};
 
 }

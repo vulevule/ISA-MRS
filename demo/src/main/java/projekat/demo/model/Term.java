@@ -14,36 +14,37 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class Term implements Serializable {
-	
+
 	private static final long serialVersionUID = -7156861256132077357L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	@Column(nullable = false)
 	private Date projectionDate;
-	
+
 	@Column(nullable = false)
 	private Time projectionTime;
-	
+
 	@OneToOne
 	private Place place;
-	
-	@Column(nullable =false)
+
+	@Column(nullable = false)
 	private double price;
-	
+
 	@OneToOne
-	private Arena arena; //sala u kojoj se odrzava film ili predstava
-	
+	private Arena arena; // sala u kojoj se odrzava film ili predstava
+
 	@Column(nullable = false)
 	private int freeSeats;
-	
+
 	@ManyToOne
 	private Projection projection;
 
-	public Term(){}
-	
+	public Term() {
+	}
+
 	public Term(Date projectionDate, Time projectionTime, Place place, double price, Arena arena, int freeSeats,
 			Projection projection) {
 		this();
@@ -111,7 +112,5 @@ public class Term implements Serializable {
 	public void setProjection(Projection projection) {
 		this.projection = projection;
 	}
-	
-	
-	
+
 }

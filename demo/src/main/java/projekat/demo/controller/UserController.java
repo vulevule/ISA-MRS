@@ -38,69 +38,63 @@ public class UserController {
 		return new ModelAndView("registration");
 	}
 
-	@PostMapping(
-			value = "users/registrationUser",
-			consumes = "application/json",
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UserException> registrationUser(@RequestBody User u){
+	@PostMapping(value = "users/registrationUser", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UserException> registrationUser(@RequestBody User u) {
 		logger.info("> registration");
-		
+
 		User createUser = null;
 		UserException ue = new UserException(createUser, "");
-		try{
+		try {
 			createUser = userService.createUser(u);
-			if (createUser == null){
+			if (createUser == null) {
 				ue.setMessage("Already exist user with enterd username or email");
 				ue.setUser(createUser);
 				return new ResponseEntity<UserException>(ue, HttpStatus.ALREADY_REPORTED);
 			}
 			ue.setUser(createUser);
 			ue.setMessage("User has been successfully created");
-			if(createUser.getType() == RoleType.VISITOR){
+			if (createUser.getType() == RoleType.VISITOR) {
 				sendActivateMail(createUser);
 			}
-		}catch (Exception e){
+		} catch (Exception e) {
 			ue.setMessage(e.getMessage());
 			return new ResponseEntity<UserException>(ue, HttpStatus.EXPECTATION_FAILED);
 		}
-		
+
 		logger.info("> registration");
 		return new ResponseEntity<UserException>(ue, HttpStatus.CREATED);
-		
+
 	}
-	
-	
-	
+
 	private void sendActivateMail(User createUser) {
 		// TODO Auto-generated method stub
 
-		//send mail to activate account
-		if(createUser.getType() == RoleType.VISITOR)
-		{
-			try{
+		// send mail to activate account
+		if (createUser.getType() == RoleType.VISITOR) {
+			try {
 				emailService.sendNotification(createUser);
-				//uneti u bazu aktivacioni string 
+				// uneti u bazu aktivacioni string
 				userService.setActivateString(createUser);
-			}catch(Exception e){
+			} catch (Exception e) {
 				logger.info("Error when sending email: " + e.getMessage());
 			}
 		}
 	}
 
 	@PostMapping(value = "users/activateAccount", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UserException> activateAccount( ActivateAccount aa ){
-		User u = this.userService.activateUser(aa.getEmail(),aa.getActivateAccount());
+	public ResponseEntity<UserException> activateAccount(ActivateAccount aa) {
+		User u = this.userService.activateUser(aa.getEmail(), aa.getActivateAccount());
 		UserException ue = new UserException(u, "");
-		if (u == null){
+		if (u == null) {
 			ue.setMessage("Unsuccessful activation");
-		}else{
+		} else {
 			ue.setMessage("Successful activation");
 		}
-		
+
 		return new ResponseEntity<UserException>(ue, HttpStatus.OK);
-		
+
 	}
-	
+
 	@GetMapping("users/login")
 	public ModelAndView loginForm() {
 		logger.info("> login form");
@@ -109,23 +103,19 @@ public class UserController {
 
 		return new ModelAndView("login");
 	}
-	
-	@PostMapping(
-			value = "users/loginUser",
-			consumes = MediaType.APPLICATION_JSON_VALUE,
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UserException> loginUser(@RequestBody LoginUser lu){
+
+	@PostMapping(value = "users/loginUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UserException> loginUser(@RequestBody LoginUser lu) {
 		logger.info("> login");
-		
+
 		User u = userService.login(lu.getUsername(), lu.getPassword());
 		UserException ue = new UserException(u, "Successful login");
-		if(u == null)
-		{
+		if (u == null) {
 			ue.setMessage("Invalidate username or password");
 			return new ResponseEntity<UserException>(ue, HttpStatus.BAD_REQUEST);
-		} 
+		}
 		logger.info("< login");
 		return new ResponseEntity<UserException>(ue, HttpStatus.OK);
 	}
-	
+
 }

@@ -11,15 +11,15 @@ import javax.validation.Payload;
 
 @Documented
 @Constraint(validatedBy = EmailConstraintValidator.class)
-@Target( { ElementType.METHOD, ElementType.FIELD })
+@Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 
 public @interface EmailAnnotation {
-	
+
 	String message() default "Invalid e-mail";
-	
+
 	Class<?>[] groups() default {};
-	
+
 	Class<? extends Payload>[] payload() default {};
 
 }

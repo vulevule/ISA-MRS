@@ -13,46 +13,46 @@ import projekat.demo.validator.PasswordAnnotation;
 
 @Entity
 
-public class User  implements Serializable{
-	
+public class User implements Serializable {
+
 	private static final long serialVersionUID = -2230328594830389946L;
 
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private String name;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	private String surname;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	@Id
 	@EmailAnnotation
 	private String email;
-	
+
 	@PasswordAnnotation
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private String password;
-	
+
 	@Column
 	private String address;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	private String phone;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	@Enumerated(EnumType.ORDINAL)
 	private RoleType type;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	private boolean activate;
-	
+
 	@Column
 	private String activateString;
 
 	public User() {
 	}
 
-	public User(String name, String surname, String email, String password, String address, String phone,
-			RoleType type, boolean activate, String activateString) {
+	public User(String name, String surname, String email, String password, String address, String phone, RoleType type,
+			boolean activate, String activateString) {
 		super();
 		this.name = name;
 		this.surname = surname;
@@ -137,5 +137,4 @@ public class User  implements Serializable{
 		this.activateString = activateString;
 	}
 
-	
 }

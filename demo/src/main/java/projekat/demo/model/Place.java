@@ -7,27 +7,26 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 
 @Entity
 public class Place {
 	@Column(nullable = false)
 	@Id
 	private String name;
-	
+
 	@Column(nullable = false)
 	private String description;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	private String address;
-	
+
 	@Column(nullable = false)
 	@Enumerated(EnumType.ORDINAL)
 	private PlaceType type;
-	
-	/*@ManyToMany
-	private Set<Projection> projections;*/
-	
+
+	/*
+	 * @ManyToMany private Set<Projection> projections;
+	 */
 
 	public Place() {
 	}
@@ -38,20 +37,17 @@ public class Place {
 		this.description = description;
 		this.address = address;
 		this.type = type;
-		//this.projections = projections;
-	}
-	
-	
-	
-	/*public Set<Projection> getProjections() {
-		return projections;
+		// this.projections = projections;
 	}
 
-	public void setProjections(Set<Projection> projections) {
-		this.projections = projections;
-	}*/
+	/*
+	 * public Set<Projection> getProjections() { return projections; }
+	 * 
+	 * public void setProjections(Set<Projection> projections) { this.projections =
+	 * projections; }
+	 */
 
-	public Place(String name){
+	public Place(String name) {
 		this.name = name;
 	}
 

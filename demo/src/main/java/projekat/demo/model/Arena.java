@@ -13,20 +13,21 @@ public class Arena {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	@Column
 	private String name;
-	
+
 	@OneToOne
 	private Place place;
-	
+
 	@Column
 	private int row;
-	
+
 	@Column
 	private int column;
-	
-	public Arena(){}
+
+	public Arena() {
+	}
 
 	public Arena(Long id, String name, Place place, int row, int column) {
 		this();
@@ -76,8 +77,5 @@ public class Arena {
 	public void setColumn(int column) {
 		this.column = column;
 	}
-	
-	
-	
-	
+
 }

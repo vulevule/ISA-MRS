@@ -12,17 +12,16 @@ import projekat.demo.repository.PlaceRepository;
 public class PlaceServiceImpl implements PlaceService {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+
 	@Autowired
 	private PlaceRepository placeRepository;
-	
+
 	@Override
 	public Place createPlace(Place p) {
-		//treba navesti da nijedan atribut ne sme biti null
-		
-	
+		// treba navesti da nijedan atribut ne sme biti null
+
 		Place findPlace = this.placeRepository.findByName(p.getName());
-		if (findPlace == null){
+		if (findPlace == null) {
 			return this.placeRepository.save(p);
 		}
 		return null;
