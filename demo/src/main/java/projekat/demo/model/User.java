@@ -1,12 +1,15 @@
 package projekat.demo.model;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import projekat.demo.validator.EmailAnnotation;
 import projekat.demo.validator.PasswordAnnotation;
@@ -48,21 +51,13 @@ public class User implements Serializable {
 	@Column
 	private String activateString;
 
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="user")
+	private Set<Bid> bids;
+	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="user")
+	private Set<Ad> ads;
+	
 	public User() {
-	}
-
-	public User(String name, String surname, String email, String password, String address, String phone, RoleType type,
-			boolean activate, String activateString) {
-		super();
-		this.name = name;
-		this.surname = surname;
-		this.email = email;
-		this.password = password;
-		this.address = address;
-		this.phone = phone;
-		this.type = type;
-		this.activate = activate;
-		this.activateString = activateString;
 	}
 
 	public String getName() {
@@ -136,5 +131,44 @@ public class User implements Serializable {
 	public void setActivateString(String activateString) {
 		this.activateString = activateString;
 	}
+
+	public Set<Bid> getBids() {
+		return bids;
+	}
+
+	public void setBids(Set<Bid> bids) {
+		this.bids = bids;
+	}
+
+	public Set<Ad> getAds() {
+		return ads;
+	}
+
+	public void setAds(Set<Ad> ads) {
+		this.ads = ads;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public User(String name, String surname, String email, String password, String address, String phone, RoleType type,
+			boolean activate, String activateString, Set<Bid> bids, Set<Ad> ads) {
+		super();
+		this.name = name;
+		this.surname = surname;
+		this.email = email;
+		this.password = password;
+		this.address = address;
+		this.phone = phone;
+		this.type = type;
+		this.activate = activate;
+		this.activateString = activateString;
+		this.bids = bids;
+		this.ads = ads;
+	}
+
+	
+	
 
 }

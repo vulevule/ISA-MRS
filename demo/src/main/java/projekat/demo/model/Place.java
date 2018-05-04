@@ -6,7 +6,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Place {
@@ -23,32 +26,14 @@ public class Place {
 	@Column(nullable = false)
 	@Enumerated(EnumType.ORDINAL)
 	private PlaceType type;
+	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="place")
+	private Set<Arena> arenas;
 
-	/*
-	 * @ManyToMany private Set<Projection> projections;
-	 */
-
+	@ManyToMany
+	private Set<Projection> projections;
+	
 	public Place() {
-	}
-
-	public Place(String name, String description, String address, PlaceType type, Set<Projection> projections) {
-		this();
-		this.name = name;
-		this.description = description;
-		this.address = address;
-		this.type = type;
-		// this.projections = projections;
-	}
-
-	/*
-	 * public Set<Projection> getProjections() { return projections; }
-	 * 
-	 * public void setProjections(Set<Projection> projections) { this.projections =
-	 * projections; }
-	 */
-
-	public Place(String name) {
-		this.name = name;
 	}
 
 	public String getName() {
@@ -82,5 +67,35 @@ public class Place {
 	public void setType(PlaceType type) {
 		this.type = type;
 	}
+
+	public Set<Arena> getArenas() {
+		return arenas;
+	}
+
+	public void setArenas(Set<Arena> arenas) {
+		this.arenas = arenas;
+	}
+
+	public Set<Projection> getProjections() {
+		return projections;
+	}
+
+	public void setProjections(Set<Projection> projections) {
+		this.projections = projections;
+	}
+
+	public Place(String name, String description, String address, PlaceType type, Set<Arena> arenas,
+			Set<Projection> projections) {
+		super();
+		this.name = name;
+		this.description = description;
+		this.address = address;
+		this.type = type;
+		this.arenas = arenas;
+		this.projections = projections;
+	}
+
+	
+	
 
 }

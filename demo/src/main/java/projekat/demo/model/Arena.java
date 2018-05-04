@@ -1,15 +1,26 @@
 package projekat.demo.model;
 
+import java.io.Serializable;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
-public class Arena {
+public class Arena implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6739132830220311437L;
+
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -17,8 +28,6 @@ public class Arena {
 	@Column
 	private String name;
 
-	@OneToOne
-	private Place place;
 
 	@Column
 	private int row;
@@ -26,56 +35,15 @@ public class Arena {
 	@Column
 	private int column;
 
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="arena")
+	private Set<Term> terms;
+
+	@ManyToOne(optional=false)
+	private Place place;
+	
 	public Arena() {
 	}
 
-	public Arena(Long id, String name, Place place, int row, int column) {
-		this();
-		this.id = id;
-		this.name = name;
-		this.place = place;
-		this.row = row;
-		this.column = column;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Place getPlace() {
-		return place;
-	}
-
-	public void setPlace(Place place) {
-		this.place = place;
-	}
-
-	public int getRow() {
-		return row;
-	}
-
-	public void setRow(int row) {
-		this.row = row;
-	}
-
-	public int getColumn() {
-		return column;
-	}
-
-	public void setColumn(int column) {
-		this.column = column;
-	}
+	
 
 }
