@@ -17,8 +17,8 @@ $(document).ready(function(){
 	
 	//1 bioskop ili pozoriste, ovde staviti for petlju za ispis vise bioskopa ili pozorista
 	var li = $('<li class="span3"> </li>');
-	var div4 = $('<div class="product-box" id="cinema_theater">  </div>');
-	var span1 = $('<span class="sale_tag" </span>');
+	var div4 = $('<div class="product-box" id="cinema_theater"> </div>');
+	var span1 = $('<span class="sale_tag"> </span>');
 	var p1 = $('<p><a href="product_detail.html"><img src="./themes/images/cinemas/croped.jpg" alt="" /></a></p> ');
 	var a1 = $('<a href="product_detail.html" class="title">Cinema1</a><br/>');
 	var a2 = $('<a href="products.html" class="category">Novi Sad</a>');

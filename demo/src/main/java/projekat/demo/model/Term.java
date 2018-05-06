@@ -26,7 +26,6 @@ public class Term implements Serializable {
 	@Column(nullable = false)
 	private Time projectionTime;
 
-
 	@Column(nullable = false)
 	private double price;
 

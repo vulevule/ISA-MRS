@@ -8,7 +8,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -30,7 +29,7 @@ public class Place {
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="place")
 	private Set<Arena> arenas;
 
-	@ManyToMany
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="place")
 	private Set<Projection> projections;
 	
 	public Place() {

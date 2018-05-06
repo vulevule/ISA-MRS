@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import projekat.demo.model.Arena;
+import projekat.demo.model.ArenaException;
 import projekat.demo.model.Place;
 import projekat.demo.model.PlaceException;
 import projekat.demo.service.PlaceService;
@@ -50,8 +52,15 @@ public class PlaceController {
 				ue.setPlace(createPlace);
 				return new ResponseEntity<PlaceException>(ue, HttpStatus.ALREADY_REPORTED);
 			}
+			
+			for (Arena a : p.getArenas()) {
+				this.createArena(a);
+			}
+			
 			ue.setPlace(createPlace);
 			ue.setMessage("Place has been successfully created");
+			
+			
 
 		} catch (Exception e) {
 			ue.setMessage(e.getMessage());
@@ -62,4 +71,38 @@ public class PlaceController {
 		return new ResponseEntity<PlaceException>(ue, HttpStatus.CREATED);
 
 	}
+	
+	@PostMapping(value = "/createArena", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ArenaException> createArena(@RequestBody Arena a) {
+		logger.info("> adding arena");
+
+		Arena createArena = null;
+		ArenaException ae = new ArenaException(createArena, "");
+		try {
+			createArena = placeService.createArena(a);
+			if (createArena == null) {
+				ae.setMessage("Arena with same name and place already exists!");
+				ae.setArena(createArena);
+				return new ResponseEntity<ArenaException>(ae, HttpStatus.ALREADY_REPORTED);
+			}
+			
+			//for petlja... 
+			
+			ae.setArena(createArena);
+			ae.setMessage("Arena has been successfully created");
+			
+			
+
+		} catch (Exception e) {
+			ae.setMessage(e.getMessage());
+			return new ResponseEntity<ArenaException>(ae, HttpStatus.EXPECTATION_FAILED);
+		}
+
+		logger.info("> adding cinema/theater");
+		return new ResponseEntity<ArenaException>(ae, HttpStatus.CREATED);
+	}
+	
+	
+	
+	
 }
