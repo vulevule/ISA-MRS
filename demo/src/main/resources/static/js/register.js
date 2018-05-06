@@ -16,6 +16,7 @@ function registration_submit(){
 	user["name"] = $("#name").val();
 	user["surname"] = $("#surname").val();
 	user["phone"] = $("#phone").val();
+	user["repeatPassword"] = $("#repeat_pass").val();
 	user["type"] = "VISITOR";
 	
 	$.ajax({
@@ -26,6 +27,7 @@ function registration_submit(){
 		data : JSON.stringify(user),
 		success : function(data){
 			alert(data.message);
+			$("#modalR").hide();
 		},
 		error : function(XMLHttpRequest, Textstatus, Errorthrown){
 			console.log("ajax error: " + Errorthrown + ", status: " + Textstatus);

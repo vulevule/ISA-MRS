@@ -3,6 +3,7 @@
  */
 
 $(document).ready(function(){
+	
 	var div = $('<div class="span12"> </div>');
 	var title = $('<h4 class="title">'+
 			'<span class="pull-left"><span class="text"><span class="line">Cinema and theater list</span></span></span>'+
@@ -40,5 +41,6 @@ $(document).ready(function(){
 	
 	
 	$('#place_list').append(div);
+	
 });
 

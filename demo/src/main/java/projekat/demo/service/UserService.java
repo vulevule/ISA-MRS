@@ -1,5 +1,6 @@
 package projekat.demo.service;
 
+import projekat.demo.model.Friendship;
 import projekat.demo.model.User;
 
 public interface UserService {
@@ -13,5 +14,9 @@ public interface UserService {
 	User activateUser(String email, String activateString);
 
 	User updateUser(User user);
+
+	User getUserByUsername(String username);
+
+	Friendship createFriendship(Friendship fs);
 
 }

@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import projekat.demo.model.Friendship;
 import projekat.demo.model.RoleType;
 import projekat.demo.model.User;
+import projekat.demo.repository.FriendshipRepository;
 import projekat.demo.repository.UserRepository;
 
 @Service
@@ -13,13 +15,16 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-
+	
+	@Autowired 
+	private FriendshipRepository friendshipRepository;
+	
 	@Override
 	public User createUser(User u) {
 		// treba navesti da nijedan atribut ne sme biti null
 
 		if (u.getType() == RoleType.VISITOR) {
-			u.setActivate(false); // tek kada aktivira nalog, ovo se menja na true
+			u.setActivate(false); // posle cemo promeniti kada proradi slanje mejla 
 		} else {
 			u.setActivate(true); // svi ostali korisnici uvek imaju aktiviran nalog
 		}
@@ -52,14 +57,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User activateUser(String email, String activateString) {
 		// activate account
-		User u = this.userRepository.findByEmail(email);
+		User u = this.userRepository.findByEmailAndActivateString(email, activateString);
 
 		if (u != null) {
-			if (u.getActivateString().equals(activateString)) {
-				// actvate account
-				u.setActivate(true);
-				return this.userRepository.save(u);
-			}
+			u.setActivate(true);
+			return this.userRepository.save(u);
+			
 		}
 
 		return null;
@@ -69,6 +72,17 @@ public class UserServiceImpl implements UserService {
 	public User updateUser(User user) {
 		// TODO Auto-generated method s
 		return this.userRepository.save(user);
+	}
+
+	@Override
+	public User getUserByUsername(String username) {
+		return this.userRepository.findByEmail(username);
+	}
+
+	@Override
+	public Friendship createFriendship(Friendship fs) {
+		//upis u bazu zahteva za prijateljstvo 
+		return this.friendshipRepository.save(fs);
 	}
 
 }

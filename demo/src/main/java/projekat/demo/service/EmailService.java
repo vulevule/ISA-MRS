@@ -29,10 +29,12 @@ public class EmailService {
 		mail.setFrom(env.getProperty("spring.mail.username"));
 		String activateString = generateLoginActivateString();
 		user.setActivateString(activateString);
-		mail.setSubject("Hello " + user.getName() + " " + user.getSurname() + ", \n\n Your activate string is "
+		mail.setSubject("Activate account");
+		mail.setText("Hello " + user.getName() + " " + user.getSurname() + ", \n\n Your activate string is "
 				+ activateString + ". "); // uz ovo treba da se posalje i link ka stranici na kojoj ce se upisivate
 											// aktivacioni string
 		javaMailSender.send(mail);
+		System.out.println("Email is send");
 	}
 
 	private String generateLoginActivateString() {

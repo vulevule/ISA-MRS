@@ -57,6 +57,10 @@ public class User implements Serializable {
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="user")
 	private Set<Ad> ads;
 	
+	
+	private String repeatPassword;
+	
+	
 	public User() {
 	}
 
@@ -166,6 +170,14 @@ public class User implements Serializable {
 		this.activateString = activateString;
 		this.bids = bids;
 		this.ads = ads;
+	}
+
+	public String getRepeatPassword() {
+		return repeatPassword;
+	}
+
+	public void setRepeatPassword(String repeatPassword) {
+		this.repeatPassword = repeatPassword;
 	}
 
 	

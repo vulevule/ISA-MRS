@@ -24,6 +24,36 @@ public class Friendship {
 	private User sender;
 	
 	@OneToOne
-	private User receiver;	
+	private User receiver;
+
+	
+	public Friendship(){}
+	public Friendship(FriendshipStatus status, User sender, User receiver) {
+		this();
+		this.status = status;
+		this.sender = sender;
+		this.receiver = receiver;
+	}
+	public FriendshipStatus getStatus() {
+		return status;
+	}
+	public void setStatus(FriendshipStatus status) {
+		this.status = status;
+	}
+	public User getSender() {
+		return sender;
+	}
+	public void setSender(User sender) {
+		this.sender = sender;
+	}
+	public User getReceiver() {
+		return receiver;
+	}
+	public void setReceiver(User receiver) {
+		this.receiver = receiver;
+	}	
+	
+	
+	
 	
 }
