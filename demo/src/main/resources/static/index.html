@@ -33,7 +33,6 @@
 		<link rel="stylesheet" href="themes/css/style.css">
 		
 		
-		
 	</head>
     <body>		
 		<div id="top-bar" class="container">
@@ -93,7 +92,7 @@
 				</section>
 		</div>
 		
-		
+		<script src="js/register.js"></script>
 		<div id="modalR" class="popupContainer" style="display:none;">
 				<header class="popupHeader">
 						<span class="header_title">Register</span>
@@ -106,40 +105,32 @@
 						<!-- Register Form -->
 						<div class="user_register"><a href="#" id="register_form">Sign up</a></div>
 								<form>
-										<label>Username</label>
-										<input type="text" />
-										<br />
-
 										<label>Email Address</label>
-										<input type="email" />
+										<input type="email" id="email"/>
 										<br />
 
 										<label>Password</label>
-										<input type="password" />
+										<input type="password" id="password_reg" />
 										<br />
 										
 										<label>Repeat password</label>
-										<input type="password" />
+										<input type="password" id ="repeat_pass" />
 										<br />
 										
-										<label>Full name</label>
-										<input type="text" />
+										<label>First name</label>
+										<input type="text" id="name"/>
 										<br />
 										
-										<label>Country</label>
-										<input type="text" />
-										<br />
-										
-										<label>City</label>
-										<input type="text" />
+										<label>Last name</label>
+										<input type="text" id="surname"/>
 										<br />
 										
 										<label>Address</label>
-										<input type="text" />
+										<input type="text" id="address"/>
 										<br />
 										
 										<label>Phone</label>
-										<input type="text" />
+										<input type="text" id="phone"/>
 										<br />
 										
 										<br />
@@ -157,7 +148,7 @@
 										<br />
 
 										<div class="action_btns">
-												<div class="one_half last"><input type="submit" id="register" value="Register"></div>
+												<div class="one_half last"><input type="button" id="register_button" value="Register"></div>
 										</div>
 								</form>
 						
@@ -189,89 +180,12 @@
 				</div>
 			</section>
 			
-			
+			<script src="js/index.js"> </script>
 			<section class="main-content">
 				<div class="row">
 					<div class="span12">													
-						<div class="row">
-							<div class="span12">
-								<h4 class="title">
-									<span class="pull-left"><span class="text"><span class="line">Cinema and theater list</span></span></span>
-									<span class="pull-right">
-										<a class="left button" href="#myCarousel" data-slide="prev"></a><a class="right button" href="#myCarousel" data-slide="next"></a>
-									</span>
-								</h4>
-								<div id="myCarousel" class="myCarousel carousel slide">
-									<div class="carousel-inner">
-										<div class="active item">
-											<ul class="thumbnails">												
-												<li class="span3">
-													<div class="product-box">
-														<span class="sale_tag"></span>
-														<p><a href="product_detail.html"><img src="./themes/images/cinemas/croped.jpg" alt="" /></a></p>
-														<a href="product_detail.html" class="title">Cinema1</a><br/>
-														<a href="products.html" class="category">Novi Sad</a>
-													</div>
-												</li>
-												<li class="span3">
-													<div class="product-box">
-														<span class="sale_tag"></span>
-														<p><a href="product_detail.html"><img src="./themes/images/cinemas/croped1.jpg" alt="" /></a></p>
-														<a href="product_detail.html" class="title">Cinema2</a><br/>
-														<a href="products.html" class="category">Subotica</a>
-													</div>
-												</li>
-												<li class="span3">
-													<div class="product-box">
-														<p><a href="product_detail.html"><img src="./themes/images/cinemas/croped2.jpg" alt="" /></a></p>
-														<a href="product_detail.html" class="title">Cinema3</a><br/>
-														<a href="products.html" class="category">Beograd</a>
-													</div>
-												</li>
-												<li class="span3">
-													<div class="product-box">
-														<p><a href="product_detail.html"><img src="./themes/images/cinemas/croped3.jpg" alt="" /></a></p>
-														<a href="product_detail.html" class="title">Cinema4</a><br/>
-														<a href="products.html" class="category">Las Vegas</a>
-													</div>
-												</li>
-											</ul>
-										</div>
-										<div class="item">
-											<ul class="thumbnails">
-												<li class="span3">
-													<div class="product-box">
-														<p><a href="product_detail.html"><img src="./themes/images/cinemas/croped4.jpg" alt="" /></a></p>
-														<a href="product_detail.html" class="title">Cinema5</a><br/>
-														<a href="products.html" class="category">London</a>
-													</div>
-												</li>
-												<li class="span3">
-													<div class="product-box">
-														<p><a href="product_detail.html"><img src="./themes/images/cinemas/croped5.jpg" alt="" /></a></p>
-														<a href="product_detail.html" class="title">Cinema6</a><br/>
-														<a href="products.html" class="category">New York</a>
-													</div>
-												</li>
-												<li class="span3">
-													<div class="product-box">
-														<p><a href="product_detail.html"><img src="./themes/images/cinemas/croped.jpg" alt="" /></a></p>
-														<a href="product_detail.html" class="title">Cinema7</a><br/>
-														<a href="products.html" class="category">Paris</a>
-													</div>
-												</li>
-												<li class="span3">
-													<div class="product-box">
-														<p><a href="product_detail.html"><img src="./themes/images/cinemas/croped2.jpg" alt="" /></a></p>
-														<a href="product_detail.html" class="title">Cinema8</a><br/>
-														<a href="products.html" class="category">Dubai</a>
-													</div>
-												</li>																																	
-											</ul>
-										</div>
-									</div>							
-								</div>
-							</div>						
+						<div class="row" id="place_list">
+												
 						</div>
 						<br/>
 						

@@ -40,7 +40,7 @@ public class UserController {
 
 	@PostMapping(value = "users/registrationUser", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<UserException> registrationUser(@RequestBody User u) {
-		logger.info("> registration");
+		logger.info(">> registration");
 
 		User createUser = null;
 		UserException ue = new UserException(createUser, "");
@@ -61,7 +61,7 @@ public class UserController {
 			return new ResponseEntity<UserException>(ue, HttpStatus.EXPECTATION_FAILED);
 		}
 
-		logger.info("> registration");
+		logger.info("<< registration");
 		return new ResponseEntity<UserException>(ue, HttpStatus.CREATED);
 
 	}
@@ -112,7 +112,7 @@ public class UserController {
 		UserException ue = new UserException(u, "Successful login");
 		if (u == null) {
 			ue.setMessage("Invalidate username or password");
-			return new ResponseEntity<UserException>(ue, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<UserException>(ue, HttpStatus.NOT_FOUND);
 		}
 		logger.info("< login");
 		return new ResponseEntity<UserException>(ue, HttpStatus.OK);

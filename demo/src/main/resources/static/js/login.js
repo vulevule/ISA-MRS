@@ -9,24 +9,30 @@ $(document).ready(function(){
 
 function login_submit(){
 	
-	var login = {}
+	var login = {};
 	login["username"] = $("#username").val();
 	login["password"] = $("#password").val();
 	
+	
 	$.ajax({
 		type : "POST",		
-		url : "/users/loginUser",
+		url : "../users/loginUser",
+		contentType : "application/json",
+		dataType : "json",
 		data : JSON.stringify(login),
-		dataType : 'application/json',
-		cache : false,
-		timeout : 600000,
 		success : function(data){
-			$("#model").hidden();
+			$('#modal').hide();
+			//treba jos da se dodaju dugmici za dostupne akcije
+			alert(data.message + " " + data.user.name + " " + data.user.surname);
+
 		},
-		error : function(XMLHttpRequest, Textstatus, Errorthrown){
-			console.log("ajax error: " + Errorthrown + ", status: " + Textstatus);
+		error : function(data){
+			$('#modal').hide();
+			alert("Invalidate username or password");
+
 		}
 	})
 	
 	
 }
+
