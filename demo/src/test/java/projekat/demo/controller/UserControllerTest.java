@@ -21,6 +21,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import projekat.demo.TestUtil;
 import projekat.demo.constants.UserConstants;
+import projekat.demo.model.Friendship;
+import projekat.demo.model.FriendshipStatus;
 import projekat.demo.model.LoginUser;
 import projekat.demo.model.User;
 
@@ -30,6 +32,7 @@ public class UserControllerTest {
 	private static final String URL_REGISTRATION = "/users/registrationUser";
 	private static final String URL_LOGIN = "/users/loginUser";
 	private static final String URL_UPDATE = "/users/updateAccount";
+	private static final String URL_ADD_FRIEND = "/users/addFriend";
 
 
 	private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
@@ -52,11 +55,12 @@ public class UserControllerTest {
 		User user = new User();
 		user.setName(UserConstants.NEW_FIRST_NAME);
 		user.setSurname(UserConstants.NEW_LAST_NAME);
-		user.setEmail(UserConstants.NEW_EMAIL);
-		user.setEmail(UserConstants.NEW_EMAIL);
+		user.setEmail(UserConstants.NEW_EMAIL3);
+		user.setAddress(UserConstants.NEW_ADDRESS);
 		user.setPassword(UserConstants.NEW_PASSWORD);
 		user.setPhone(UserConstants.NEW_PHONE);
 		user.setType(UserConstants.NEW_TYPE);
+		user.setRepeatPassword(UserConstants.NEW_PASSWORD);
 
 		String json = TestUtil.json(user);
 		this.mockMvc.perform(post(URL_REGISTRATION).contentType(contentType).content(json))
@@ -70,9 +74,10 @@ public class UserControllerTest {
 		User user = new User();
 		user.setName(UserConstants.NEW_FIRST_NAME);
 		user.setSurname(UserConstants.NEW_LAST_NAME);
-		user.setEmail(UserConstants.NEW_EMAIL);
-		user.setEmail(UserConstants.NEW_EMAIL);
+		user.setEmail(UserConstants.NEW_EMAIL3);
+		user.setAddress(UserConstants.NEW_ADDRESS);
 		user.setPassword(UserConstants.NEW_PASSWORD);
+		user.setRepeatPassword(UserConstants.NEW_PASSWORD);
 		user.setPhone(UserConstants.NEW_PHONE);
 		user.setType(UserConstants.NEW_TYPE1);
 
@@ -89,7 +94,7 @@ public class UserControllerTest {
 		user.setName(UserConstants.NEW_FIRST_NAME1);
 		user.setSurname(UserConstants.NEW_LAST_NAME);
 		user.setEmail(UserConstants.NEW_EMAIL);
-		user.setEmail(UserConstants.NEW_EMAIL);
+		user.setAddress(UserConstants.NEW_ADDRESS2);
 		user.setPassword(UserConstants.NEW_PASSWORD1);
 		user.setPhone(UserConstants.NEW_PHONE);
 		user.setType(UserConstants.NEW_TYPE1);
@@ -119,7 +124,23 @@ public class UserControllerTest {
 		lu.setPassword(UserConstants.LOGIN_PASSWORD);
 
 		String json = TestUtil.json(lu);
-		this.mockMvc.perform(post(URL_LOGIN).contentType(contentType).content(json)).andExpect(status().isBadRequest());
+		this.mockMvc.perform(post(URL_LOGIN).contentType(contentType).content(json)).andExpect(status().isNotFound());
 	}
 
+	@Test
+	@Transactional
+	@Rollback(true)
+	public void testAddFriend() throws Exception{
+		Friendship fs = new Friendship();
+		User u1 = new User(UserConstants.NEW_FIRST_NAME, UserConstants.NEW_LAST_NAME, UserConstants.NEW_EMAIL, UserConstants.NEW_PASSWORD, UserConstants.NEW_ADDRESS,UserConstants.NEW_PHONE, UserConstants.NEW_TYPE, true, "", null, null);
+		User u2 = new User(UserConstants.NEW_FIRST_NAME2, UserConstants.NEW_LAST_NAME2, UserConstants.NEW_EMAIL2, UserConstants.NEW_PASSWORD2, UserConstants.NEW_ADDRESS2,UserConstants.NEW_PHONE2, UserConstants.NEW_TYPE2, true, "", null, null);
+
+		fs.setSender(u1);
+		fs.setReceiver(u2);
+		fs.setStatus(FriendshipStatus.SEND_REQUEST);
+		String json = TestUtil.json(fs);
+		this.mockMvc.perform(post(URL_ADD_FRIEND).contentType(contentType).content(json)).andExpect(status().isCreated());
+
+		
+	}
 }

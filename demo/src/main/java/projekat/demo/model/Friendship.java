@@ -28,8 +28,9 @@ public class Friendship {
 
 	
 	public Friendship(){}
-	public Friendship(FriendshipStatus status, User sender, User receiver) {
+	public Friendship(Long id, FriendshipStatus status, User sender, User receiver) {
 		this();
+		this.id = id;
 		this.status = status;
 		this.sender = sender;
 		this.receiver = receiver;
@@ -51,6 +52,12 @@ public class Friendship {
 	}
 	public void setReceiver(User receiver) {
 		this.receiver = receiver;
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	}	
 	
 	

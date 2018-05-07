@@ -19,4 +19,8 @@ public interface UserService {
 
 	Friendship createFriendship(Friendship fs);
 
+	Friendship acceptFriendship(Friendship fs);
+
+	boolean deleteFriend(Friendship fs);
+
 }

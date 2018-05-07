@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import projekat.demo.model.Friendship;
+import projekat.demo.model.FriendshipStatus;
 import projekat.demo.model.RoleType;
 import projekat.demo.model.User;
 import projekat.demo.repository.FriendshipRepository;
@@ -82,7 +83,47 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Friendship createFriendship(Friendship fs) {
 		//upis u bazu zahteva za prijateljstvo 
-		return this.friendshipRepository.save(fs);
+		Friendship saveFriendShip = new Friendship();
+		saveFriendShip.setSender(this.userRepository.findByEmail(fs.getSender().getEmail()));
+		saveFriendShip.setReceiver(this.userRepository.findByEmail(fs.getReceiver().getEmail()));
+		saveFriendShip.setStatus(fs.getStatus());		
+		return this.friendshipRepository.save(saveFriendShip);
 	}
 
+	@Override
+	public Friendship acceptFriendship(Friendship fs) {
+		// TODO Auto-generated method stub
+		Friendship acceptFriendship = new Friendship();
+		acceptFriendship.setSender(this.userRepository.findByEmail(fs.getSender().getEmail()));
+		acceptFriendship.setReceiver(this.userRepository.findByEmail(fs.getReceiver().getEmail()));
+		acceptFriendship.setStatus(fs.getStatus());
+		
+		Friendship searchFriendship = this.friendshipRepository.findBySenderAndReceiverAndStatus(acceptFriendship.getSender(), acceptFriendship.getReceiver(), FriendshipStatus.SEND_REQUEST);
+		if(searchFriendship == null){
+			//ne postoji, nije moguce promeniti mu status 
+			return null;
+		}
+		
+		//sacuvamo novo stanje sa promenom statusa
+		searchFriendship.setStatus(fs.getStatus());
+		return this.friendshipRepository.save(searchFriendship) ;
+	}
+
+	@Override
+	public boolean deleteFriend(Friendship fs) {
+		Friendship acceptFriendship = new Friendship();
+		acceptFriendship.setSender(this.userRepository.findByEmail(fs.getSender().getEmail()));
+		acceptFriendship.setReceiver(this.userRepository.findByEmail(fs.getReceiver().getEmail()));
+		acceptFriendship.setStatus(fs.getStatus());
+		
+		Friendship searchFriendship = this.friendshipRepository.findBySenderAndReceiver(acceptFriendship.getSender(), acceptFriendship.getReceiver());
+		if(searchFriendship == null){
+			//ne postoji, nije moguce izbrisati ga
+			return false;
+		}
+		//sacuvamo novo stanje sa promenom statusa
+		friendshipRepository.delete(acceptFriendship);
+		return true;
+	}
+	
 }

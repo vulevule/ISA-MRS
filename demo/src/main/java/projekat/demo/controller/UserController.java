@@ -140,13 +140,13 @@ public class UserController {
 
 	}
 
-	@GetMapping("users/login")
-	public ModelAndView loginForm() {
-		logger.info("> login form");
+	@GetMapping("users/activate")
+	public ModelAndView activateForm() {
+		logger.info("> activate form");
 
-		logger.info("< login form");
+		logger.info("< activate form");
 
-		return new ModelAndView("login");
+		return new ModelAndView("activate");
 	}
 
 	@PostMapping(value = "users/loginUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -197,6 +197,41 @@ public class UserController {
 		fe.setMessage("The request for friendship has been successfully sent");
 		logger.info("<< add friend");
 		return new ResponseEntity<FriendshipException>(fe, HttpStatus.CREATED);
+		
+	}
+	
+	@PostMapping (value="users/acceptFriendship",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<FriendshipException> acceptFriendship(@RequestBody Friendship fs){
+		logger.info(">> accept friendship");
+		Friendship acceptFriendship = this.userService.acceptFriendship(fs);
+		FriendshipException fe = new FriendshipException(acceptFriendship, "");
+		if(acceptFriendship == null){
+			fe.setMessage("Does not exist friendship");
+			logger.info("<< accept friendship");
+			return new ResponseEntity<FriendshipException>(fe, HttpStatus.BAD_REQUEST);
+		}
+		
+		fe.setMessage("A request for friendship is accepted");
+		logger.info("<< accept friendship");
+		return new ResponseEntity<FriendshipException>(fe, HttpStatus.OK);
+		
+	}
+	
+	@PostMapping(value="users/deleteFriendship",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<FriendshipException> deleteFriend(@RequestBody Friendship fs){
+		logger.info(">> delete friend");
+		boolean deleteFriendship = this.userService.deleteFriend(fs);
+		FriendshipException fe = new FriendshipException(null, "");
+		if(deleteFriendship == false){
+			fe.setMessage("Does not exists friendship");
+			logger.info("<< delete friend");
+			return new ResponseEntity<FriendshipException>(fe, HttpStatus.BAD_REQUEST);
+		}
+		
+		fe.setMessage("Friendship has been deleted");
+		logger.info("<< delete friend");
+		return new ResponseEntity<FriendshipException>(fe, HttpStatus.OK);
+		
 		
 	}
 
