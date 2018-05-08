@@ -2,25 +2,23 @@
  * 
  */
 
-$(document).ready(function(){
-	document.getElementById('my_account').click(function(event){
-		event.preventDefault();
-		
-		myAccount_click();
-	});
+$(document).click('#accountButton_id', function(event){
+	event.preventDefault();
 	
-});
+	myAccount_click();
+})
 
 function myAccount_click(){
-	var username = $(this).text();
+	var username = $(this).val();
 	console.log(username);
 	var sendData = {};
 	sendData['username'] = username;
 	
 	$.ajax({
 		type : "POST",
-		url :  "../users/getUser/"+ username,
+		url :  "../users/getUser/",
 		dataType : "json",
+		data : username,
 		success : function(data){
 			//PRAVIMO ACCOUNT STRANICU 
 			var div1 = $('<div class="span9"> </div>');

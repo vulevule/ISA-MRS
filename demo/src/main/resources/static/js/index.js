@@ -41,6 +41,7 @@ $(document).ready(function(){
 	
 	
 	$('#place_list').append(div);
+	$('#accaountButton_id').hide();
 	
 });
 

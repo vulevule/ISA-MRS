@@ -223,7 +223,7 @@ public class UserController {
 		boolean deleteFriendship = this.userService.deleteFriend(fs);
 		FriendshipException fe = new FriendshipException(null, "");
 		if(deleteFriendship == false){
-			fe.setMessage("Does not exists friendship");
+			fe.setMessage("Does not exist friendship");
 			logger.info("<< delete friend");
 			return new ResponseEntity<FriendshipException>(fe, HttpStatus.BAD_REQUEST);
 		}

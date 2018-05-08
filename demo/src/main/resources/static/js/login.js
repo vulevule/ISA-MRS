@@ -21,7 +21,8 @@ function login_submit(){
 		data : JSON.stringify(login),
 		success : function(data){
 			$('#modal').hide();
-			var a = $('<a id="my_account" href="" class="btn">' + data.user.email + " </a> ");
+			$('#accountButton_id').attr('value', data.user.username);
+			$('#accountButton_id').show();
 			var script = $('<script src="js/myAccount.js"> </script>');
 			$('body').append(script);
 			$("#account").append(a);
