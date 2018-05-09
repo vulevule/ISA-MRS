@@ -1,5 +1,7 @@
 package projekat.demo.service;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,14 @@ public class PlaceServiceImpl implements PlaceService {
 	private ArenaRepository arenaRepository;
 	
 
+	@Override
+	public Collection<Place> findAll() {
+		
+        Collection<Place> places = placeRepository.findAll();
+        
+        return places;
+	}
+	
 	@Override
 	public Place createPlace(Place p) {
 		// treba navesti da nijedan atribut ne sme biti null
@@ -53,9 +63,26 @@ public class PlaceServiceImpl implements PlaceService {
 		
 		return true;
 	}
+	
+	@Override
+	public Collection<Arena> findAllArenas() {
+		
+		 Collection<Arena> arenas = this.arenaRepository.findAll();
+	        
+	     return arenas;
+	}
 
 	@Override
 	public Arena createArena(Arena a) {
+		Place searchPlace = this.placeRepository.findByName(a.getPlace().getName());
+		if (searchPlace == null) {
+			return null;
+		}
+		if (searchPlace != a.getPlace()) {
+			System.out.println("***** FATAL ERROR ***** - PLACES IN ARENA ARE NOT EQUAL!!!");
+		}
+		a.setPlace(searchPlace);
+		
 		Arena searchArena = this.arenaRepository.findByNameAndPlace(a.getName(), a.getPlace());
 		if (searchArena == null) {
 			return this.arenaRepository.save(a);

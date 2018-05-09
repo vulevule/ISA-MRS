@@ -2,6 +2,7 @@ package projekat.demo.model;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -26,10 +27,10 @@ public class Place {
 	@Enumerated(EnumType.ORDINAL)
 	private PlaceType type;
 	
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="place")
+	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="place")
 	private Set<Arena> arenas;
 
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="place")
+	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL,  mappedBy="place")
 	private Set<Projection> projections;
 	
 	public Place() {

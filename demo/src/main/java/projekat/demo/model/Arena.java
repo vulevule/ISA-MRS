@@ -37,10 +37,21 @@ public class Arena implements Serializable {
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="arena")
 	private Set<Term> terms;
 
+
 	@ManyToOne(optional=false)
 	private Place place;
 	
 	public Arena() {
+	}
+
+	public Arena(Long id, String name, int rowSeats, int columnSeats, Set<Term> terms, Place place) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.rowSeats = rowSeats;
+		this.columnSeats = columnSeats;
+		this.terms = terms;
+		this.place = place;
 	}
 
 	public Long getId() {
@@ -59,20 +70,20 @@ public class Arena implements Serializable {
 		this.name = name;
 	}
 
-	public int getRow() {
+	public int getRowSeats() {
 		return rowSeats;
 	}
 
-	public void setRow(int row) {
-		this.rowSeats = row;
+	public void setRowSeats(int rowSeats) {
+		this.rowSeats = rowSeats;
 	}
 
-	public int getColumn() {
+	public int getColumnSeats() {
 		return columnSeats;
 	}
 
-	public void setColumn(int column) {
-		this.columnSeats = column;
+	public void setColumnSeats(int columnSeats) {
+		this.columnSeats = columnSeats;
 	}
 
 	public Set<Term> getTerms() {
@@ -94,6 +105,8 @@ public class Arena implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	
+	
 
 	
 

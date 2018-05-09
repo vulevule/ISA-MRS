@@ -1,5 +1,11 @@
 package projekat.demo.controller;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,11 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import projekat.demo.model.Arena;
 import projekat.demo.model.ArenaException;
@@ -28,15 +33,26 @@ public class PlaceController {
 	@Autowired
 	private PlaceService placeService;
 
-	@GetMapping
-	public ModelAndView getPlaces() {
+	@RequestMapping(value = "/getPlaces", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Collection<Place>> getPlaces() {
 		logger.info("> getPlaces");
 
-		// ArrayList<Place> places = placeService.findAll();
+		Collection<Place> places = placeService.findAll();
 
 		logger.info("< getPlaces");
+		
+		return new ResponseEntity<Collection<Place>>(places, HttpStatus.OK);		
+	}
+	
+	@RequestMapping(value = "/getArenas", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Collection<Arena>> getArenas() {
+		logger.info("> getArenas");
 
-		return new ModelAndView("index");
+		Collection<Arena> arenas = placeService.findAllArenas();
+
+		logger.info("< getArenas");
+		
+		return new ResponseEntity<Collection<Arena>>(arenas, HttpStatus.OK);		
 	}
 
 	@PostMapping(value = "/createPlace", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -46,17 +62,20 @@ public class PlaceController {
 		Place createPlace = null;
 		PlaceException ue = new PlaceException(createPlace, "");
 		try {
+			/*Set<Arena> temp = new HashSet<Arena>();
+			for (Arena a : p.getArenas()) {
+				a.setPlace(p);
+				temp.add((this.createArena(a)).getBody().getArena());
+			}
+			p.setArenas(temp);*/
+			
 			createPlace = placeService.createPlace(p);
 			if (createPlace == null) {
 				ue.setMessage("Already exist cinema/theater with the same name");
 				ue.setPlace(createPlace);
 				return new ResponseEntity<PlaceException>(ue, HttpStatus.ALREADY_REPORTED);
 			}
-			
-			for (Arena a : p.getArenas()) {
-				this.createArena(a);
-			}
-			
+					
 			ue.setPlace(createPlace);
 			ue.setMessage("Place has been successfully created");
 			
@@ -76,17 +95,18 @@ public class PlaceController {
 	public ResponseEntity<ArenaException> createArena(@RequestBody Arena a) {
 		logger.info("> adding arena");
 
+		
 		Arena createArena = null;
 		ArenaException ae = new ArenaException(createArena, "");
 		try {
 			createArena = placeService.createArena(a);
+			
 			if (createArena == null) {
 				ae.setMessage("Arena with same name and place already exists!");
 				ae.setArena(createArena);
 				return new ResponseEntity<ArenaException>(ae, HttpStatus.ALREADY_REPORTED);
 			}
 			
-			//for petlja... 
 			
 			ae.setArena(createArena);
 			ae.setMessage("Arena has been successfully created");
