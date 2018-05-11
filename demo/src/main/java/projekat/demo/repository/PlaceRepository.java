@@ -10,5 +10,5 @@ public interface PlaceRepository extends CrudRepository<Place, String> {
 
 	Collection<Place> findAll();
 
-	Place findByName(String name);
+	Place findByNameAndAddress(String name, String address);
 }

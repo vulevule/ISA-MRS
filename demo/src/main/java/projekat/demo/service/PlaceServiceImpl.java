@@ -34,7 +34,7 @@ public class PlaceServiceImpl implements PlaceService {
 	public Place createPlace(Place p) {
 		// treba navesti da nijedan atribut ne sme biti null
 
-		Place findPlace = this.placeRepository.findByName(p.getName());
+		Place findPlace = this.placeRepository.findByNameAndAddress(p.getName(), p.getAddress());
 		if (findPlace == null) {
 			return this.placeRepository.save(p);
 		}
@@ -44,17 +44,18 @@ public class PlaceServiceImpl implements PlaceService {
 	@Override
 	public Place updatePlace(Place p) {		
 		
-		Place searchPlace = this.placeRepository.findByName(p.getName());
+		Place searchPlace = this.placeRepository.findByNameAndAddress(p.getName(),p.getAddress());
+		
 		if (searchPlace == null) {
 			return null;
 		}
-		
+		p.setId(searchPlace.getId());
 		return this.placeRepository.save(p);
 	}
 
 	@Override
 	public boolean deletePlace(Place p) {
-		Place searchPlace = this.placeRepository.findByName(p.getName());
+		Place searchPlace = this.placeRepository.findByNameAndAddress(p.getName(),p.getAddress());
 		if (searchPlace == null) {
 			return false;
 		}
@@ -74,7 +75,7 @@ public class PlaceServiceImpl implements PlaceService {
 
 	@Override
 	public Arena createArena(Arena a) {
-		Place searchPlace = this.placeRepository.findByName(a.getPlace().getName());
+		Place searchPlace = this.placeRepository.findByNameAndAddress(a.getPlace().getName(),a.getPlace().getAddress());
 		if (searchPlace == null) {
 			return null;
 		}

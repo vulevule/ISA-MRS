@@ -27,31 +27,33 @@ public class EmailService {
 	@Autowired
 	private Environment env;
 
+	
 	@Async
 	public void sendNotification(User user) throws MailException, InterruptedException, MessagingException {
 		System.out.println("Sending email....");
-		/*
-		
-		SimpleMailMessage mail = new SimpleMailMessage();
-		mail.setTo(user.getEmail());
-		mail.setFrom(env.getProperty("spring.mail.username"));*/
 		String activateString = generateLoginActivateString();
 		user.setActivateString(activateString);
-		/*mail.setSubject("Activate account");
-		
-		
-		
-		mail.setText("Hello " + user.getName() + " " + user.getSurname() + ", \n\n Your activate string is "
-				+ activateString + ". " + " <a href ='localhost:8080/users/activate'> Link to activate your account </a>"); // uz ovo treba da se posalje i link ka stranici na kojoj ce se upisivate
-											// aktivacioni string
-		javaMailSender.send(mail);*/
-		
+			
 		MimeMessage message = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		
 		helper.setTo(user.getEmail());
 		helper.setText("<html> <body> Hi " + user.getName() + " " + user.getSurname() + ", \n\n Your activate string is " +
-		activateString + ". You can activate acocunt by clicking on the <a href='http://localhost:8080/activate.html'> link </a> </body> </html>", true);
+		activateString + ". You can activate acocunt by clicking on the <a href='http://localhost:8080/activate' id='id_link'> link </a> "
+				+ " <script>  $('id_link').on('click', function(){"
+				+ "	var activateAccount = {};"
+				+ "activateAccount['email'] = " +  user.getEmail() + ";"
+						+ "activateAccount['activateString'] = " + user.getActivateString() +";"+
+				" $.ajax({"
+				+ "type : 'POST',"
+				+ "contentType : 'application/json,'"
+				+ "dataType : 'json';"
+				+ "data : JSON.stringify(activateAccount),"
+				+ "success : function(data){"
+				+ "var url = window.location.href;"				
+				+ "window.location = url + '/index.html';"						
+				+"});(</script>  "
+				+ "</body> </html>", true);
 		helper.setSubject("Activate theaterize account");
 		
 		

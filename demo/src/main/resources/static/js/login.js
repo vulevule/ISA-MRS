@@ -23,12 +23,10 @@ function login_submit(){
 			$('#modal').hide();
 			$('#accountButton_id').attr('value', data.user.username);
 			$('#accountButton_id').show();
-			var script = $('<script src="js/myAccount.js"> </script>');
-			$('body').append(script);
-			$("#account").append(a);
-			$('#register_button').hide();
-			$('#login_button').attr('id', 'sign_out_button');
-			$('#sign_out_button').attr('value', 'Sign out');
+			$('#modal_trigger').hide();
+			$('#modal_trigger1').hide();
+			var sign_out = " <form id=account> <input type='button' class='btn' id='sign_out_button' value='Sign out'></form>";
+			$('#2').append(sign_out);
 			alert(data.message + " " + data.user.name + " " + data.user.surname);
 			if(data.user.type == "VISITOR"){
 				var li_props = $('<li> <a href="#" id="props_list"> Thematic Props </a> <ul id="items_props"> </ul> </li>');
@@ -86,7 +84,7 @@ function login_submit(){
 		},
 		error : function(data){
 			$('#modal').hide();
-			alert("Invalidate username or password");
+			alert("Invalid username or password");
 
 		}
 	})

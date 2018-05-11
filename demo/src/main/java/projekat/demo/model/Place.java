@@ -8,13 +8,24 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class, property = "name")
 public class Place {
-	@Column(nullable = false)
+	
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer id;
+	
+	@Column(nullable = false)
 	private String name;
 
 	@Column(nullable = false)
@@ -27,6 +38,7 @@ public class Place {
 	@Enumerated(EnumType.ORDINAL)
 	private PlaceType type;
 	
+	@JsonBackReference
 	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="place")
 	private Set<Arena> arenas;
 
@@ -83,10 +95,20 @@ public class Place {
 	public void setProjections(Set<Projection> projections) {
 		this.projections = projections;
 	}
+	
 
-	public Place(String name, String description, String address, PlaceType type, Set<Arena> arenas,
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Place(Integer id, String name, String description, String address, PlaceType type, Set<Arena> arenas,
 			Set<Projection> projections) {
-		super();
+		this();
+		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.address = address;
@@ -95,6 +117,7 @@ public class Place {
 		this.projections = projections;
 	}
 
+	
 	
 	
 

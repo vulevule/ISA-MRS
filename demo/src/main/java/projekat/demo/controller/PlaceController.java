@@ -61,14 +61,7 @@ public class PlaceController {
 
 		Place createPlace = null;
 		PlaceException ue = new PlaceException(createPlace, "");
-		try {
-			/*Set<Arena> temp = new HashSet<Arena>();
-			for (Arena a : p.getArenas()) {
-				a.setPlace(p);
-				temp.add((this.createArena(a)).getBody().getArena());
-			}
-			p.setArenas(temp);*/
-			
+		try {			
 			createPlace = placeService.createPlace(p);
 			if (createPlace == null) {
 				ue.setMessage("Already exist cinema/theater with the same name");
