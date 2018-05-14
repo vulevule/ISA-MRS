@@ -2,8 +2,6 @@ package projekat.demo.service;
 
 import java.util.Collection;
 
-import org.springframework.data.domain.Page;
-
 import projekat.demo.model.Arena;
 import projekat.demo.model.Place;
 

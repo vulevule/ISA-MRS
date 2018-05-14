@@ -14,8 +14,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Ad implements Serializable{
+public class Ad implements Serializable {
 	
+	private static final long serialVersionUID = 2330757556071615800L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;

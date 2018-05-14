@@ -6,7 +6,7 @@ $(document).ready(function(){
 	
 	$.ajax({
 		type : 'GET',
-		url : '../users/existUser',
+		url : '../users/exists',
 		dataType : 'json',
 		success : function(data){
 			loginUser = data.user;

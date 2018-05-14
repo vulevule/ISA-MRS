@@ -2,7 +2,7 @@ package projekat.demo.exceptions;
 
 import projekat.demo.model.Arena;
 
-public class ArenaException {
+public class ArenaException extends RuntimeException {
 
 	private Arena arena;
 	private String message;

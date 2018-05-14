@@ -11,11 +11,12 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import projekat.demo.validator.EmailAnnotation;
 import projekat.demo.validator.PasswordAnnotation;
 
 @Entity
-
 public class User implements Serializable {
 
 	private static final long serialVersionUID = -2230328594830389946L;
@@ -51,15 +52,19 @@ public class User implements Serializable {
 	@Column
 	private String activateString;
 
+	@JsonBackReference(value = "bids")
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="user")
 	private Set<Bid> bids;
 	
+	@JsonBackReference(value = "ads")
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="user")
 	private Set<Ad> ads;
 	
+	@JsonBackReference(value = "thematicProps-user")
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="user")
+	private Set<ThematicProp> thematicProps;
 	
 	private String repeatPassword;
-	
 	
 	public User() {
 	}

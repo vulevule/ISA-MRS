@@ -15,11 +15,12 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class Projection implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -33,9 +34,11 @@ public class Projection implements Serializable {
 	@Enumerated(EnumType.ORDINAL)
 	private ProjectionType type;
 	
+	@JsonManagedReference(value = "projection-place")
 	@ManyToOne
 	private Place place;
 	
+	@JsonBackReference(value = "arenasOfProjection")
 	@ManyToMany
 	private Set<Arena> arenasOfProjection;
 
@@ -63,11 +66,17 @@ public class Projection implements Serializable {
 	@Column(nullable = false)
 	private String description;
 
+	@JsonBackReference(value = "terms")
 	@OneToMany(mappedBy = "projection")
 	private Set<Term> terms;
 	
+	@JsonBackReference(value = "ads")
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="projection")
 	private Set<Ad> ads;
+	
+	@JsonBackReference(value = "thematicProps-projection")
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="projection")
+	private Set<ThematicProp> thematicProps;
 
 	public Long getId() {
 		return id;
@@ -188,9 +197,4 @@ public class Projection implements Serializable {
 	public void setAds(Set<Ad> ads) {
 		this.ads = ads;
 	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
 }

@@ -5,13 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import projekat.demo.exceptions.ProjectionException;
 import projekat.demo.exceptions.ThematicPropException;
+import projekat.demo.exceptions.UserException;
 import projekat.demo.model.ThematicProp;
+import projekat.demo.model.ThematicPropDto;
 import projekat.demo.service.ThematicPropService;
 
 @RestController
@@ -23,33 +27,24 @@ public class ThematicPropController {
 	@Autowired
 	private ThematicPropService thematicPropService;
 
-	@PostMapping(value = "/createThematicProp", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ThematicPropException> createThematicProp(@RequestBody ThematicProp tp) {
+	@PostMapping(consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> createThematicProp(@RequestBody ThematicPropDto tp) {
 		logger.info("> adding thematic prop");
 
-		ThematicProp createThematicProp = null;
-		ThematicPropException pe = new ThematicPropException(createThematicProp, "");
-
 		try {
-			createThematicProp = thematicPropService.createThematicProp(tp);
-			if (createThematicProp == null) {
-				pe.setMessage("Thematic Prop with same name and place already exists!");
-				pe.setThematicProp(createThematicProp);
-				return new ResponseEntity<ThematicPropException>(pe, HttpStatus.ALREADY_REPORTED);
-			}
-			pe.setThematicProp(createThematicProp);
-			pe.setMessage("Thematic Prop successfully created!");
-
-		} catch (Exception e) {
-			pe.setMessage(e.getMessage());
-			return new ResponseEntity<ThematicPropException>(pe, HttpStatus.EXPECTATION_FAILED);
+			thematicPropService.createThematicProp(tp);
+			logger.info("< adding thematic prop");
+			return new ResponseEntity<String>("Thematic Prop successfully created!", HttpStatus.CREATED);
+		} catch (ProjectionException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		} catch (UserException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		} catch (ThematicPropException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.ALREADY_REPORTED);
 		}
-
-		logger.info("< adding thematic prop");
-		return new ResponseEntity<ThematicPropException>(pe, HttpStatus.CREATED);
 	}
 
-	@PostMapping(value = "/deleteThematicProp", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ThematicPropException> deleteThematicProp(@RequestBody ThematicProp thematicProp) {
 		logger.info(">> delete thematic prop");
 		ThematicPropException pe = new ThematicPropException(thematicProp, "");

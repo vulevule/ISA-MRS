@@ -2,7 +2,7 @@ package projekat.demo.exceptions;
 
 import projekat.demo.model.ThematicProp;
 
-public class ThematicPropException {
+public class ThematicPropException extends RuntimeException {
 
 	private ThematicProp thematicProp;
 	private String message;

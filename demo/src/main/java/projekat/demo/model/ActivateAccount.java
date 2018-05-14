@@ -4,9 +4,7 @@ import java.io.Serializable;
 
 public class ActivateAccount implements Serializable {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 4933264589620709632L;
 	private String email;
 	private String activateAccount;

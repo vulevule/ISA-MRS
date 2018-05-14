@@ -2,7 +2,10 @@ package projekat.demo.exceptions;
 
 import projekat.demo.model.User;
 
-public class UserException {
+public class UserException extends RuntimeException {
+	
+	private static final long serialVersionUID = 1L;
+	
 	private User user;
 	private String message;
 

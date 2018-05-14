@@ -9,4 +9,6 @@ public interface ProjectionService {
 	Projection updateProjection(Projection p);
 	
 	boolean deleteProjection(Projection p);
+	
+	Iterable<Projection> findAll();
 }

@@ -2,7 +2,7 @@ package projekat.demo.exceptions;
 
 import projekat.demo.model.Place;
 
-public class PlaceException {
+public class PlaceException extends RuntimeException {
 	private Place place;
 	private String message;
 

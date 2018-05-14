@@ -2,7 +2,7 @@ package projekat.demo.exceptions;
 
 import projekat.demo.model.Projection;
 
-public class ProjectionException {
+public class ProjectionException extends RuntimeException {
 
 	private Projection projection;
 	private String message;

@@ -13,7 +13,6 @@ function activate_submit(){
 	login["email"] = $("#email_id").val();
 	login["activateAccount"] = $("#activate_id").val();
 	
-	
 	$.ajax({
 		type : "POST",		
 		url : "../users/activateAccount",

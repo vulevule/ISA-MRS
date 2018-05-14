@@ -2,7 +2,8 @@ package projekat.demo.exceptions;
 
 import projekat.demo.model.Friendship;
 
-public class FriendshipException {
+public class FriendshipException extends RuntimeException {
+	
 	private Friendship fs;
 	private String message;
 

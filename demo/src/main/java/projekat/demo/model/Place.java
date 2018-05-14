@@ -1,5 +1,6 @@
 package projekat.demo.model;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -16,8 +17,10 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-public class Place {
+public class Place implements Serializable {
 	
+	private static final long serialVersionUID = -3237585465892945619L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
@@ -35,16 +38,14 @@ public class Place {
 	@Enumerated(EnumType.ORDINAL)
 	private PlaceType type;
 	
-	@JsonBackReference
+	@JsonBackReference(value = "arenas")
 	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="place")
 	private Set<Arena> arenas;
 
+	@JsonBackReference(value = "projection-place")
 	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL,  mappedBy="place")
 	private Set<Projection> projections;
 	
-	public Place() {
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -101,21 +102,4 @@ public class Place {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
-	public Place(Integer id, String name, String description, String address, PlaceType type, Set<Arena> arenas,
-			Set<Projection> projections) {
-		this();
-		this.id = id;
-		this.name = name;
-		this.description = description;
-		this.address = address;
-		this.type = type;
-		this.arenas = arenas;
-		this.projections = projections;
-	}
-
-	
-	
-	
-
 }

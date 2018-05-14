@@ -37,7 +37,7 @@ public class UserController {
 	private HttpSession session;
 
 	@GetMapping(value = "users/exists", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UserException> UserInSession() {
+	public ResponseEntity<UserException> userInSession() {
 		logger.info("> exists user");
 		User user = (User) session.getAttribute("loginUser");
 		UserException ue = new UserException(user, "Exists login user");

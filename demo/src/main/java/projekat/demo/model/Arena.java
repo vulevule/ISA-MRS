@@ -12,19 +12,12 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerator;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 public class Arena implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 6739132830220311437L;
-
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class ThematicProp implements Serializable {
 
@@ -21,18 +23,13 @@ public class ThematicProp implements Serializable {
 	@Column(nullable = false)
 	private String name;
 
+	@JsonManagedReference(value = "thematicProps-projection")
 	@ManyToOne
 	private Projection projection;
 
+	@JsonManagedReference(value = "thematicProps-user")
 	@ManyToOne
 	private User user;
-
-	public ThematicProp(String name, Projection projection, User user) {
-		super();
-		this.name = name;
-		this.projection = projection;
-		this.user = user;
-	}
 
 	public Long getId() {
 		return id;

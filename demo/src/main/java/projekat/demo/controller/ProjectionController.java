@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -82,5 +83,15 @@ public class ProjectionController {
 		logger.info("<< delete projection");
 		return new ResponseEntity<ProjectionException>(pe, HttpStatus.OK);
 	}
+	
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Iterable<Projection>> findAll() {
+		logger.info(">> find all projections");
+		
+		Iterable<Projection> projections = projectionService.findAll();
+		
+		logger.info("<< find all projection");
 
+		return new ResponseEntity<Iterable<Projection>>(projections, HttpStatus.OK);
+	}
 }
