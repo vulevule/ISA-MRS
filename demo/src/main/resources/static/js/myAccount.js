@@ -7,16 +7,15 @@ $(document).ready(function(){
 	
 	$.ajax({
 		type : 'GET',
-		url : '../users/existUser',
+		url : '../users/exists',
 		dataType : 'json',
 		success : function(data){
 			loginUser = data.user;
 		}
 	})
 	
+	/*
 	
-	
-	$('#email').attr("placeholder", loginUser.email);
 	$('#name_id').attr("placeholder", loginUser.name);
 	$('#surname_id').attr("placeholder", loginUser.surname);
 	$('#phone_id').attr("placeholder", loginUser.phone);
@@ -25,7 +24,7 @@ $(document).ready(function(){
 	$('#name_id').val(loginUser.name);
 	$('#surname_id').val( loginUser.surname);
 	$('#phone_id').val(loginUser.phone);
-	$('#address_id').val(loginUser.address);
+	$('#address_id').val(loginUser.address);*/
 });
 
 

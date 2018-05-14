@@ -1,5 +1,8 @@
 package projekat.demo.service;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -124,6 +127,33 @@ public class UserServiceImpl implements UserService {
 		//sacuvamo novo stanje sa promenom statusa
 		friendshipRepository.delete(acceptFriendship);
 		return true;
+	}
+
+	@Override
+	public Collection<User> allFriends(User user) {
+		// TODO Auto-generated method stub
+		Collection<Friendship> sendFriend = this.friendshipRepository.findBySenderAndStatus(user, FriendshipStatus.APPROVED);
+		Collection<Friendship> acceptFriend = this.friendshipRepository.findByReceiverAndStatus(user, FriendshipStatus.APPROVED);
+		Collection<User> friends = new ArrayList<User>();
+		
+		for (Friendship fs : sendFriend){
+			friends.add(fs.getReceiver());
+		}
+		for (Friendship fs : acceptFriend){
+			friends.add(fs.getSender());
+		}
+		return friends;
+	}
+
+	@Override
+	public Collection<User> allFriendshipRequest(User user) {
+		//pronadjemo sve poslate zahteve, trazimo da prosledjeni user bude receiver i status da bude send
+		Collection<Friendship> requests = this.friendshipRepository.findByReceiverAndStatus(user, FriendshipStatus.SEND_REQUEST);
+		Collection<User> users = new ArrayList<User>();
+		for(Friendship fs : requests){
+			users.add(fs.getSender());
+		}
+		return users;
 	}
 	
 }

@@ -1,5 +1,8 @@
 package projekat.demo.controller;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -10,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -221,5 +226,27 @@ public class UserController {
 		return new ResponseEntity<FriendshipException>(fe, HttpStatus.OK);
 
 	}
+	
+	//all friends
+	@RequestMapping(value= "users/allFriends", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Collection<User>> getAllFriends(){
+			logger.info("> all friends");
+			User user =(User)this.session.getAttribute("loginUser");
+			Collection<User> allFriends = this.userService.allFriends(user);			
+			logger.info("< all friends");
+			return new ResponseEntity<Collection<User>>(allFriends, HttpStatus.OK);
+			
+		}
+	//all friendship request
+	@RequestMapping(value= "users/allFriendshipRequest", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Collection<User>> getAllFriendshipRequest(){
+			logger.info("> all friendship request");
+			User user =(User)this.session.getAttribute("loginUser");
+			Collection<User> allFriends = this.userService.allFriendshipRequest(user);			
+			logger.info("< all friendship request");
+			return new ResponseEntity<Collection<User>>(allFriends, HttpStatus.OK);
+			
+		}
+		
 
 }
