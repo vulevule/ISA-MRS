@@ -1,4 +1,6 @@
-package projekat.demo.model;
+package projekat.demo.exceptions;
+
+import projekat.demo.model.Place;
 
 public class PlaceException {
 	private Place place;

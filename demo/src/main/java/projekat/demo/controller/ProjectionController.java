@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import projekat.demo.exceptions.ProjectionException;
 import projekat.demo.model.Projection;
-import projekat.demo.model.ProjectionException;
 import projekat.demo.service.ProjectionService;
 
 @RestController
@@ -22,14 +22,14 @@ public class ProjectionController {
 
 	@Autowired
 	private ProjectionService projectionService;
-	
+
 	@PostMapping(value = "/createProjection", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ProjectionException> createProjection(@RequestBody Projection p) {
 		logger.info("> adding projection");
-		
+
 		Projection createProjection = null;
 		ProjectionException pe = new ProjectionException(createProjection, "");
-		
+
 		try {
 			createProjection = projectionService.createProjection(p);
 			if (createProjection == null) {
@@ -39,22 +39,22 @@ public class ProjectionController {
 			}
 			pe.setProjection(createProjection);
 			pe.setMessage("Projection successfully created!");
-		
+
 		} catch (Exception e) {
 			pe.setMessage(e.getMessage());
 			return new ResponseEntity<ProjectionException>(pe, HttpStatus.EXPECTATION_FAILED);
 		}
-		
+
 		logger.info("< adding projection");
 		return new ResponseEntity<ProjectionException>(pe, HttpStatus.CREATED);
 	}
-	
+
 	@PostMapping(value = "/updateProjection", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ProjectionException> updateProjection(@RequestBody Projection projection) {
 		logger.info(">> update projection");
 		Projection updateProjection = this.projectionService.updateProjection(projection);
 		ProjectionException pe = new ProjectionException(updateProjection, "");
-		
+
 		if (updateProjection == null) {
 			pe.setMessage("Projection does not exist");
 			logger.info("<< update projection");
@@ -65,12 +65,12 @@ public class ProjectionController {
 		logger.info("<< update projection");
 		return new ResponseEntity<ProjectionException>(pe, HttpStatus.OK);
 	}
-	
+
 	@PostMapping(value = "/deleteProjection", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ProjectionException> deleteProjection(@RequestBody Projection projection) {
 		logger.info(">> delete projection");
 		ProjectionException pe = new ProjectionException(projection, "");
-		
+
 		if (!this.projectionService.deleteProjection(projection)) {
 			pe.setMessage("Projection does not exist!");
 			logger.info("<< delete projection");
@@ -78,9 +78,9 @@ public class ProjectionController {
 		} else {
 			pe.setMessage("Deletion successfull!");
 		}
-		
+
 		logger.info("<< delete projection");
 		return new ResponseEntity<ProjectionException>(pe, HttpStatus.OK);
 	}
-	
+
 }
