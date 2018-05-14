@@ -21,12 +21,11 @@ function login_submit(){
 		data : JSON.stringify(login),
 		success : function(data){
 			$('#modal').hide();
-			$('#accountButton_id').attr('value', data.user.username);
-			$('#accountButton_id').show();
+			$('#myAccount').show();
+			$('#log-out').show();
 			$('#modal_trigger').hide();
 			$('#modal_trigger1').hide();
-			var sign_out = " <form id=account> <input type='button' class='btn' id='sign_out_button' value='Sign out'></form>";
-			$('#2').append(sign_out);
+		
 			alert(data.message + " " + data.user.name + " " + data.user.surname);
 			if(data.user.type == "VISITOR"){
 				var li_props = $('<li> <a href="#" id="props_list"> Thematic Props </a> <ul id="items_props"> </ul> </li>');
