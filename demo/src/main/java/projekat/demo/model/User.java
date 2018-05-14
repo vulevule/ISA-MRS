@@ -52,17 +52,11 @@ public class User implements Serializable {
 	@Column
 	private String activateString;
 
-	@JsonBackReference(value = "bids")
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="user")
 	private Set<Bid> bids;
 	
-	@JsonBackReference(value = "ads")
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="user")
 	private Set<Ad> ads;
-	
-	@JsonBackReference(value = "thematicProps-user")
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="user")
-	private Set<ThematicProp> thematicProps;
 	
 	private String repeatPassword;
 	
