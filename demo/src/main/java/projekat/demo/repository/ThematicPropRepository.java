@@ -9,8 +9,11 @@ import projekat.demo.model.ThematicProp;
 import projekat.demo.model.User;
 
 public interface ThematicPropRepository extends CrudRepository<ThematicProp, Long> {
-	
+
 	List<ThematicProp> findByUser(User user);
+
 	List<ThematicProp> findByProjection(Projection projection);
+
+	ThematicProp findByNameAndProjection(String name, Projection projection);
 
 }

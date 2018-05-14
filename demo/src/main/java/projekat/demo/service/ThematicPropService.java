@@ -4,9 +4,11 @@ import projekat.demo.model.ThematicProp;
 
 public interface ThematicPropService {
 	
-	ThematicProp createThematicProp(String name, Long projectionId, String email);
+	ThematicProp createThematicProp(ThematicProp thematicProp);
 	
-	void deleteThematicProp(Long thematicPropId);
+	ThematicProp updateThematicProp(ThematicProp thematicProp);
+	
+	boolean deleteThematicProp(ThematicProp thematicProp);
 	
 
 }

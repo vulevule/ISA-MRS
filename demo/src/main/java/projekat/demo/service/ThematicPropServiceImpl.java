@@ -26,29 +26,49 @@ public class ThematicPropServiceImpl implements ThematicPropService {
 	private UserRepository userRepository;
 
 	@Override
-	public ThematicProp createThematicProp(String name, Long projectionId, String email) {
-		Optional<Projection> foundProjection = projectionRepository.findById(projectionId);
+	public ThematicProp createThematicProp(ThematicProp thematicProp) {
+		Optional<Projection> foundProjection = projectionRepository.findById(thematicProp.getId());
 		if (!foundProjection.isPresent()) {
 			// TODO throw exception
 		}
-		Projection projection = foundProjection.get();
-		Optional<User> foundUser = userRepository.findById(email);
+	
+		Optional<User> foundUser = userRepository.findById(thematicProp.getUser().getEmail());
 		if (!foundUser.isPresent()) {
 			// TODO throw exception
 		}
-		User user = userRepository.findById(email).get();
+		User user = userRepository.findById(thematicProp.getUser().getEmail()).get();
 		
 		if (user.getType() == RoleType.FAN_ZONE_ADMIN) {
-			ThematicProp thematicProp = new ThematicProp(name, projection, user);
-			return thematicPropRepository.save(thematicProp);
+			ThematicProp findThematicProp = this.thematicPropRepository.findByNameAndProjection(thematicProp.getName(), thematicProp.getProjection());
+			if (findThematicProp == null) {
+				return this.thematicPropRepository.save(thematicProp);
+			}
 		}
 		// TODO throw exception
 		return null;
 	}
+	
+	@Override
+	public ThematicProp updateThematicProp(ThematicProp thematicProp) {
+		
+		return this.thematicPropRepository.save(thematicProp);
+	}
 
 	@Override
-	public void deleteThematicProp(Long thematicPropId) {
-		thematicPropRepository.deleteById(thematicPropId);
+	public boolean deleteThematicProp(ThematicProp thematicProp) {
+		
+		if (thematicProp == null) {
+			return false;
+		}
+		ThematicProp deleteThematicProp = this.thematicPropRepository.findByNameAndProjection(thematicProp.getName(), thematicProp.getProjection());
+		
+		if (deleteThematicProp == null) {
+			return false;
+		}
+	
+		this.thematicPropRepository.delete(thematicProp);
+		
+		return true;
 
 	}
 
