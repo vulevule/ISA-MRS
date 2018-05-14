@@ -1,8 +1,52 @@
 /**
  * 
  */
-
+var loginUser; 
 $(document).ready(function(){
+	
+	$.ajax({
+		type : 'GET',
+		url : '../users/existUser',
+		dataType : 'json',
+		success : function(data){
+			loginUser = data.user;
+		}
+	})
+	
+	
+	if(loginUser == null){
+		$('head').append("<link rel='stylesheet' href='../themes/css/style.css'>");
+		$('#user_menu').append("<li><a id='modal_trigger' href='#modalR' class='btn'>Register</a></li>" + 			
+							"<li><a id='modal_trigger1' href='#modal' class='btn'>Login</a></li>	");
+		
+		$('body').append("<script src='login.js'></script>\
+				<div id='modal' class='popupContainer' style='display:none;'>\
+						<header class='popupHeader'>\
+								<span class='header_title'>Login</span>\
+								<span class='modal_close'><i class='fa fa-times'></i></span>\
+						</header>\
+						<section class='popupBody'>\
+								<div class='user_login'><a href='#' id='login_form'>Login</a></div>\
+										<form id='login' >\
+												<label>Email / Username</label>\
+												<input type='text'  id='username'/>\
+												<br />\
+												<label>Password</label>\
+												<input type='password' id='password'/>\
+												<br />\
+												<div class='action_btns'>\
+														<div class='one_half last'><input type='button' id='login_button' class='btn btn_red' value='Login'></div>\
+												</div>\
+												<a href='#' class='forgot_password'>Forgot password?</a>\
+										</form>\
+						</section>\
+				</div>");
+		$('body').append("<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>\
+		<script src='https://andwecode.com/wp-content/uploads/2015/10/jquery.leanModal.min_.js'></script>\
+		<script  src='../themes/js/index.js'></script>");
+	}
+	
+	
 	
 	var div = $('<div class="span12"> </div>');
 	var title = $('<h4 class="title">'+

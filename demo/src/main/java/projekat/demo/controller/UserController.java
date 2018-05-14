@@ -1,10 +1,14 @@
 package projekat.demo.controller;
 
+
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,32 +37,21 @@ public class UserController {
 	private UserService userService;
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private HttpSession session;
 
-	@GetMapping("users/register")
-	public ModelAndView registration() {
-		logger.info("> registration form");
-
-		logger.info("< registration form");
-
-		return new ModelAndView("registration");
-	}
 	
 	
-	@RequestMapping(value="users/getUser/{username}", method=RequestMethod.GET,  produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UserException> getUser(@PathVariable("username") String username ){
-		logger.info(">> get user by username:{}", username);
-		User findUser = null;
-		UserException ue = new UserException(findUser, "User is found");
-		
-		findUser =  userService.getUserByUsername(username);
-		if (findUser == null){
-			ue.setMessage("User does not exist");
-			logger.info("<< get user by username");
-			return new ResponseEntity<UserException>(ue, HttpStatus.NOT_FOUND);
+	@GetMapping(value = "users/exists", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UserException> UserInSession(){
+		logger.info("> exists user");
+		User user = (User) session.getAttribute("loginUser");
+		UserException ue = new UserException(user, "Exists login user");
+		if(user == null){
+			ue.setMessage("Does not exist login user");
 		}
-		ue.setUser(findUser);
-		
-		logger.info(" << get user by username ");
+		logger.info("<< exists user" + user);
 		return new ResponseEntity<UserException>(ue, HttpStatus.OK);
 	}
 	
@@ -91,7 +84,7 @@ public class UserController {
 			if (createUser.getType() == RoleType.VISITOR) {
 				if(sendActivateMail(createUser) == false){
 					//ne uspelo slanje mejla, ispisujemo poruku
-					ue.setMessage("Failed to send activatio email.");
+					ue.setMessage("Failed to send activation email.");
 					return new ResponseEntity<UserException>(ue, HttpStatus.BAD_REQUEST);
 				}
 			}
@@ -160,6 +153,7 @@ public class UserController {
 			return new ResponseEntity<UserException>(ue, HttpStatus.NOT_FOUND);
 		}
 		logger.info("< login");
+		session.setAttribute("loginUser", u);
 		return new ResponseEntity<UserException>(ue, HttpStatus.OK);
 	}
 	
@@ -186,6 +180,8 @@ public class UserController {
 	public ResponseEntity<FriendshipException> addFriend(@RequestBody Friendship fs){
 		//slanje zahteva za prijateljstvo, samo unos podataka u tabelu friendship
 		logger.info(">> add friend");
+		User sender =(User)session.getAttribute("loginUser");
+		fs.setSender(sender);		
 		Friendship newFriendship = this.userService.createFriendship(fs);
 		FriendshipException fe = new FriendshipException(newFriendship, "");
 		if(newFriendship == null){
@@ -203,6 +199,7 @@ public class UserController {
 	@PostMapping (value="users/acceptFriendship",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<FriendshipException> acceptFriendship(@RequestBody Friendship fs){
 		logger.info(">> accept friendship");
+		fs.setSender((User)session.getAttribute("loginUser"));
 		Friendship acceptFriendship = this.userService.acceptFriendship(fs);
 		FriendshipException fe = new FriendshipException(acceptFriendship, "");
 		if(acceptFriendship == null){
@@ -220,6 +217,7 @@ public class UserController {
 	@PostMapping(value="users/deleteFriendship",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<FriendshipException> deleteFriend(@RequestBody Friendship fs){
 		logger.info(">> delete friend");
+		fs.setSender((User)session.getAttribute("loginUser"));
 		boolean deleteFriendship = this.userService.deleteFriend(fs);
 		FriendshipException fe = new FriendshipException(null, "");
 		if(deleteFriendship == false){

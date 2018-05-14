@@ -21,6 +21,8 @@
 		<script src="bootstrap/js/bootstrap.min.js"></script>				
 		<script src="themes/js/superfish.js"></script>	
 		<script src="themes/js/jquery.scrolltotop.js"></script>
+		<script src="js/index.js"> </script>
+		
 		<!--[if lt IE 9]>			
 			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 			<script src="js/respond.min.js"></script>
@@ -44,51 +46,16 @@
 				</div>
 				<div class="span8">
 					<div class="account pull-right">
-						<ul class="user-menu" id="user_menu">
-							<li id="account"> <form id=account> <input type="button" class="btn" id="accaountButton_id" value=""></form></li>			
-							<li id="2"><a id="modal_trigger" href="#modalR" class="btn">Register</a></li>				
-							<li id="3"><a id="modal_trigger1" href="#modal" class="btn">Login</a></li>	
+						<ul class="user-menu" id="user_menu">			
 						</ul>
 					</div>
 				</div>
 			</div>
 		</div>
-		<script src="js/login.js"></script>
-		<div id="modal" class="popupContainer" style="display:none;">
-				<header class="popupHeader">
-						<span class="header_title">Login</span>
-						<span class="modal_close"><i class="fa fa-times"></i></span>
-				</header>
-
-				<section class="popupBody">
-						
-
-						<!-- Username & Password Login form -->
-						<div class="user_login"><a href="#" id="login_form">Login</a></div>
-								<form id="login" >
-										<label>Email / Username</label>
-										<input type="text"  id="username"/>
-										<br />
-
-										<label>Password</label>
-										<input type="password" id="password"/>
-										<br />
-
-										<div class="checkbox">
-												<input id="remember" type="checkbox" />
-												<label for="remember">Remember me on this computer</label>
-										</div>
-
-										<div class="action_btns">
-												<div class="one_half last"><input type="button" id="login_button" class="btn btn_red" value="Login"></div>
-										</div>
-										
-										<a href="#" class="forgot_password">Forgot password?</a>
-								</form>
-
-								
-				</section>
+		
+		<div id='login_popup'>
 		</div>
+		
 		
 		<script src="js/register.js"></script>
 		<div id="modalR" class="popupContainer" style="display:none;">
@@ -165,7 +132,6 @@
 				</div>
 			</section>
 			
-			<script src="js/index.js"> </script>
 			<section class="main-content">
 				<div class="row">
 					<div class="span12">													
