@@ -1,5 +1,7 @@
 package projekat.demo.service;
 
+import java.util.Collection;
+
 import projekat.demo.model.Friendship;
 import projekat.demo.model.User;
 
@@ -22,5 +24,7 @@ public interface UserService {
 	Friendship acceptFriendship(Friendship fs);
 
 	boolean deleteFriend(Friendship fs);
+
+	Collection<User> allFriends(User user);
 
 }

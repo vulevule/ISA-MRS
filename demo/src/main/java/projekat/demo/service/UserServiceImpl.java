@@ -1,5 +1,7 @@
 package projekat.demo.service;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -124,6 +126,11 @@ public class UserServiceImpl implements UserService {
 		//sacuvamo novo stanje sa promenom statusa
 		friendshipRepository.delete(acceptFriendship);
 		return true;
+	}
+
+	@Override
+	public Collection<User> allFriends(User user) {
+		return this.friendshipRepository.findBySenderOrReceiver(user, user);
 	}
 	
 }

@@ -1,5 +1,7 @@
 package projekat.demo.repository;
 
+import java.util.Collection;
+
 import org.springframework.data.repository.CrudRepository;
 
 import projekat.demo.model.Friendship;
@@ -11,4 +13,6 @@ public interface FriendshipRepository extends CrudRepository<Friendship, Long>{
 	Friendship findBySenderAndReceiverAndStatus(User sender, User receiver, FriendshipStatus status);
 	
 	Friendship findBySenderAndReceiver(User sender, User receiver);
+
+	Collection<User> findBySenderOrReceiver(User sender, User receiver);
 }

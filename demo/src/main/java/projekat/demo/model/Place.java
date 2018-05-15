@@ -1,5 +1,6 @@
 package projekat.demo.model;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,7 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Place {
@@ -35,7 +36,7 @@ public class Place {
 	@Enumerated(EnumType.ORDINAL)
 	private PlaceType type;
 	
-	@JsonBackReference
+	@JsonManagedReference
 	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="place")
 	private Set<Arena> arenas;
 
@@ -76,6 +77,7 @@ public class Place {
 	public void setType(PlaceType type) {
 		this.type = type;
 	}
+
 
 	public Set<Arena> getArenas() {
 		return arenas;

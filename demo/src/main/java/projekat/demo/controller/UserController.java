@@ -1,5 +1,7 @@
 package projekat.demo.controller;
 
+import java.util.Collection;
+
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -10,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,6 +22,7 @@ import projekat.demo.exceptions.UserException;
 import projekat.demo.model.ActivateAccount;
 import projekat.demo.model.Friendship;
 import projekat.demo.model.LoginUser;
+import projekat.demo.model.Place;
 import projekat.demo.model.RoleType;
 import projekat.demo.model.User;
 import projekat.demo.service.EmailService;
@@ -151,6 +156,11 @@ public class UserController {
 	@PostMapping(value = "users/updateAccount", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<UserException> updateAccount(@RequestBody User user) {
 		logger.info(">> update account");
+		
+		if(!(user.getPassword().equals(user.getRepeatPassword()))){
+			return new ResponseEntity<UserException>(new UserException(user, "Entered passwords do not matched!!"), HttpStatus.BAD_REQUEST);
+		}
+		
 		User u = this.userService.updateUser(user);
 		UserException ue = new UserException(u, "");
 
@@ -189,7 +199,7 @@ public class UserController {
 	@PostMapping(value = "users/acceptFriendship", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<FriendshipException> acceptFriendship(@RequestBody Friendship fs) {
 		logger.info(">> accept friendship");
-		fs.setSender((User) session.getAttribute("loginUser"));
+		fs.setReceiver((User) session.getAttribute("loginUser"));
 		Friendship acceptFriendship = this.userService.acceptFriendship(fs);
 		FriendshipException fe = new FriendshipException(acceptFriendship, "");
 		if (acceptFriendship == null) {
@@ -221,5 +231,17 @@ public class UserController {
 		return new ResponseEntity<FriendshipException>(fe, HttpStatus.OK);
 
 	}
+	
+	//all friends
+	@RequestMapping(value= "users/allFriends", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Collection<User>> getAllFriends(){
+		logger.info("> all friends");
+		User user =(User)this.session.getAttribute("loginUser");
+		Collection<User> allFriends = this.userService.allFriends(user);
+		logger.info("< all friends");
+		return new ResponseEntity<Collection<User>>(allFriends, HttpStatus.OK);
+		
+	}
+	
 
 }

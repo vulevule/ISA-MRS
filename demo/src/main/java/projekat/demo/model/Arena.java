@@ -12,10 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerator;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Arena implements Serializable {
@@ -42,7 +39,7 @@ public class Arena implements Serializable {
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="arena")
 	private Set<Term> terms;
 
-	@JsonManagedReference
+	@JsonBackReference
 	@ManyToOne(optional=false)
 	private Place place;
 	
