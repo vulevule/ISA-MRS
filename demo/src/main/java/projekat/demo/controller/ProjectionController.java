@@ -27,7 +27,7 @@ public class ProjectionController {
 	@PostMapping(value = "/createProjection", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ProjectionException> createProjection(@RequestBody Projection p) {
 		logger.info("> adding projection");
-
+		
 		Projection createProjection = null;
 		ProjectionException pe = new ProjectionException(createProjection, "");
 

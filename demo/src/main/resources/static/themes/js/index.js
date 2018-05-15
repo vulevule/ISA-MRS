@@ -10,6 +10,12 @@ $("#modal_trigger1").leanModal({
 		closeButton: ".modal_close"
 });
 
+$("#modal_trigger_projection").leanModal({
+	top: 100,
+	overlay: 0.6,
+	closeButton: ".modal_close"
+});
+
 $(function() {
 		// Calling Login Form
 		$("#login_form").click(function() {
@@ -24,5 +30,11 @@ $(function() {
 				$(".header_title").text('Register');
 				return false;
 		});
+		
+		$("#create_projection_form").click(function() {
+			$(".create_projection").show();
+			$(".header_title").text('Create projection');
+			return false;
+	});
 
 });

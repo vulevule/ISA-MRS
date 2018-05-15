@@ -49,6 +49,7 @@
 						<ul class="user-menu" id="user_menu">		
 							<li><a id='modal_trigger' href='#modalR' class='btn'>Register</a></li>			
 							<li><a id='modal_trigger1' href='#modal' class='btn'>Login</a></li>	
+							<li><a id='modal_trigger_projection' href='#modalP' class='btn'>Create projection</a></li>
 							<li><a id='myAccount' href='myaccount.html' class='btn'>My Account</a></li>			
 							<li><a id='log-out' href='' class='btn'>Log out</a></li>	
 						</ul>
@@ -138,6 +139,61 @@
 
 										<div class="action_btns">
 												<div class="one_half last"><input type="button" id="register_button" value="Register"></div>
+										</div>
+								</form>
+						
+				</section>
+		</div>
+		
+		<script src="js/createProjection.js"></script>
+		<div id="modalP" class="popupContainer" style="display:none;">
+				<header class="popupHeader">
+						<span class="header_title">Create projection</span>
+						<span class="modal_close"><i class="fa fa-times"></i></span>
+				</header>
+
+				<section class="popupBody">
+						
+
+						<!-- Create projection form -->
+						<div class="create_projection"><a href="#" id="create_projection_form">Create projection</a></div>
+								<form>
+										<label>Name</label>
+										<input type="text" id="name" required="required"/>
+										<br />
+										
+										<label>Cast</label>
+										<input type="text" id ="cast" required="required"/>
+										<br />
+										
+										<label>Genre</label>
+										<input type="text" id="genre" required="required"/>
+										<br />
+										
+										<label>Director</label>
+										<input type="text" id="director" required="required"/>
+										<br />
+										
+										<label>Duration</label>
+										<input type="number" id="duration" min="1" required="required"/>
+										<br />
+										
+										<label>Description</label>
+										<input type="text" id="description" required="required"/>
+										<br />
+										
+										<label>Banner</label>
+										<input type="file" id="banner" required="required"/>
+										<br />
+
+										<label>Terms</label>
+										<ul id="terms_section">
+											
+										</ul>
+										<div class="one_half last"><input type="button" id="add_new_term_button" value="Add new term"></div>
+										
+										<div class="action_btns">
+											<div class="one_half last"><input type="button" id="create_projection_button" value="Create"></div>
 										</div>
 								</form>
 						

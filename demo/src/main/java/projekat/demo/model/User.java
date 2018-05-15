@@ -10,6 +10,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -45,6 +46,9 @@ public class User implements Serializable {
 	@Column(nullable = false)
 	@Enumerated(EnumType.ORDINAL)
 	private RoleType type;
+	
+	@OneToOne
+	private Place place;
 
 	@Column(nullable = false)
 	private boolean activate;

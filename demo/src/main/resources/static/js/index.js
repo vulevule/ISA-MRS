@@ -55,7 +55,29 @@ $(document).ready(function(){
 		url : "../places/getPlaces",
 		dataType : "json",
 		success : function(data){
-			alert("Success!");
+			//alert("Success!");
+			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+			
+			//alert("Data is array: " + (data instanceof Array ? true : false));
+			$.each(list, function(index, place) { 
+				alert("Success 2");
+				var li = $('<li class="span3"> </li>');
+				var div4 = $('<div class="product-box" id="cinema_theater"> </div>');
+				var span1 = $('<span class="sale_tag"> </span>');
+				var p1 = $('<p><a href="product_detail.html"><img src="./themes/images/cinemas/croped.jpg" alt="" /></a></p> ');
+				var a1 = $('<a href="product_detail.html" class="title">' + place.name + '</a><br/>');
+				var a2 = $('<a href="products.html" class="category">' + place.address + '</a>');
+				
+				//ispis bioskopa
+				div4.append(span1);
+				div4.append(p1);
+				div4.append(a1);
+				div4.append(a2);
+				li.append(div4);
+				ul.append(li);
+			});
+			
+			//alert("Success again!");
 			
 			
 		},
@@ -77,30 +99,5 @@ $(document).ready(function(){
 	
 });
 
-function renderList(data) {
-	// JAX-RS serializes an empty list as null, and a 'collection of one' as an object (not an 'array of one')
-	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
-	var forma = $("#productsform");
-	
-//	$('#wineList li').remove();
-//	$.each(list, function(index, product) {
-//		$('#wineList').append(
-//				'<li><a href="#" data-identity="' + product.name + '">'
-//						+ product.price + "," + product.name + '</a></li>');
-//	});
-	$.each(list, function(index, product) {
-		
-        var forma = $('<form method="get" class="productsform" action="ShoppingCartServlet"></form>');
-        var tr = $('<tr></tr>');
-        tr.append('<td>' + product.name + '</td>' +
-                '<td>' + product.price + '</td>');
-        forma.append('<input type="text" size="3" name="count">' +
-                '<input type="hidden" name="id" value='+ product.id +'>' +
-                '<input type="submit" value="Dodaj">');
-        var td = $('<td></td>');
-        td.append(forma);
-        tr.append(td);
-        $('#tabela').append(tr);
-	});
-}
+
 
