@@ -28,6 +28,18 @@ public class Friendship {
 
 	
 	public Friendship(){}
+	
+	
+	
+	public Friendship(FriendshipStatus status, User sender, User receiver) {
+		this();
+		this.status = status;
+		this.sender = sender;
+		this.receiver = receiver;
+	}
+
+
+
 	public Friendship(Long id, FriendshipStatus status, User sender, User receiver) {
 		this();
 		this.id = id;

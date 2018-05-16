@@ -6,20 +6,20 @@ $(document).ready(function(){
 	
 	$.ajax({
 		type : 'GET',
-		url : '../users/existUser',
+		url : '../users/exists',
 		dataType : 'json',
 		success : function(data){
 			loginUser = data.user;
+			
+			if(data.user != null){
+				$('#modal_trigger').hide();
+				$('#modal_trigger1').hide();
+				$('#myAccount').show();
+				$('#log-out').show();
+			}
 		}
-	})
-	
-	
-	if(loginUser != null){
-		$('#modal_trigger').hide();
-		$('#modal_trigger1').hide();
-		$('#myAccount').show();
-		$('#log-out').show();
-	}
+	});
+
 
 	
 	var div = $('<div class="span12"> </div>');

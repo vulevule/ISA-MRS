@@ -27,4 +27,10 @@ public interface UserService {
 
 	Collection<User> allFriends(User user);
 
+	Friendship notAcceptFriendship(Friendship notAcceptFSRequest);
+
+	Collection<User> allFriendshipRequest(User user);
+
+	Collection<User> allNotFriends(User user);
+
 }

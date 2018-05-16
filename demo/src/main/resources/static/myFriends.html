@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-title>Theaterize</title>
+<title>Theaterize</title>
 		<link rel="icon" href="./themes/images/sitelogo.png">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description" content="">
@@ -33,6 +33,7 @@ title>Theaterize</title>
 		<link rel="stylesheet" href="themes/css/style.css">
 </head>
 <body>
+<script src="js/logOut.js"></script>
 <div id="top-bar" class="container">
 			<div class="row">
 				<div class="span4">
@@ -42,8 +43,9 @@ title>Theaterize</title>
 				</div>
 				<div class="span8">
 					<div class="account pull-right">
-						<ul class="user-menu">				
-							<li><a href="myaccount.html">My Account</a></li>
+						<ul class="user-menu" id="user_menu">		
+							<li><a id='myAccount' href='myaccount.html' class='btn'>My Account</a></li>			
+							<li><a id='log-out' href='' class='btn'>Log out</a></li>	
 						</ul>
 					</div>
 				</div>
@@ -57,80 +59,60 @@ title>Theaterize</title>
 				<div class="navbar-inner main-menu">				
 					<a href="index.html" class="logo pull-left"><img src="./themes/images/logo.png" class="site_logo" alt=""></a>
 					<nav id="menu" class="pull-right">
-						<ul>
-							<li><a href="myFriends.html">Friends</a></li>								
+						<ul id="menu_list">
+							<li> <a id='friends_id' href="myFriends.html">Friends</a></li>				
 						</ul>
 					</nav>
 				</div>
 			</section>
 			
-			<section class="header_text sub">
-				<h4><span>FRIENDS</span></h4>
-			</section>
-			
-			
-			
+			<script type="text/javascript" src="js/myFriends.js"></script>
 			<section class="main-content">
 				<div class="row">
-						<div class="span9">					
-								<h4 class="title">
-									<span class="pull-left"><span class="text"><span class="line">MY FRIENDS</span></span></span>
-								</h4>
-								<div id="list"> 
-								
-								</div>
-								
+					<div class="span12">													
+						<div class="row" id="friends_list">
 												
 						</div>
-						<div class="span3 col">
-							<div class="block">
-								<ul class="nav nav-list">
-									<li class="nav-header">MY FRIENDS</li>
-									<li class="active"><a href="products.html">My Friends</a></li>
-									<li><a href="products.html">Add friends</a></li>
-									<li><a href="products.html">Friendship request</a></li>
-								</ul>
-								<br/>
-							</div>
-							<div class="block">
-								<h4 class="title">
-									<span class="pull-left"><span class="text">Your ads</span></span>
-									<span class="pull-right">
-										<a class="left button" href="#myCarousel" data-slide="prev"></a><a class="right button" href="#myCarousel" data-slide="next"></a>
-									</span>
-								</h4>
-								<div id="myCarousel" class="carousel slide">
-									<div class="carousel-inner">
-										<div class="active item">
-											<ul class="thumbnails listing-products">
-												<li class="span3">
-													<div class="product-box">
-														<span class="sale_tag"></span>												
-														<a href="product_detail.html"><img alt="" src="themes/images/ladies/2.jpg"></a><br/>
-														<a href="product_detail.html" class="title">Thematic prop 1</a><br/>
-														<a href="#" class="category">Movie</a>
-														<p class="price">$261</p>
-													</div>
-												</li>
-											</ul>
-										</div>
-										<div class="item">
-											<ul class="thumbnails listing-products">
-												<li class="span3">
-													<div class="product-box">												
-														<a href="product_detail.html"><img alt="" src="themes/images/ladies/4.jpg"></a><br/>
-														<a href="product_detail.html" class="title">Thematic prop 2</a><br/>
-														<a href="#" class="category">Theater</a>
-														<p class="price">$134</p>
-													</div>
-												</li>
-											</ul>
-										</div>
+						<br/>
+						<div class="row" id="request_list">
+												
+						</div>
+						<br/>
+						<div class="row" id="add_friends_list">
+												
+						</div>
+						<br/>
+						<div class="row feature_box">						
+							<div class="span4">
+								<div class="service">
+									<div class="responsive">	
+										<img src="./themes/images/feature_img_2.png" alt="" />
+										<h4><strong>FAST</strong> RESERVATIONS</h4>
+										<p>Reserve your tickets with just one click.</p>									
 									</div>
 								</div>
-							</div>						
-						</div>
-				</div>	
+							</div>
+							<div class="span4">	
+								<div class="service">
+									<div class="customize">			
+										<img src="./themes/images/feature_img_1.png" alt="" />
+										<h4><strong>QUICK</strong> RESERVATIONS</h4>
+										<p>Reserve your tickets with just one click.</p>
+									</div>
+								</div>
+							</div>
+							<div class="span4">
+								<div class="service">
+									<div class="support">	
+										<img src="./themes/images/feature_img_3.png" alt="" />
+										<h4><strong>THEMATIC PROPS</strong></h4>
+										<p>View and buy thematic props from theatrical plays and movies.</p>
+									</div>
+								</div>
+							</div>	
+						</div>		
+					</div>				
+				</div>
 			</section>
 			
 			<section id="footer-bar">
@@ -167,16 +149,12 @@ title>Theaterize</title>
 			</section>
 		</div>
 		<script src="themes/js/common.js"></script>
-		<script>
-			$(document).ready(function() {
-				$('#checkout').click(function (e) {
-					document.location.href = "checkout.html";
-				})
-			});
-		</script>
+		<script src="themes/js/jquery.flexslider-min.js"></script>
+		
 		<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 		<script src='themes/js/leanModal.min_.js'></script>
 		<script  src="themes/js/index.js"></script>
+		
 		
 </body>
 </html>

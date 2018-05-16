@@ -33,6 +33,13 @@ function login_submit(){
 				
 				$("#menu_list").append(li_friend);
 				
+			}else if (data.user.type == "FAN_ZONE_ADMIN"){
+				var li_props = $('<li> <a href="./myFriends.html" id="props_list"> Props </a> <ul id="props_items"> </ul> </li>');
+				$("#menu_list").append(li_props);
+			}else if (data.user.type == "CINEMA_THEATER_ADMIN"){
+				var li_place = $('<li> <a href="./myFriends.html" id="props_list"> Place </a> <ul id="props_items"> </ul> </li>');
+				$("#menu_list").append(li_place);
+
 			}
 		},
 		error : function(data){

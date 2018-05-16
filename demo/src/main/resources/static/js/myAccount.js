@@ -7,48 +7,51 @@ $(document).ready(function(){
 	
 	$.ajax({
 		type : 'GET',
-		url : '../users/existUser',
+		url : '../users/exists',
 		dataType : 'json',
 		success : function(data){
-			loginUser = data.user;
+			loginUser = data
+			var email_lab = $("<label class='control-label'>"+ data.user.email + "</label>")
+			$('#email_id').append(email_lab);
+			$('#name_id').attr("placeholder", data.user.name);
+			$('#surname_id').attr("placeholder", data.user.surname);
+			$('#phone_id').attr("placeholder", data.user.phone);
+			$('#address_id').attr("placeholder", data.user.address);
+			
+			
+			$('#name_id').val(data.user.name);
+			$('#surname_id').val(data.user.surname);
+			$('#phone_id').val(data.user.phone);
+			$('#address_id').val(data.user.address);
+			$('#pass_id').val(data.user.password);
+			$('#repeat_pass_id').val(data.user.repeatPassword);
+			
 		}
-	})
+	});
 	
 	
 	
-	$('#email').attr("placeholder", loginUser.email);
-	$('#name_id').attr("placeholder", loginUser.name);
-	$('#surname_id').attr("placeholder", loginUser.surname);
-	$('#phone_id').attr("placeholder", loginUser.phone);
-	$('#address_id').attr("placeholder", loginUser.address);
 	
-	$('#name_id').val(loginUser.name);
-	$('#surname_id').val( loginUser.surname);
-	$('#phone_id').val(loginUser.phone);
-	$('#address_id').val(loginUser.address);
+	
+	
 });
 
 
-$("#update_button").click(function(event){
+$(document).on('click', "#update_button", function(event){
+	
+	event.preventDefault();
+	
+	
 	var updateUser = {};
-	updateUser['email'] = loginUser.email;
  	updateUser['name']= $('#name_id').val();
 	updateUser['surname'] = $('#surname_id').val();
 	updateUser['phone'] = $('#phone_id').val();
 	updateUser['address'] = $('#address_id').val(); 
-	var password = $('#pass_id').val();
-	var repeat_pass = $('#repeat_pass').val();
-	
-	
-	
-	if (password == "" ){
-		updateUser['password'] = password;
-		updateUser['repeatPassword'] = repeat_pass;
-	}
-	
+	updateUser['password'] = $('#pass_id').val();
+	updateUser['repeatPassword'] = $('#repeat_pass_id').val();
 	$.ajax({
 		type : 'POST',
-		url : "../users/updateUser",
+		url : "../users/updateAccount",
 		contentType : "application/json",
 		dataType : "json",
 		data : JSON.stringify(updateUser),
@@ -56,9 +59,9 @@ $("#update_button").click(function(event){
 			alert ("User " + data.user.name + " " + data.user.surname + " is successful update");
 		},
 		error : function(data){
-			alert ("Failed update user");
+			alert ("Failed update user " + data.message);
 		}
-	})
+	});
 	
 	
 	

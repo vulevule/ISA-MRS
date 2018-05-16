@@ -15,4 +15,8 @@ public interface FriendshipRepository extends CrudRepository<Friendship, Long>{
 	Friendship findBySenderAndReceiver(User sender, User receiver);
 
 	Collection<User> findBySenderOrReceiver(User sender, User receiver);
+
+	Collection<Friendship> findBySenderAndStatus(User user, FriendshipStatus approved);
+
+	Collection<Friendship> findByReceiverAndStatus(User user, FriendshipStatus approved);
 }

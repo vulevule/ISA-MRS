@@ -1,5 +1,7 @@
 package projekat.demo.controller;
 
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
+
 import java.util.Collection;
 
 import javax.servlet.http.HttpSession;
@@ -21,6 +23,7 @@ import projekat.demo.exceptions.FriendshipException;
 import projekat.demo.exceptions.UserException;
 import projekat.demo.model.ActivateAccount;
 import projekat.demo.model.Friendship;
+import projekat.demo.model.FriendshipStatus;
 import projekat.demo.model.LoginUser;
 import projekat.demo.model.Place;
 import projekat.demo.model.RoleType;
@@ -141,7 +144,9 @@ public class UserController {
 	@PostMapping(value = "users/loginUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<UserException> loginUser(@RequestBody LoginUser lu) {
 		logger.info("> login");
-
+		if((User)this.session.getAttribute("loginUser")!= null){
+			return new ResponseEntity<UserException>(new UserException(null, "Already exists login user"), HttpStatus.BAD_REQUEST);
+		}
 		User u = userService.login(lu.getUsername(), lu.getPassword());
 		UserException ue = new UserException(u, "Successful login");
 		if (u == null) {
@@ -153,14 +158,47 @@ public class UserController {
 		return new ResponseEntity<UserException>(ue, HttpStatus.OK);
 	}
 
+	@GetMapping(value="users/logOut", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UserException> logOut(){
+		User loginUser = (User)this.session.getAttribute("loginUser");
+		UserException ue = new UserException(loginUser, "Successful log out");
+		if(loginUser != null){
+			this.session.setAttribute("loginUser", null);
+			return new ResponseEntity<UserException>(ue, HttpStatus.OK);
+			
+		}
+		
+		ue.setMessage("Unsuccessful log out, because does not exist login user");
+		return new ResponseEntity<UserException>(ue, HttpStatus.BAD_REQUEST);
+		
+		
+		
+	}
+	
 	@PostMapping(value = "users/updateAccount", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<UserException> updateAccount(@RequestBody User user) {
 		logger.info(">> update account");
 		
-		if(!(user.getPassword().equals(user.getRepeatPassword()))){
-			return new ResponseEntity<UserException>(new UserException(user, "Entered passwords do not matched!!"), HttpStatus.BAD_REQUEST);
-		}
+		//user sa sesije se menja
+		User sessionUser = (User)this.session.getAttribute("loginUser");
+		logger.info("Update user: email: " + sessionUser.getEmail() + " name: " + sessionUser.getName() + " surname: " + sessionUser.getSurname() + " address: " + sessionUser.getAddress()+
+				" phone: " + sessionUser.getPhone() + " password: " + sessionUser.getPassword());
 		
+		//ovi atributi se ne mogu menjati
+		user.setEmail(sessionUser.getEmail());
+		user.setType(sessionUser.getType());
+		user.setActivate(true);
+		user.setActivateString(sessionUser.getActivateString());
+		
+		logger.info("Update user: email: " + user.getEmail() + " name: " + user.getName() + " surname: " + user.getSurname() + " address: " + user.getAddress()+
+				" phone: " + user.getPhone() + " password: " + user.getPassword());
+		
+		
+		if (!(user.getPassword().equals(user.getRepeatPassword()))) {
+			return new ResponseEntity<UserException>(new UserException(user, "Entered passwords do not matched!!"),
+					HttpStatus.BAD_REQUEST);
+		}
+
 		User u = this.userService.updateUser(user);
 		UserException ue = new UserException(u, "");
 
@@ -171,18 +209,22 @@ public class UserController {
 		} else {
 			ue.setMessage("Successful update account");
 		}
+		this.session.setAttribute("loginUser", user);
 		logger.info("<< update account");
 		return new ResponseEntity<UserException>(ue, HttpStatus.OK);
 
 	}
 
 	@PostMapping(value = "users/addFriend", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<FriendshipException> addFriend(@RequestBody Friendship fs) {
-		// slanje zahteva za prijateljstvo, samo unos podataka u tabelu friendship
+	public ResponseEntity<FriendshipException> addFriend(@RequestBody User user) {
+		// sender - sa sesije, receiver - prosledjeni user, status - send
 		logger.info(">> add friend");
-		User sender = (User) session.getAttribute("loginUser");
-		fs.setSender(sender);
-		Friendship newFriendship = this.userService.createFriendship(fs);
+		// uzmemo kompletnog korisnika iz baze na osnovu email-a
+		User receiver = this.userService.getUserByUsername(user.getEmail());
+		User sender = (User) session.getAttribute("loginUser"); // user sa
+																// sesije
+		Friendship newFSRequest = new Friendship(FriendshipStatus.SEND_REQUEST, sender, receiver);
+		Friendship newFriendship = this.userService.createFriendship(newFSRequest);
 		FriendshipException fe = new FriendshipException(newFriendship, "");
 		if (newFriendship == null) {
 			fe.setMessage("Requset for friendship has not been sent");
@@ -197,10 +239,16 @@ public class UserController {
 	}
 
 	@PostMapping(value = "users/acceptFriendship", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<FriendshipException> acceptFriendship(@RequestBody Friendship fs) {
+	public ResponseEntity<FriendshipException> acceptFriendship(@RequestBody User user) {
+		// receiver-> user sa sesije (primio zahtev i sad ga prihvata), sender
+		// <- user , status - approved
 		logger.info(">> accept friendship");
-		fs.setReceiver((User) session.getAttribute("loginUser"));
-		Friendship acceptFriendship = this.userService.acceptFriendship(fs);
+		// sendera uzimamo iz baze na osnovu email-a
+		User sender = this.userService.getUserByUsername(user.getEmail());
+		// receiver sa sesije
+		User receiver = (User) this.session.getAttribute("loginUser");
+		Friendship acceptFSRequest = new Friendship(FriendshipStatus.APPROVED, sender, receiver);
+		Friendship acceptFriendship = this.userService.acceptFriendship(acceptFSRequest);
 		FriendshipException fe = new FriendshipException(acceptFriendship, "");
 		if (acceptFriendship == null) {
 			fe.setMessage("Does not exist friendship");
@@ -210,6 +258,27 @@ public class UserController {
 
 		fe.setMessage("A request for friendship is accepted");
 		logger.info("<< accept friendship");
+		return new ResponseEntity<FriendshipException>(fe, HttpStatus.OK);
+
+	}
+
+	@PostMapping(value = "users/notAcceptFriendship", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<FriendshipException> notAcceptFriendship(@RequestBody User user) {
+		logger.info(">> not accept friendship request");
+		// sender <- user, receiver <- user sa sesije, status - not approved
+		User sender = this.userService.getUserByUsername(user.getEmail());
+		User receiver = (User) this.session.getAttribute("loginUser");
+		logger.info("sender: " + sender.getEmail() + ", receiver: " + receiver.getEmail());
+		Friendship notAcceptFSRequest = new Friendship(FriendshipStatus.NOT_APPROVED, sender, receiver);
+		Friendship notAcceptFriendship = this.userService.notAcceptFriendship(notAcceptFSRequest);
+		FriendshipException fe = new FriendshipException(notAcceptFriendship, "");
+		if (notAcceptFriendship == null) {
+			fe.setMessage("Does not exist friendship");
+			logger.info("<< NOT ACCEPT FRIENDSHIP");
+			return new ResponseEntity<FriendshipException>(fe, HttpStatus.BAD_REQUEST);
+		}
+		fe.setMessage("Ä request for friendship is not accept");
+		logger.info("<< not accept friendship request");
 		return new ResponseEntity<FriendshipException>(fe, HttpStatus.OK);
 
 	}
@@ -231,17 +300,39 @@ public class UserController {
 		return new ResponseEntity<FriendshipException>(fe, HttpStatus.OK);
 
 	}
-	
-	//all friends
-	@RequestMapping(value= "users/allFriends", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Collection<User>> getAllFriends(){
+
+	// all friends
+	@RequestMapping(value = "users/allFriends", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Collection<User>> getAllFriends() {
 		logger.info("> all friends");
-		User user =(User)this.session.getAttribute("loginUser");
+		User user = (User) this.session.getAttribute("loginUser");
 		Collection<User> allFriends = this.userService.allFriends(user);
 		logger.info("< all friends");
 		return new ResponseEntity<Collection<User>>(allFriends, HttpStatus.OK);
-		
+
+	}
+
+	// all friendship request
+	@RequestMapping(value = "users/allFriendshipRequest", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Collection<User>> getAllFriendshipRequest() {
+		logger.info("> all friendship request");
+		User user = (User) this.session.getAttribute("loginUser");
+		Collection<User> allFriends = this.userService.allFriendshipRequest(user);
+		logger.info("< all friendship request");
+		return new ResponseEntity<Collection<User>>(allFriends, HttpStatus.OK);
+
 	}
 	
+	
+	//all not friends 
+	@RequestMapping(value="users/allNotFriends",  method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE )
+	public ResponseEntity<Collection<User>> getAllNotFriends(){
+		logger.info(">> all not friends");
+		User user = (User)this.session.getAttribute("loginUser");
+		Collection<User> allNotFriends = this.userService.allNotFriends(user);
+		logger.info("<< all not friends");
+		return new ResponseEntity<Collection<User>>(allNotFriends, HttpStatus.OK);
+		
+	}
 
 }
