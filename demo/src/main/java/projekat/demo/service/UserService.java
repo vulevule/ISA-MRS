@@ -23,7 +23,7 @@ public interface UserService {
 
 	Friendship acceptFriendship(Friendship fs);
 
-	boolean deleteFriend(Friendship fs);
+	boolean deleteFriend(User user, User sessionUser);
 
 	Collection<User> allFriends(User user);
 

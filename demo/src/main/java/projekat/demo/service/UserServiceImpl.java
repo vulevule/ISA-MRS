@@ -117,20 +117,25 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean deleteFriend(Friendship fs) {
-		Friendship acceptFriendship = new Friendship();
-		acceptFriendship.setSender(this.userRepository.findByEmail(fs.getSender().getEmail()));
-		acceptFriendship.setReceiver(this.userRepository.findByEmail(fs.getReceiver().getEmail()));
-		acceptFriendship.setStatus(fs.getStatus());
-
-		Friendship searchFriendship = this.friendshipRepository.findBySenderAndReceiver(acceptFriendship.getSender(),
-				acceptFriendship.getReceiver());
-		if (searchFriendship == null) {
-			// ne postoji, nije moguce izbrisati ga
-			return false;
+	public boolean deleteFriend(User user,  User sessionUser) {
+		//1. sender <- sessionUser, receiver <- user
+		User u = this.userRepository.findByEmail(user.getEmail());
+		Friendship deleteFriendship1 = new Friendship(FriendshipStatus.APPROVED, sessionUser, u);
+		//2. sender <- user, receiver <- sessionUser
+		Friendship deleteFriendship2 = new Friendship(FriendshipStatus.APPROVED, u, sessionUser);
+		
+		Friendship searchFriendship1 = this.friendshipRepository.findBySenderAndReceiverAndStatus(deleteFriendship1.getSender(), deleteFriendship1.getReceiver(), deleteFriendship1.getStatus());
+		
+		if(searchFriendship1 == null){
+			Friendship searchFriendship2 =	this.friendshipRepository.findBySenderAndReceiverAndStatus(deleteFriendship2.getSender(), deleteFriendship2.getReceiver(), deleteFriendship2.getStatus());
+			if(searchFriendship2 == null){
+				return false;
+			}
+			this.friendshipRepository.delete(searchFriendship2);
+			return true;
 		}
-		// sacuvamo novo stanje sa promenom statusa
-		friendshipRepository.delete(acceptFriendship);
+	
+		friendshipRepository.delete(searchFriendship1);
 		return true;
 	}
 
@@ -197,7 +202,18 @@ public class UserServiceImpl implements UserService {
 				allVisitors.remove(u);
 			}
 		}
-					
+		//svi neprihvaceni zahtevi
+		Collection<Friendship> allNotAcceptFriend = this.friendshipRepository.findBySenderAndStatus(user, FriendshipStatus.NOT_APPROVED);
+		Collection<User>notAcceptUsers =new ArrayList<User>();
+		for(Friendship fs : allNotAcceptFriend){
+			notAcceptUsers.add(fs.getReceiver());
+		}
+		Collection<Friendship> allNotAcceptFriend2 = this.friendshipRepository.findByReceiverAndStatus(user, FriendshipStatus.NOT_APPROVED);
+		Collection<User>notAcceptUsers2 =new ArrayList<User>();
+		for(Friendship fs : allNotAcceptFriend2){
+			notAcceptUsers2.add(fs.getSender());
+		}
+		
 		Collection<User> friends = allFriends(user);
 		friends.addAll(allFriendshipRequest(user));
 		friends.addAll(allSendRequests(user));
@@ -207,6 +223,8 @@ public class UserServiceImpl implements UserService {
 				allNotFriends.add(u);
 			}
 		}
+		allNotFriends.addAll(notAcceptUsers);
+		allNotFriends.addAll(notAcceptUsers2);
 		return allNotFriends;
 	}
 

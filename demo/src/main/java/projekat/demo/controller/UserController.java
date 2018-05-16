@@ -219,6 +219,7 @@ public class UserController {
 	public ResponseEntity<FriendshipException> addFriend(@RequestBody User user) {
 		// sender - sa sesije, receiver - prosledjeni user, status - send
 		logger.info(">> add friend");
+		logger.info("add user: " + user.getEmail());
 		// uzmemo kompletnog korisnika iz baze na osnovu email-a
 		User receiver = this.userService.getUserByUsername(user.getEmail());
 		User sender = (User) session.getAttribute("loginUser"); // user sa
@@ -284,10 +285,12 @@ public class UserController {
 	}
 
 	@PostMapping(value = "users/deleteFriendship", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<FriendshipException> deleteFriend(@RequestBody Friendship fs) {
+	public ResponseEntity<FriendshipException> deleteFriend(@RequestBody User user) {
 		logger.info(">> delete friend");
-		fs.setSender((User) session.getAttribute("loginUser"));
-		boolean deleteFriendship = this.userService.deleteFriend(fs);
+		logger.info(">> delete friend: " + user.getEmail());
+		// prosledicemo servisu i sendera i receivera pa cemo tamo odraditi ostalu logiku
+		User sessionUser =(User) this.session.getAttribute("loginUser");
+		boolean deleteFriendship = this.userService.deleteFriend(user, sessionUser);
 		FriendshipException fe = new FriendshipException(null, "");
 		if (deleteFriendship == false) {
 			fe.setMessage("Does not exist friendship");
