@@ -3,20 +3,17 @@ package projekat.demo.service;
 import java.util.Random;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import projekat.demo.model.User;
+import projekat.demo.model.Visitor;
 
 @Service
 public class EmailService {
@@ -29,7 +26,7 @@ public class EmailService {
 
 	
 	@Async
-	public void sendNotification(User user) throws MailException, InterruptedException, MessagingException {
+	public void sendNotification(Visitor user) throws MailException, InterruptedException, MessagingException {
 		System.out.println("Sending email....");
 		String activateString = generateLoginActivateString();
 		user.setActivateString(activateString);

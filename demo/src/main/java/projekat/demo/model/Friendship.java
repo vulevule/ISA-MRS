@@ -7,6 +7,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -20,10 +21,10 @@ public class Friendship {
 	@Enumerated(EnumType.ORDINAL)
 	private FriendshipStatus status;
 
-	@OneToOne
+	
 	private User sender;
 	
-	@OneToOne
+
 	private User receiver;
 
 	

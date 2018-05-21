@@ -1,7 +1,5 @@
 package projekat.demo.controller;
 
-import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
-
 import java.util.Collection;
 
 import javax.servlet.http.HttpSession;
@@ -25,9 +23,10 @@ import projekat.demo.model.ActivateAccount;
 import projekat.demo.model.Friendship;
 import projekat.demo.model.FriendshipStatus;
 import projekat.demo.model.LoginUser;
-import projekat.demo.model.Place;
 import projekat.demo.model.RoleType;
 import projekat.demo.model.User;
+import projekat.demo.model.Visitor;
+import projekat.demo.model.DTO.UserDTO;
 import projekat.demo.service.EmailService;
 import projekat.demo.service.UserService;
 
@@ -57,7 +56,7 @@ public class UserController {
 	}
 
 	@PostMapping(value = "users/registrationUser", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UserException> registrationUser(@RequestBody User u) {
+	public ResponseEntity<UserException> registrationUser(@RequestBody UserDTO u) {
 		logger.info(">> registration");
 
 		User createUser = null;
@@ -80,7 +79,7 @@ public class UserController {
 			}
 			ue.setUser(createUser);
 			ue.setMessage("User has been successfully created");
-			if (createUser.getType() == RoleType.VISITOR) {
+			if (u.getType() == RoleType.VISITOR) {
 				if (sendActivateMail(createUser) == false) {
 					// ne uspelo slanje mejla, ispisujemo poruku
 					ue.setMessage("Failed to send activation email.");
@@ -101,19 +100,18 @@ public class UserController {
 		// TODO Auto-generated method stub
 
 		// send mail to activate account
-		if (createUser.getType() == RoleType.VISITOR) {
-			try {
-				emailService.sendNotification(createUser);
-				// uneti u bazu aktivacioni string
-				userService.setActivateString(createUser);
-				return true;
-			} catch (Exception e) {
-				logger.info("Error when sending email: " + e.getMessage());
-				return false;
-			}
+		Visitor v = (Visitor)createUser;
+
+		try {
+			emailService.sendNotification(v);
+			// uneti u bazu aktivacioni string
+			userService.setActivateString(v);
+			return true;
+		} catch (Exception e) {
+			logger.info("Error when sending email: " + e.getMessage());
+			return false;
 		}
 
-		return false;
 	}
 
 	@PostMapping(value = "users/activateAccount", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -144,8 +142,9 @@ public class UserController {
 	@PostMapping(value = "users/loginUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<UserException> loginUser(@RequestBody LoginUser lu) {
 		logger.info("> login");
-		if((User)this.session.getAttribute("loginUser")!= null){
-			return new ResponseEntity<UserException>(new UserException(null, "Already exists login user"), HttpStatus.BAD_REQUEST);
+		if ((User) this.session.getAttribute("loginUser") != null) {
+			return new ResponseEntity<UserException>(new UserException(null, "Already exists login user"),
+					HttpStatus.BAD_REQUEST);
 		}
 		User u = userService.login(lu.getUsername(), lu.getPassword());
 		UserException ue = new UserException(u, "Successful login");
@@ -158,51 +157,55 @@ public class UserController {
 		return new ResponseEntity<UserException>(ue, HttpStatus.OK);
 	}
 
-	@GetMapping(value="users/logOut", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UserException> logOut(){
-		User loginUser = (User)this.session.getAttribute("loginUser");
+	@GetMapping(value = "users/logOut", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UserException> logOut() {
+		User loginUser = (User) this.session.getAttribute("loginUser");
 		UserException ue = new UserException(loginUser, "Successful log out");
-		if(loginUser != null){
+		if (loginUser != null) {
 			this.session.setAttribute("loginUser", null);
 			return new ResponseEntity<UserException>(ue, HttpStatus.OK);
-			
+
 		}
-		
+
 		ue.setMessage("Unsuccessful log out, because does not exist login user");
 		return new ResponseEntity<UserException>(ue, HttpStatus.BAD_REQUEST);
-		
-		
-		
+
 	}
-	
+
 	@PostMapping(value = "users/updateAccount", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UserException> updateAccount(@RequestBody User user) {
+	public ResponseEntity<UserException> updateAccount(@RequestBody UserDTO user) {
 		logger.info(">> update account");
-		
-		//user sa sesije se menja
-		User sessionUser = (User)this.session.getAttribute("loginUser");
-		logger.info("Update user: email: " + sessionUser.getEmail() + " name: " + sessionUser.getName() + " surname: " + sessionUser.getSurname() + " address: " + sessionUser.getAddress()+
-				" phone: " + sessionUser.getPhone() + " password: " + sessionUser.getPassword());
-		
-		//ovi atributi se ne mogu menjati
+
+		// user sa sesije se menja
+		User sessionUser = (User) this.session.getAttribute("loginUser");
+		logger.info("Update user: email: " + sessionUser.getEmail() + " name: " + sessionUser.getName() + " surname: "
+				+ sessionUser.getSurname() + " address: " + sessionUser.getAddress() + " phone: "
+				+ sessionUser.getPhone() + " password: " + sessionUser.getPassword());
+
+		// ovi atributi se ne mogu menjati
 		user.setEmail(sessionUser.getEmail());
-		user.setType(sessionUser.getType());
-		user.setActivate(true);
-		user.setActivateString(sessionUser.getActivateString());
-		
-		logger.info("Update user: email: " + user.getEmail() + " name: " + user.getName() + " surname: " + user.getSurname() + " address: " + user.getAddress()+
-				" phone: " + user.getPhone() + " password: " + user.getPassword());
-		
-		
+		user.setType(sessionUser.getRole());
+
+		logger.info("Update user: email: " + user.getEmail() + " name: " + user.getFirstName() + " surname: "
+				+ user.getLastName() + " address: " + user.getAddress() + " phone: " + user.getPhone() + " password: "
+				+ user.getPassword());
+
+		UserException ue = new UserException(sessionUser, "");
 		if (!(user.getPassword().equals(user.getRepeatPassword()))) {
-			return new ResponseEntity<UserException>(new UserException(user, "Entered passwords do not matched!!"),
-					HttpStatus.BAD_REQUEST);
+			ue.setMessage("Entered passwords do not matched!!");
+			return new ResponseEntity<UserException>(ue, HttpStatus.BAD_REQUEST);
 		}
 
-		User u = this.userService.updateUser(user);
-		UserException ue = new UserException(u, "");
+		User updateUser = null;
 
-		if (u == null) {
+		if (user.getType() == RoleType.VISITOR) {
+			Visitor updateV = new Visitor(user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword(),
+					user.getAddress(), user.getPhone(), true, user.getType());
+			updateUser = this.userService.updateUser(updateV);
+		}
+		ue.setUser(updateUser);
+
+		if (updateUser == null) {
 			ue.setMessage("User does not exists");
 			logger.info("<< update account");
 			return new ResponseEntity<UserException>(ue, HttpStatus.ALREADY_REPORTED);
@@ -288,8 +291,9 @@ public class UserController {
 	public ResponseEntity<FriendshipException> deleteFriend(@RequestBody User user) {
 		logger.info(">> delete friend");
 		logger.info(">> delete friend: " + user.getEmail());
-		// prosledicemo servisu i sendera i receivera pa cemo tamo odraditi ostalu logiku
-		User sessionUser =(User) this.session.getAttribute("loginUser");
+		// prosledicemo servisu i sendera i receivera pa cemo tamo odraditi
+		// ostalu logiku
+		User sessionUser = (User) this.session.getAttribute("loginUser");
 		boolean deleteFriendship = this.userService.deleteFriend(user, sessionUser);
 		FriendshipException fe = new FriendshipException(null, "");
 		if (deleteFriendship == false) {
@@ -325,17 +329,16 @@ public class UserController {
 		return new ResponseEntity<Collection<User>>(allFriends, HttpStatus.OK);
 
 	}
-	
-	
-	//all not friends 
-	@RequestMapping(value="users/allNotFriends",  method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE )
-	public ResponseEntity<Collection<User>> getAllNotFriends(){
+
+	// all not friends
+	@RequestMapping(value = "users/allNotFriends", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Collection<User>> getAllNotFriends() {
 		logger.info(">> all not friends");
-		User user = (User)this.session.getAttribute("loginUser");
+		User user = (User) this.session.getAttribute("loginUser");
 		Collection<User> allNotFriends = this.userService.allNotFriends(user);
 		logger.info("<< all not friends");
 		return new ResponseEntity<Collection<User>>(allNotFriends, HttpStatus.OK);
-		
+
 	}
 
 }

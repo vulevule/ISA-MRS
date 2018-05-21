@@ -1,22 +1,21 @@
 package projekat.demo.model;
 
 import java.io.Serializable;
-import java.util.Set;
+import static javax.persistence.InheritanceType.SINGLE_TABLE;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.Inheritance;
 
 import projekat.demo.validator.EmailAnnotation;
 import projekat.demo.validator.PasswordAnnotation;
 
 @Entity
-
-public class User implements Serializable {
+@Inheritance(strategy = SINGLE_TABLE)
+@DiscriminatorColumn(name = "type")
+public abstract class User implements Serializable {
 
 	private static final long serialVersionUID = -2230328594830389946L;
 
@@ -35,33 +34,29 @@ public class User implements Serializable {
 	@Column(nullable = false)
 	private String password;
 
-	@Column
+	@Column(nullable = false)
 	private String address;
 
 	@Column(nullable = false)
 	private String phone;
 
 	@Column(nullable = false)
-	@Enumerated(EnumType.ORDINAL)
-	private RoleType type;
+	private RoleType role;
 
-	@Column(nullable = false)
-	private boolean activate;
-
-	@Column
-	private String activateString;
-
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="user")
-	private Set<Bid> bids;
-	
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="user")
-	private Set<Ad> ads;
-	
-	
-	private String repeatPassword;
-	
-	
 	public User() {
+	}
+
+	public User(String name, String surname, String email, String password, String address, String phone,
+			RoleType role) {
+		this();
+		this.name = name;
+		this.surname = surname;
+		this.email = email;
+		this.password = password;
+		this.address = address;
+		this.phone = phone;
+		this.role = role;
+
 	}
 
 	public String getName() {
@@ -112,75 +107,16 @@ public class User implements Serializable {
 		this.phone = phone;
 	}
 
-	public RoleType getType() {
-		return type;
+	public RoleType getRole() {
+		return role;
 	}
 
-	public void setType(RoleType type) {
-		this.type = type;
-	}
-
-	public boolean isActivate() {
-		return activate;
-	}
-
-	public void setActivate(boolean activate) {
-		this.activate = activate;
-	}
-
-	public String getActivateString() {
-		return activateString;
-	}
-
-	public void setActivateString(String activateString) {
-		this.activateString = activateString;
-	}
-
-	public Set<Bid> getBids() {
-		return bids;
-	}
-
-	public void setBids(Set<Bid> bids) {
-		this.bids = bids;
-	}
-
-	public Set<Ad> getAds() {
-		return ads;
-	}
-
-	public void setAds(Set<Ad> ads) {
-		this.ads = ads;
+	public void setRole(RoleType role) {
+		this.role = role;
 	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
-	public User(String name, String surname, String email, String password, String address, String phone, RoleType type,
-			boolean activate, String activateString, Set<Bid> bids, Set<Ad> ads) {
-		super();
-		this.name = name;
-		this.surname = surname;
-		this.email = email;
-		this.password = password;
-		this.address = address;
-		this.phone = phone;
-		this.type = type;
-		this.activate = activate;
-		this.activateString = activateString;
-		this.bids = bids;
-		this.ads = ads;
-	}
-
-	public String getRepeatPassword() {
-		return repeatPassword;
-	}
-
-	public void setRepeatPassword(String repeatPassword) {
-		this.repeatPassword = repeatPassword;
-	}
-
-	
-	
 
 }

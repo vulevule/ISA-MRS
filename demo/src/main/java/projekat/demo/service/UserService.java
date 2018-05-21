@@ -4,10 +4,11 @@ import java.util.Collection;
 
 import projekat.demo.model.Friendship;
 import projekat.demo.model.User;
+import projekat.demo.model.DTO.UserDTO;
 
 public interface UserService {
 
-	User createUser(User u);
+	User createUser(UserDTO u);
 
 	User login(String username, String password);
 
