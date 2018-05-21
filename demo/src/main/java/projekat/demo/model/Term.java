@@ -29,7 +29,7 @@ public class Term implements Serializable {
 	@Column(nullable = false)
 	private double price;
 
-	@ManyToOne(optional=false)
+	@ManyToOne(optional = false)
 	private Arena arena; // sala u kojoj se odrzava film ili predstava
 
 	@Column(nullable = false)
@@ -40,4 +40,61 @@ public class Term implements Serializable {
 
 	public Term() {
 	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Date getProjectionDate() {
+		return projectionDate;
+	}
+
+	public void setProjectionDate(Date projectionDate) {
+		this.projectionDate = projectionDate;
+	}
+
+	public Time getProjectionTime() {
+		return projectionTime;
+	}
+
+	public void setProjectionTime(Time projectionTime) {
+		this.projectionTime = projectionTime;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public Arena getArena() {
+		return arena;
+	}
+
+	public void setArena(Arena arena) {
+		this.arena = arena;
+	}
+
+	public int getFreeSeats() {
+		return freeSeats;
+	}
+
+	public void setFreeSeats(int freeSeats) {
+		this.freeSeats = freeSeats;
+	}
+
+	public Projection getProjection() {
+		return projection;
+	}
+
+	public void setProjection(Projection projection) {
+		this.projection = projection;
+	}
+
 }

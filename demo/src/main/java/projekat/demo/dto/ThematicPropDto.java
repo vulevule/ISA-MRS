@@ -1,4 +1,4 @@
-package projekat.demo.model;
+package projekat.demo.dto;
 
 import java.io.Serializable;
 
@@ -8,14 +8,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ThematicPropDto implements Serializable {
 
 	private static final long serialVersionUID = 4151573907787468526L;
-	
+
 	private String name;
 	private Long projectionId;
 	private String userEmail;
 
 	@JsonCreator
-	public ThematicPropDto(@JsonProperty("name") String name, 
-			@JsonProperty("projectionId") Long projectionId, 
+	public ThematicPropDto(@JsonProperty("name") String name, @JsonProperty("projectionId") Long projectionId,
 			@JsonProperty("userEmail") String userEmail) {
 		this.name = name;
 		this.projectionId = projectionId;

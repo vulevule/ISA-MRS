@@ -11,11 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import projekat.demo.dto.ThematicPropDto;
 import projekat.demo.exceptions.ProjectionException;
 import projekat.demo.exceptions.ThematicPropException;
 import projekat.demo.exceptions.UserException;
-import projekat.demo.model.ThematicProp;
-import projekat.demo.model.ThematicPropDto;
 import projekat.demo.service.ThematicPropService;
 
 @RestController
@@ -27,9 +26,9 @@ public class ThematicPropController {
 	@Autowired
 	private ThematicPropService thematicPropService;
 
-	@PostMapping(consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/createThematicProp", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> createThematicProp(@RequestBody ThematicPropDto tp) {
-		logger.info("> adding thematic prop");
+		logger.info("> adding thematic prop started");
 
 		try {
 			thematicPropService.createThematicProp(tp);
@@ -44,21 +43,39 @@ public class ThematicPropController {
 		}
 	}
 
-	@DeleteMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ThematicPropException> deleteThematicProp(@RequestBody ThematicProp thematicProp) {
-		logger.info(">> delete thematic prop");
-		ThematicPropException pe = new ThematicPropException(thematicProp, "");
+	@PostMapping(value = "/updateThematicProp", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> updateThematicProp(@RequestBody ThematicPropDto tp) {
+		logger.info("> updating thematic prop started");
 
-		if (!this.thematicPropService.deleteThematicProp(thematicProp)) {
-			pe.setMessage("Thematic prop does not exist!");
-			logger.info("<< delete thematic prop");
-			return new ResponseEntity<ThematicPropException>(pe, HttpStatus.NOT_FOUND);
-		} else {
-			pe.setMessage("Deletion successfull!");
+		try {
+			thematicPropService.updateThematicProp(tp);
+			logger.info("< updating thematic prop");
+			return new ResponseEntity<String>("Thematic Prop successfully created!", HttpStatus.OK);
+		} catch (ProjectionException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		} catch (UserException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		} catch (ThematicPropException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@DeleteMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> deleteThematicProp(@RequestBody ThematicPropDto tp) {
+		logger.info("> deleting thematic prop started");
+
+		try {
+			thematicPropService.deleteThematicProp(tp);
+			logger.info("< deleting thematic prop");
+			return new ResponseEntity<String>("Thematic Prop successfully deleted!", HttpStatus.OK);
+		} catch (ProjectionException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		} catch (UserException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		} catch (ThematicPropException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
 		}
 
-		logger.info("<< delete thematic prop");
-		return new ResponseEntity<ThematicPropException>(pe, HttpStatus.OK);
 	}
 
 }

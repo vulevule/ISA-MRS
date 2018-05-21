@@ -4,16 +4,17 @@ import projekat.demo.model.Arena;
 
 public class ArenaException extends RuntimeException {
 
+	private static final long serialVersionUID = 1L;
 	private Arena arena;
 	private String message;
 
-	public ArenaException() {
+	public ArenaException(String message) {
+		super(message);
 	}
 
 	public ArenaException(Arena arena, String message) {
-		this();
+		super(message);
 		this.arena = arena;
-		this.message = message;
 	}
 
 	public Arena getArena() {

@@ -49,9 +49,10 @@
 						<ul class="user-menu" id="user_menu">		
 							<li><a id='modal_trigger' href='#modalR' class='btn'>Register</a></li>			
 							<li><a id='modal_trigger1' href='#modal' class='btn'>Login</a></li>	
-							<li><a id='modal_trigger_projection' href='#modalP' class='btn'>Create projection</a></li>
-							<li><a id='myAccount' href='myaccount.html' class='btn'>My Account</a></li>			
-							<li><a id='log-out' href='' class='btn'>Log out</a></li>	
+							<li><a id='modal_trigger_place' href='#modalPlace' class='btn' style='display:none'>Create place</a></li>
+							<li><a id='modal_trigger_projection' href='#modalP' class='btn' style='display:none'>Create projection</a></li>
+							<li><a id='myAccount' href='myaccount.html' class='btn'style='display:none'>My Account</a></li>			
+							<li><a id='log-out' href='' class='btn' style='display:none'>Log out</a></li>	
 						</ul>
 					</div>
 				</div>
@@ -59,27 +60,27 @@
 		</div>
 		
 		<script src='js/login.js'></script>
-				<div id='modal' class='popupContainer' style='display:none;'>
-						<header class='popupHeader'>
-								<span class='header_title'>Login</span>
-								<span class='modal_close'><i class='fa fa-times'></i></span>
-						</header>
-						<section class='popupBody'>
-								<div class='user_login'><a href='#' id='login_form'>Login</a></div>
-										<form id='login' >
-												<label>Email / Username</label>
-												<input type='text'  id='username'/>
-												<br />
-												<label>Password</label>
-												<input type='password' id='password'/>
-												<br />
-												<div class='action_btns'>
-														<div class='one_half last'><input type='button' id='login_button' class='btn btn_red' value='Login'></div>
-												</div>
-												<a href='#' class='forgot_password'>Forgot password?</a>
-										</form>
-						</section>
-				</div>
+		<div id='modal' class='popupContainer' style='display:none;'>
+				<header class='popupHeader'>
+						<span class='header_title'>Login</span>
+						<span class='modal_close'><i class='fa fa-times'></i></span>
+				</header>
+				<section class='popupBody'>
+						<div class='user_login'><a href='#' id='login_form'>Login</a></div>
+								<form id='login' >
+										<label>Email / Username</label>
+										<input type='text'  id='username'/>
+										<br />
+										<label>Password</label>
+										<input type='password' id='password'/>
+										<br />
+										<div class='action_btns'>
+												<div class='one_half last'><input type='button' id='login_button' class='btn btn_red' value='Login'></div>
+										</div>
+										<a href='#' class='forgot_password'>Forgot password?</a>
+								</form>
+				</section>
+		</div>
 		
 		
 		<script src="js/register.js"></script>
@@ -193,11 +194,65 @@
 										<div class="one_half last"><input type="button" id="add_new_term_button" value="Add new term"></div>
 										
 										<div class="action_btns">
-											<div class="one_half last"><input type="button" id="create_projection_button" value="Create"></div>
+											<div class="one_half last"><input type="button" id="create_projection_button" class='btn btn_red' value="Create"></div>
 										</div>
 								</form>
 						
 				</section>
+		</div>
+		
+		
+		<!-- CREATE PLACE POP-UP -->
+		<script src="js/createPlace.js"></script>
+		<div id="modalPlace" class="popupContainer" style="display:none;">
+			<header class="popupHeader">
+				<span class="header_title">Create place</span>
+				<span class="modal_close"><i class="fa fa-times"></i></span>
+			</header>
+
+			<section class="popupBody">
+					
+				<!-- Create place form -->
+				<div class="create_place"><a href="#" id="create_place_form"></a></div>
+					<form>
+						<label>Name</label>
+						<input type="text" id="place_name" required="required"/><br />
+						
+						<label>Description</label>
+						<input type="text" id ="place_description" required="required"/><br />
+						
+						<label>Address</label>
+						<input type="text" id="place_address" required="required"/><br />
+						
+						<label>Place type</label>
+						<div class="controls">
+							<select id="place_type_select">
+							
+							</select>
+						</div><br />
+						
+						<label>Arenas list</label>
+						<div class="controls">
+							<div id="arena_select">
+							
+							</div>
+						</div>
+						
+						<div class="one_half last"><input type="button" id="add_new_arena_button" value="Add new arena"></div><br /><br />
+						
+						<label>Projections list</label>
+						<div class="controls">
+							<div id="projection_select">
+								
+							</div>
+						</div><br /><br />
+						
+						<div class="action_btns">
+							<div class="one_half last"><input type="button" id="create_place_button"  class='btn btn_red' value="Create"></div>
+						</div>
+					</form>
+					
+			</section>
 		</div>
 		
 		<div id="wrapper" class="container">
@@ -215,8 +270,16 @@
 			<section class="main-content">
 				<div class="row">
 					<div class="span12">													
-						<div class="row" id="place_list">
-												
+						<div class="row" id="place_list" style="display: none">
+							<div class="span12"> </div>
+							<h4 class="title">
+							<span class="pull-left"><span class="text"><span class="line">Cinema and theater list</span></span></span>
+							<span class="pull-right">
+							<a class="left button" href="#myCarousel" data-slide="prev"></a><a class="right button" href="#myCarousel" data-slide="next"></a>
+							</span></h4>
+							<div id="myCarousel" class="myCarousel carousel slide"> </div>
+							<div class="carousel-inner"> </div>
+							<ul class="thumbnails" id="cinema_theater">	</ul>
 						</div>
 						<br/>
 						

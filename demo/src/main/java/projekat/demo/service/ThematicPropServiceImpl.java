@@ -5,13 +5,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import projekat.demo.dto.ThematicPropDto;
 import projekat.demo.exceptions.ProjectionException;
 import projekat.demo.exceptions.ThematicPropException;
 import projekat.demo.exceptions.UserException;
 import projekat.demo.model.Projection;
 import projekat.demo.model.RoleType;
 import projekat.demo.model.ThematicProp;
-import projekat.demo.model.ThematicPropDto;
 import projekat.demo.model.User;
 import projekat.demo.repository.ProjectionRepository;
 import projekat.demo.repository.ThematicPropRepository;
@@ -33,16 +33,18 @@ public class ThematicPropServiceImpl implements ThematicPropService {
 	public ThematicProp createThematicProp(ThematicPropDto thematicPropDto) {
 		Optional<Projection> foundProjection = projectionRepository.findById(thematicPropDto.getProjectionId());
 		if (!foundProjection.isPresent()) {
-			throw new ProjectionException(null, "Projection with id " + thematicPropDto.getProjectionId() + "does not exist");
+			throw new ProjectionException(null,
+					"Projection with id " + thematicPropDto.getProjectionId() + "does not exist");
 		}
-	
+
 		Optional<User> foundUser = userRepository.findById(thematicPropDto.getUserEmail());
 		if (!foundUser.isPresent()) {
 			throw new UserException(null, "User " + thematicPropDto.getUserEmail() + "does not exist");
 		}
-		
+
 		if (foundUser.get().getType() == RoleType.FAN_ZONE_ADMIN) {
-			ThematicProp findThematicProp = this.thematicPropRepository.findByNameAndProjection(thematicPropDto.getName(), foundProjection.get());
+			ThematicProp findThematicProp = this.thematicPropRepository
+					.findByNameAndProjection(thematicPropDto.getName(), foundProjection.get());
 			if (findThematicProp == null) {
 				ThematicProp thematicProp = new ThematicProp();
 				thematicProp.setName(thematicPropDto.getName());
@@ -56,28 +58,54 @@ public class ThematicPropServiceImpl implements ThematicPropService {
 			throw new UserException(foundUser.get(), "User is not fan zone admin");
 		}
 	}
-	
+
 	@Override
-	public ThematicProp updateThematicProp(ThematicProp thematicProp) {
-		
-		return this.thematicPropRepository.save(thematicProp);
+	public ThematicProp updateThematicProp(ThematicPropDto thematicPropDto) {
+
+		Optional<Projection> foundProjection = projectionRepository.findById(thematicPropDto.getProjectionId());
+		if (!foundProjection.isPresent()) {
+			throw new ProjectionException(null,
+					"Projection with id " + thematicPropDto.getProjectionId() + "does not exist");
+		}
+
+		Optional<User> foundUser = userRepository.findById(thematicPropDto.getUserEmail());
+		if (!foundUser.isPresent()) {
+			throw new UserException(null, "User " + thematicPropDto.getUserEmail() + "does not exist");
+		}
+
+		ThematicProp findThematicProp = this.thematicPropRepository.findByNameAndProjection(thematicPropDto.getName(),
+				foundProjection.get());
+		if(findThematicProp == null) {
+			throw new ThematicPropException(findThematicProp, "Thematic prop does not exist");
+		}
+		else {
+			return this.thematicPropRepository.save(findThematicProp);
+		}
 	}
 
 	@Override
-	public boolean deleteThematicProp(ThematicProp thematicProp) {
-		
-		if (thematicProp == null) {
-			return false;
+	public ThematicProp deleteThematicProp(ThematicPropDto thematicPropDto) {
+
+		Optional<Projection> foundProjection = projectionRepository.findById(thematicPropDto.getProjectionId());
+		if (!foundProjection.isPresent()) {
+			throw new ProjectionException(null,
+					"Projection with id " + thematicPropDto.getProjectionId() + "does not exist");
 		}
-		ThematicProp deleteThematicProp = this.thematicPropRepository.findByNameAndProjection(thematicProp.getName(), thematicProp.getProjection());
-		
-		if (deleteThematicProp == null) {
-			return false;
+
+		Optional<User> foundUser = userRepository.findById(thematicPropDto.getUserEmail());
+		if (!foundUser.isPresent()) {
+			throw new UserException(null, "User " + thematicPropDto.getUserEmail() + "does not exist");
 		}
-	
-		this.thematicPropRepository.delete(thematicProp);
-		
-		return true;
+
+		ThematicProp findThematicProp = this.thematicPropRepository.findByNameAndProjection(thematicPropDto.getName(),
+				foundProjection.get());
+
+		if (findThematicProp == null) {
+			throw new ThematicPropException(findThematicProp, "Thematic prop does not exist");
+		} else {
+			this.thematicPropRepository.delete(findThematicProp);
+			return findThematicProp;
+		}
 
 	}
 

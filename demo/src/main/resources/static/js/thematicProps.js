@@ -7,13 +7,12 @@ $(document).ready(function() {
 			url : '../users/exists',
 			dataType : 'json',
 			success : function(data) {
-				var selectedProjectionId = $('#projection_select').val();
+				
 				var loggedInUserEmail = data.user.email;
-				var thematicPropName = $('#name_id').val();
 				
 				var thematicProp = {};
-				thematicProp["name"] = thematicPropName;
-				thematicProp["projectionId"] = selectedProjectionId;
+				thematicProp["name"] = $('#name_id').val();
+				thematicProp["projectionId"] = $('#projection_select').val();
 				thematicProp["userEmail"] = loggedInUserEmail;
 				
 				$.ajax({

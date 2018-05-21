@@ -16,6 +16,12 @@ $("#modal_trigger_projection").leanModal({
 	closeButton: ".modal_close"
 });
 
+$("#modal_trigger_place").leanModal({
+	top: 100,
+	overlay: 0.6,
+	closeButton: ".modal_close"
+});
+
 $(function() {
 		// Calling Login Form
 		$("#login_form").click(function() {
@@ -35,6 +41,12 @@ $(function() {
 			$(".create_projection").show();
 			$(".header_title").text('Create projection');
 			return false;
-	});
+		});
+		
+		$("#create_place_form").click(function() {
+			$(".create_place").show();
+			$(".header_title").text('Create place');
+			return false;
+		});
 
 });

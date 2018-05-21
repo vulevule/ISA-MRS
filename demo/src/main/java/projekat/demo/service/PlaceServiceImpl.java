@@ -1,14 +1,31 @@
 package projekat.demo.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Sets;
+
+import projekat.demo.dto.ArenaDto;
+import projekat.demo.dto.PlaceDto;
+import projekat.demo.dto.ProjectionDto;
+import projekat.demo.exceptions.ArenaException;
+import projekat.demo.exceptions.PlaceException;
+import projekat.demo.exceptions.ProjectionException;
+import projekat.demo.exceptions.UserException;
 import projekat.demo.model.Arena;
 import projekat.demo.model.Place;
+import projekat.demo.model.Projection;
+import projekat.demo.model.RoleType;
+import projekat.demo.model.User;
 import projekat.demo.repository.ArenaRepository;
 import projekat.demo.repository.PlaceRepository;
+import projekat.demo.repository.ProjectionRepository;
+import projekat.demo.repository.UserRepository;
 
 @Service
 public class PlaceServiceImpl implements PlaceService {
@@ -19,92 +36,122 @@ public class PlaceServiceImpl implements PlaceService {
 	@Autowired
 	private ArenaRepository arenaRepository;
 
+	@Autowired
+	private ProjectionRepository projectionRepository;
+
+	@Autowired
+	private UserRepository userRepository;
+
 	@Override
-	public Collection<Place> findAll() {
+	public Iterable<Place> findAllPlaces() {
 		return placeRepository.findAll();
 	}
 
 	@Override
-	public Place createPlace(Place p) {
-		// treba navesti da nijedan atribut ne sme biti null
-
-		Place findPlace = this.placeRepository.findByNameAndAddress(p.getName(), p.getAddress());
-		if (findPlace == null) {
-			return this.placeRepository.save(p);
+	public Place createPlace(PlaceDto placeDto) {
+		for (ProjectionDto projection : placeDto.getProjections()) {
+			Optional<Projection> foundProjection = projectionRepository.findById(projection.getId());
+			if (!foundProjection.isPresent()) {
+				throw new ProjectionException(null, "Projection with id " + projection.getId() + "does not exist");
+			}
 		}
-		return null;
+
+		for (ArenaDto arena : placeDto.getArenas()) {
+			Optional<Arena> foundArena = arenaRepository.findById(arena.getId());
+			if (!foundArena.isPresent()) {
+				throw new ArenaException(null, "Arena with id " + arena.getId() + "does not exist");
+			}
+		}
+
+		Optional<User> foundUser = userRepository.findById(placeDto.getUserEmail());
+		if (!foundUser.isPresent()) {
+			throw new UserException(null, "User " + placeDto.getUserEmail() + "does not exist");
+		}
+
+		if (foundUser.get().getType() == RoleType.SYSTEM_ADMIN) {
+			Place findPlace = this.placeRepository.findByNameAndAddress(placeDto.getName(), placeDto.getAddress());
+			if (findPlace == null) {
+				Place place = new Place();
+				place.setName(placeDto.getName());
+				place.setDescription(placeDto.getDescription());
+				place.setAddress(placeDto.getAddress());
+				place.setType(placeDto.getType());
+				Collection<Long> arenasIds = new ArrayList<>();
+				for (ArenaDto arenaDto : placeDto.getArenas()) {
+					arenasIds.add(arenaDto.getId());
+				}
+				place.setArenas(Sets.newHashSet(arenaRepository.findAllById(arenasIds)));
+				
+				Collection<Long> projectionsIds = new ArrayList<>();
+				for (ProjectionDto projectionDto : placeDto.getProjections()) {
+					projectionsIds.add(projectionDto.getId());
+				}
+				place.setProjections(Sets.newHashSet(projectionRepository.findAllById(projectionsIds)));
+				
+				place.setUser(foundUser.get());
+				return this.placeRepository.save(place);
+			} else {
+				throw new PlaceException(findPlace, "Place already exists");
+			}
+		} else {
+			throw new UserException(foundUser.get(), "User is not system admin");
+		}
 	}
 
 	@Override
-	public Place updatePlace(Place p) {
-		Place searchPlace = this.placeRepository.findByNameAndAddress(p.getName(), p.getAddress());
-
-		if (searchPlace == null) {
-			return null;
+	public Place updatePlace(Long placeId, PlaceDto placeDto) {
+		for (ProjectionDto projection : placeDto.getProjections()) {
+			Optional<Projection> foundProjection = projectionRepository.findById(projection.getId());
+			if (!foundProjection.isPresent()) {
+				throw new ProjectionException(null, "Projection with id " + projection.getId() + "does not exist");
+			}
 		}
-		p.setId(searchPlace.getId());
-		return this.placeRepository.save(p);
+
+		for (ArenaDto arena : placeDto.getArenas()) {
+			Optional<Arena> foundArena = arenaRepository.findById(arena.getId());
+			if (!foundArena.isPresent()) {
+				throw new ArenaException(null, "Arena with id " + arena.getId() + "does not exist");
+			}
+		}
+
+		Optional<User> foundUser = userRepository.findById(placeDto.getUserEmail());
+		if (!foundUser.isPresent()) {
+			throw new UserException(null, "User " + placeDto.getUserEmail() + "does not exist");
+		}
+
+		Optional<Place> foundPlace = this.placeRepository.findById(placeId);
+		if (!foundPlace.isPresent()) {
+			throw new PlaceException("Place does not exist");
+		} else {
+			Place place = foundPlace.get();
+			place.setName(placeDto.getName());
+			place.setDescription(placeDto.getDescription());
+			place.setAddress(placeDto.getAddress());
+			place.setType(placeDto.getType());
+			Collection<Long> arenasIds = new ArrayList<>();
+			for (ArenaDto arenaDto : placeDto.getArenas()) {
+				arenasIds.add(arenaDto.getId());
+				
+			}
+			Set<Arena> allArenas = (Set<Arena>) arenaRepository.findAllById(arenasIds);
+			place.setArenas(allArenas);
+			
+			Collection<Long> projectionsIds = new ArrayList<>();
+			for (ProjectionDto projectionDto : placeDto.getProjections()) {
+				projectionsIds.add(projectionDto.getId());
+				
+			}
+			Set<Projection> allProjections = (Set<Projection>) projectionRepository.findAllById(projectionsIds);
+			place.setProjections(allProjections);
+			
+			place.setUser(foundUser.get());
+			return placeRepository.save(place);
+		}
 	}
 
 	@Override
-	public boolean deletePlace(Place p) {
-		Place searchPlace = this.placeRepository.findByNameAndAddress(p.getName(), p.getAddress());
-		if (searchPlace == null) {
-			return false;
-		}
-
-		this.placeRepository.delete(p);
-
-		return true;
-	}
-
-	@Override
-	public Collection<Arena> findAllArenas() {
-		Collection<Arena> arenas = this.arenaRepository.findAll();
-
-		return arenas;
-	}
-
-	@Override
-	public Arena createArena(Arena a) {
-		Place searchPlace = this.placeRepository.findByNameAndAddress(a.getPlace().getName(),
-				a.getPlace().getAddress());
-		if (searchPlace == null) {
-			return null;
-		}
-		if (searchPlace != a.getPlace()) {
-			System.out.println("***** FATAL ERROR ***** - PLACES IN ARENA ARE NOT EQUAL!!!");
-		}
-		a.setPlace(searchPlace);
-
-		Arena searchArena = this.arenaRepository.findByNameAndPlace(a.getName(), a.getPlace());
-		if (searchArena == null) {
-			return this.arenaRepository.save(a);
-		}
-
-		return null;
-	}
-
-	@Override
-	public Arena updateArena(Arena a) {
-		Arena searchArena = this.arenaRepository.findByNameAndPlace(a.getName(), a.getPlace());
-		if (searchArena == null) {
-			return null;
-		}
-
-		return this.arenaRepository.save(a);
-	}
-
-	@Override
-	public boolean deleteArena(Arena a) {
-		Arena searchArena = this.arenaRepository.findByNameAndPlace(a.getName(), a.getPlace());
-		if (searchArena == null) {
-			return false;
-		}
-
-		this.arenaRepository.delete(a);
-
-		return true;
+	public void deletePlace(Long placeId) {
+		placeRepository.deleteById(placeId);
 	}
 
 }

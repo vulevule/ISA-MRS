@@ -1,14 +1,14 @@
 package projekat.demo.service;
 
+import projekat.demo.dto.ThematicPropDto;
 import projekat.demo.model.ThematicProp;
-import projekat.demo.model.ThematicPropDto;
 
 public interface ThematicPropService {
 	
 	ThematicProp createThematicProp(ThematicPropDto thematicPropDto);
 	
-	ThematicProp updateThematicProp(ThematicProp thematicProp);
+	ThematicProp updateThematicProp(ThematicPropDto thematicPropDto);
 	
-	boolean deleteThematicProp(ThematicProp thematicProp);
+	ThematicProp deleteThematicProp(ThematicPropDto thematicPropDto);
 
 }

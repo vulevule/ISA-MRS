@@ -12,19 +12,21 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Place implements Serializable {
-	
+
 	private static final long serialVersionUID = -3237585465892945619L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
-	
+	private Long id;
+
 	@Column(nullable = false)
 	private String name;
 
@@ -37,15 +39,19 @@ public class Place implements Serializable {
 	@Column(nullable = false)
 	@Enumerated(EnumType.ORDINAL)
 	private PlaceType type;
-	
+
 	@JsonBackReference(value = "arenas")
-	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="place")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "place")
 	private Set<Arena> arenas;
 
 	@JsonBackReference(value = "projection-place")
-	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL,  mappedBy="place")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "place")
 	private Set<Projection> projections;
-	
+
+	@JsonManagedReference(value = "place-user")
+	@ManyToOne
+	private User user;
+
 	public String getName() {
 		return name;
 	}
@@ -93,13 +99,20 @@ public class Place implements Serializable {
 	public void setProjections(Set<Projection> projections) {
 		this.projections = projections;
 	}
-	
 
-	public Integer getId() {
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 }

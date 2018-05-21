@@ -3,16 +3,19 @@ package projekat.demo.exceptions;
 import projekat.demo.model.Place;
 
 public class PlaceException extends RuntimeException {
+	
+	private static final long serialVersionUID = 1L;
+
 	private Place place;
 	private String message;
 
-	public PlaceException() {
+	public PlaceException(String message) {
+		super(message);
 	}
 
 	public PlaceException(Place place, String message) {
-		this();
+		super(message);
 		this.place = place;
-		this.message = message;
 	}
 
 	public Place getPlace() {
