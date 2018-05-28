@@ -27,7 +27,7 @@ function login_submit(){
 			$('#modal_trigger1').hide();
 		
 			alert(data.message + " " + data.user.name + " " + data.user.surname);
-			if(data.user.type == "VISITOR"){
+			if(data.user.role == "VISITOR"){
 						
 				var li_friend = $('<li> <a href="./myFriends.html" id="friend_list"> Friend </a> <ul id="friend_items"> </ul> </li>');
 				

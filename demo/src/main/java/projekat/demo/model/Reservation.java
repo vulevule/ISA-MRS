@@ -2,6 +2,7 @@ package projekat.demo.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,6 +26,12 @@ public class Reservation implements Serializable {
 	
 	@ManyToOne(optional=false)
 	private Term term;
+	
+	@Column 
+	private int rowSeat;
+	
+	@Column
+	private int columnSeat;
 
 	public long getId() {
 		return id;
@@ -38,7 +45,7 @@ public class Reservation implements Serializable {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(Visitor user) {
 		this.user = user;
 	}
 
@@ -50,7 +57,7 @@ public class Reservation implements Serializable {
 		this.term = term;
 	}
 
-	public Reservation(User user, Term term) {
+	public Reservation(Visitor user, Term term) {
 		super();
 		this.user = user;
 		this.term = term;

@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
-
 @Entity
 @DiscriminatorValue("Visitor")
 public class Visitor extends User {
@@ -17,15 +16,9 @@ public class Visitor extends User {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
 
- 	
-	
 	@Column
 	private boolean activate;
-
-	@Column
-	private String activateString;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	private Set<Bid> bids;
@@ -39,11 +32,10 @@ public class Visitor extends User {
 	}
 
 	public Visitor(String name, String surname, String email, String password, String address, String phone,
-			boolean activate, String activateString,RoleType role, Set<Bid> bids, Set<Ad> ads) {
+			boolean activate, RoleType role, Set<Bid> bids, Set<Ad> ads) {
 		super(name, surname, email, password, address, phone, role);
 		// TODO Auto-generated constructor stub
 		this.activate = activate;
-		this.activateString = activateString;
 		this.bids = bids;
 		this.ads = ads;
 
@@ -62,14 +54,6 @@ public class Visitor extends User {
 
 	public void setActivate(boolean activate) {
 		this.activate = activate;
-	}
-
-	public String getActivateString() {
-		return activateString;
-	}
-
-	public void setActivateString(String activateString) {
-		this.activateString = activateString;
 	}
 
 	public Set<Bid> getBids() {

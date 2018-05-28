@@ -1,8 +1,12 @@
 package projekat.demo.repository;
 
+import java.util.Collection;
+
 import org.springframework.data.repository.CrudRepository;
 
+import projekat.demo.model.RoleType;
 import projekat.demo.model.User;
+import projekat.demo.model.Visitor;
 
 public interface UserRepository extends CrudRepository<User, String> {
 
@@ -11,5 +15,8 @@ public interface UserRepository extends CrudRepository<User, String> {
 	
 	User findByEmailAndPassword(String username, String password);
 	
-
+	User findByEmailAndRole(String email, RoleType role);
+	
+	Collection<User> findByRole(RoleType role);
+	
 }

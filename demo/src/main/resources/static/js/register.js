@@ -13,8 +13,8 @@ function registration_submit(){
 	user["email"] = $("#email").val();
 	user["password"] = $("#password_reg").val();
 	user["address"] = $("#address").val();
-	user["name"] = $("#name").val();
-	user["surname"] = $("#surname").val();
+	user["firstName"] = $("#name").val();
+	user["lastName"] = $("#surname").val();
 	user["phone"] = $("#phone").val();
 	user["repeatPassword"] = $("#repeat_pass").val();
 	user["type"] = "VISITOR";

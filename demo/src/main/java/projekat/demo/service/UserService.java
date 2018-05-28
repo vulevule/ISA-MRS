@@ -14,21 +14,21 @@ public interface UserService {
 
 	User setActivateString(User createUser);
 
-	User activateUser(String email, String activateString);
+	boolean activateUser( String email);
 
 	User updateUser(User user);
 
 	User getUserByUsername(String username);
 
-	Friendship createFriendship(Friendship fs);
+	Friendship createFriendship(String sender, String receiver);
 
-	Friendship acceptFriendship(Friendship fs);
+	Friendship acceptFriendship(String sender, String receiver);
 
-	boolean deleteFriend(User user, User sessionUser);
+	boolean deleteFriend(String user, String sessionUser);
 
 	Collection<User> allFriends(User user);
 
-	Friendship notAcceptFriendship(Friendship notAcceptFSRequest);
+	Friendship notAcceptFriendship(String sender, String receiver);
 
 	Collection<User> allFriendshipRequest(User user);
 

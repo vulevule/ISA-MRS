@@ -21,18 +21,18 @@ public class Friendship {
 	@Enumerated(EnumType.ORDINAL)
 	private FriendshipStatus status;
 
+	@Column(nullable = false)
+	private String sender;
 	
-	private User sender;
-	
-
-	private User receiver;
+	@Column(nullable = false)
+	private String receiver;
 
 	
 	public Friendship(){}
 	
 	
 	
-	public Friendship(FriendshipStatus status, User sender, User receiver) {
+	public Friendship(FriendshipStatus status, String sender, String receiver) {
 		this();
 		this.status = status;
 		this.sender = sender;
@@ -41,7 +41,7 @@ public class Friendship {
 
 
 
-	public Friendship(Long id, FriendshipStatus status, User sender, User receiver) {
+	public Friendship(Long id, FriendshipStatus status, String sender, String receiver) {
 		this();
 		this.id = id;
 		this.status = status;
@@ -54,16 +54,16 @@ public class Friendship {
 	public void setStatus(FriendshipStatus status) {
 		this.status = status;
 	}
-	public User getSender() {
+	public String getSender() {
 		return sender;
 	}
-	public void setSender(User sender) {
+	public void setSender(String sender) {
 		this.sender = sender;
 	}
-	public User getReceiver() {
+	public String getReceiver() {
 		return receiver;
 	}
-	public void setReceiver(User receiver) {
+	public void setReceiver(String receiver) {
 		this.receiver = receiver;
 	}
 	public Long getId() {

@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,10 +22,10 @@ import org.springframework.web.context.WebApplicationContext;
 
 import projekat.demo.TestUtil;
 import projekat.demo.constants.UserConstants;
-import projekat.demo.model.Friendship;
-import projekat.demo.model.FriendshipStatus;
 import projekat.demo.model.LoginUser;
-import projekat.demo.model.User;
+import projekat.demo.model.RoleType;
+import projekat.demo.model.Visitor;
+import projekat.demo.model.DTO.UserDTO;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -44,20 +45,24 @@ public class UserControllerTest {
 
 	@Autowired
 	private WebApplicationContext webApplicationContext;
+	
+//	@Autowired
+	//private MockHttpSession session;
 
 	@PostConstruct
 	public void setup() {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 	}
 
+	//registracija novog korisnika
 	@Test
 	@Transactional
 	@Rollback(true)
 	public void testSaveVisitor() throws Exception {
-		User user = new User();
-		user.setName(UserConstants.NEW_FIRST_NAME);
-		user.setSurname(UserConstants.NEW_LAST_NAME);
-		user.setEmail(UserConstants.NEW_EMAIL3);
+		UserDTO user = new UserDTO();
+		user.setFirstName(UserConstants.NEW_FIRST_NAME);
+		user.setLastName(UserConstants.NEW_LAST_NAME);
+		user.setEmail(UserConstants.NEW_EMAIL);
 		user.setAddress(UserConstants.NEW_ADDRESS);
 		user.setPassword(UserConstants.NEW_PASSWORD);
 		user.setPhone(UserConstants.NEW_PHONE);
@@ -69,56 +74,58 @@ public class UserControllerTest {
 				.andExpect(status().isCreated());
 	}
 
+	//registracija korisnika koji vec postoji
 	@Test
 	@Transactional
-	@Rollback
-	public void testSaveAdmin() throws Exception {
-		User user = new User();
-		user.setName(UserConstants.NEW_FIRST_NAME);
-		user.setSurname(UserConstants.NEW_LAST_NAME);
-		user.setEmail(UserConstants.NEW_EMAIL3);
+	public void testSaveExistVisitor() throws Exception {
+		UserDTO user = new UserDTO();
+		user.setFirstName(UserConstants.NEW_FIRST_NAME);
+		user.setLastName(UserConstants.NEW_LAST_NAME);
+		user.setEmail("jovanaj33@gmail.com");
 		user.setAddress(UserConstants.NEW_ADDRESS);
 		user.setPassword(UserConstants.NEW_PASSWORD);
-		user.setRepeatPassword(UserConstants.NEW_PASSWORD);
 		user.setPhone(UserConstants.NEW_PHONE);
-		user.setType(UserConstants.NEW_TYPE1);
+		user.setType(UserConstants.NEW_TYPE);
+		user.setRepeatPassword(UserConstants.NEW_PASSWORD);
 
 		String json = TestUtil.json(user);
 		this.mockMvc.perform(post(URL_REGISTRATION).contentType(contentType).content(json))
-				.andExpect(status().isCreated());
+				.andExpect(status().isAlreadyReported());
 	}
+	/*
 	
+	//izmene korisnickog naloga 
 	@Test
 	@Transactional
 	@Rollback
 	public void testUpdateUser() throws Exception {
-		User user = new User();
-		user.setName(UserConstants.NEW_FIRST_NAME1);
-		user.setSurname(UserConstants.NEW_LAST_NAME);
-		user.setEmail(UserConstants.NEW_EMAIL);
+		UserDTO user = new UserDTO();
+		user.setLastName(UserConstants.NEW_FIRST_NAME1);
+		user.setFirstName(UserConstants.NEW_LAST_NAME);
+		user.setEmail("jovanaj33@gmail.com");
 		user.setAddress(UserConstants.NEW_ADDRESS2);
 		user.setPassword(UserConstants.NEW_PASSWORD1);
 		user.setPhone(UserConstants.NEW_PHONE);
 		user.setType(UserConstants.NEW_TYPE1);
 
+		Visitor v = new Visitor("Jovana", "Jovanovic", "jovanaj33@gmail.com", "jovanajovanovic", "nn 56,nn", "875778",
+				true, RoleType.VISITOR);
+		session.setAttribute("loginUser", v);
+		
 		String json = TestUtil.json(user);
-		this.mockMvc.perform(post(URL_UPDATE).contentType(contentType).content(json))
+		this.mockMvc.perform(post(URL_UPDATE).session(session).contentType(contentType).content(json))
 				.andExpect(status().isOk());
 	}
+	
+	//logovanje posetioca
+	@Test
+	public void testLogin() throws Exception{
+		LoginUser lu = new LoginUser("jovanaj33@gmail.com", "jovanajovanovic");
+		String json = TestUtil.json(lu);
+		this.mockMvc.perform(post(URL_LOGIN).contentType(contentType).content(json)).andExpect(status().isOk());
+	}
 
-	/*
-	 * MOCI CEMO DA PROVERIMO TEK KADA NAMESTIMO DA SE BAZA CUVA, ODNOSNO DA SE NE
-	 * BRISE POSLE SVAKOG GASENJA APLIKACIJE
-	 * 
-	 * @Test public void testLoginActivateUser() throws Exception{ LoginUser lu =
-	 * new LoginUser(); lu.setUsername(UserConstants.LOGIN_EMAIL);
-	 * lu.setPassword(UserConstants.LOGIN_PASSWORD);
-	 * 
-	 * String json = TestUtil.json(lu);
-	 * this.mockMvc.perform(post(URL_LOGIN).contentType(contentType).content(json)).
-	 * andExpect(status().isOk()); }
-	 * 
-	 */
+/*	
 	@Test
 	public void testLoginNotActivateVisitor() throws Exception {
 		LoginUser lu = new LoginUser();
@@ -128,7 +135,7 @@ public class UserControllerTest {
 		String json = TestUtil.json(lu);
 		this.mockMvc.perform(post(URL_LOGIN).contentType(contentType).content(json)).andExpect(status().isNotFound());
 	}
-
+/*
 	@Test
 	@Transactional
 	@Rollback(true)
@@ -145,7 +152,7 @@ public class UserControllerTest {
 
 		
 	}
-	
+	/*
 	@Test
 	public void testAcceptFriendship() throws Exception{
 		Friendship fs = new Friendship();
@@ -170,6 +177,6 @@ public class UserControllerTest {
 		fs.setStatus(FriendshipStatus.SEND_REQUEST);
 		String json = TestUtil.json(fs);
 		this.mockMvc.perform(post(URL_DELETE_FRIEND).contentType(contentType).content(json)).andExpect(status().isBadRequest());
-	}
+	}*/
 	
 }

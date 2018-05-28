@@ -1,7 +1,5 @@
 package projekat.demo.service;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import projekat.demo.model.FanZoneAdmin;
 import projekat.demo.model.Projection;
-import projekat.demo.model.RoleType;
 import projekat.demo.model.ThematicProp;
 import projekat.demo.model.User;
 import projekat.demo.repository.ProjectionRepository;

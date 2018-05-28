@@ -11,7 +11,9 @@ public class UserConstants {
 	public static final String NEW_ADDRESS = "Vuka Karadzica 5, Novi Sad";
 	public static final String NEW_PHONE = "06722256";
 	public static final RoleType NEW_TYPE = RoleType.VISITOR;
-	public static final RoleType NEW_TYPE1 = RoleType.SYSTEM_ADMIN;
+	
+	//add exist user
+	public static final String EXIST_EMAIL ="jovanaj33@gmail.com";
 	
 	//zbog unosa korisnika 
 	public static final String NEW_EMAIL3 = "jovanaftn@yahoo.com";

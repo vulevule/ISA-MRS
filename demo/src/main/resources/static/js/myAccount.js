@@ -43,8 +43,8 @@ $(document).on('click', "#update_button", function(event){
 	
 	
 	var updateUser = {};
- 	updateUser['name']= $('#name_id').val();
-	updateUser['surname'] = $('#surname_id').val();
+ 	updateUser['firstName']= $('#name_id').val();
+	updateUser['lastName'] = $('#surname_id').val();
 	updateUser['phone'] = $('#phone_id').val();
 	updateUser['address'] = $('#address_id').val(); 
 	updateUser['password'] = $('#pass_id').val();
