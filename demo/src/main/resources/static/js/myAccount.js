@@ -24,7 +24,7 @@ $(document).ready(function(){
 			$('#phone_id').val(data.user.phone);
 			$('#address_id').val(data.user.address);
 			$('#pass_id').val(data.user.password);
-			$('#repeat_pass_id').val(data.user.repeatPassword);
+			$('#repeat_pass_id').val(data.user.password);
 			
 		}
 	});
