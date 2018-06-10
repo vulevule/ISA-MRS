@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import projekat.demo.dto.UserDTO;
 import projekat.demo.model.Friendship;
 import projekat.demo.model.FriendshipStatus;
 import projekat.demo.model.RoleType;
 import projekat.demo.model.User;
+import projekat.demo.model.Visitor;
 import projekat.demo.repository.FriendshipRepository;
 import projekat.demo.repository.UserRepository;
 
@@ -19,23 +21,30 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-	
-	@Autowired 
+
+	@Autowired
 	private FriendshipRepository friendshipRepository;
-	
+
 	@Override
-	public User createUser(User u) {
+	public User createUser(UserDTO u) {
 		// treba navesti da nijedan atribut ne sme biti null
 
-		if (u.getType() == RoleType.VISITOR) {
-			u.setActivate(false); // posle cemo promeniti kada proradi slanje mejla 
-		} else {
-			u.setActivate(true); // svi ostali korisnici uvek imaju aktiviran nalog
+		User findUser = this.userRepository.findByEmail(u.getEmail());
+		if (findUser != null) {
+			return null;
 		}
 
-		User findUser = this.userRepository.findByEmail(u.getEmail());
-		if (findUser == null) {
-			return this.userRepository.save(u);
+		if (u.getType() == RoleType.VISITOR) {
+			Visitor v = new Visitor(u.getFirstName(), u.getLastName(), u.getEmail(), u.getPassword(), u.getAddress(),
+					u.getPhone(), false, u.getType());
+			return this.userRepository.save(v);
+		} else if (u.getType() == RoleType.CINEMA_THEATER_ADMIN) {
+			return null;
+		} else if (u.getType() == RoleType.FAN_ZONE_ADMIN) {
+			return null;
+		} else if (u.getType() == RoleType.SYSTEM_ADMIN) {
+			// dodati kod za registrovanje admina
+			return null;
 		}
 		return null;
 
@@ -46,9 +55,17 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		Assert.notNull(password, "The password must not be null");
 		Assert.notNull(username, "The username must not be null");
-		boolean activate = true;
-		return this.userRepository.findByEmailAndPasswordAndActivate(username, password, activate);
+		User u = this.userRepository.findByEmailAndPassword(username, password);
+		if (u.getRole() == RoleType.VISITOR) {
+			Visitor v = (Visitor) u;
+			if (v.isActivate() == true) {
+				return v;
+			} else {
+				return null; // ne moze da se uloguje, nije aktiviran nalog
+			}
+		}
 
+		return u;
 	}
 
 	@Override
@@ -59,17 +76,19 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User activateUser(String email, String activateString) {
+	public boolean activateUser(String email) {
 		// activate account
-		User u = this.userRepository.findByEmailAndActivateString(email, activateString);
+		User u = this.userRepository.findByEmail(email);
+		Visitor v = (Visitor) u;
+		/*
+		 * if (v.getActivateString().equals(activateString)) {
+		 * v.setActivate(true); User vi = this.userRepository.save(v); return
+		 * true; }
+		 */
+		v.setActivate(true);
+		User vi = this.userRepository.save(v);
 
-		if (u != null) {
-			u.setActivate(true);
-			return this.userRepository.save(u);
-			
-		}
-
-		return null;
+		return true;
 	}
 
 	@Override
@@ -84,76 +103,148 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Friendship createFriendship(Friendship fs) {
-		//upis u bazu zahteva za prijateljstvo 
-		Friendship saveFriendShip = new Friendship();
-		saveFriendShip.setSender(this.userRepository.findByEmail(fs.getSender().getEmail()));
-		saveFriendShip.setReceiver(this.userRepository.findByEmail(fs.getReceiver().getEmail()));
-		saveFriendShip.setStatus(fs.getStatus());		
+	public Friendship createFriendship(String sender, String receiver) {
+		// upis u bazu zahteva za prijateljstvo
+		Friendship saveFriendShip = new Friendship(FriendshipStatus.SEND_REQUEST, sender, receiver);
+		// mozemo jos samo da proverimo da li postoje posetioci sa ovim
+		// emailovima
+		User senderUser = this.userRepository.findByEmailAndRole(sender, RoleType.VISITOR);
+		User receiverUser = this.userRepository.findByEmailAndRole(receiver, RoleType.VISITOR);
+
+		if (senderUser == null || receiverUser == null) {
+			return null;
+		}
+
 		return this.friendshipRepository.save(saveFriendShip);
 	}
 
 	@Override
-	public Friendship acceptFriendship(Friendship fs) {
+	public Friendship acceptFriendship(String sender, String receiver) {
 		// TODO Auto-generated method stub
-		Friendship acceptFriendship = new Friendship();
-		acceptFriendship.setSender(this.userRepository.findByEmail(fs.getSender().getEmail()));
-		acceptFriendship.setReceiver(this.userRepository.findByEmail(fs.getReceiver().getEmail()));
-		acceptFriendship.setStatus(fs.getStatus());
-		
-		Friendship searchFriendship = this.friendshipRepository.findBySenderAndReceiverAndStatus(acceptFriendship.getSender(), acceptFriendship.getReceiver(), FriendshipStatus.SEND_REQUEST);
-		if(searchFriendship == null){
-			//ne postoji, nije moguce promeniti mu status 
+		Friendship searchFriendship = this.friendshipRepository.findBySenderAndReceiverAndStatus(sender, receiver,
+				FriendshipStatus.SEND_REQUEST);
+		if (searchFriendship == null) {
+			// ne postoji, nije moguce promeniti mu status
 			return null;
 		}
-		
-		//sacuvamo novo stanje sa promenom statusa
-		searchFriendship.setStatus(fs.getStatus());
-		return this.friendshipRepository.save(searchFriendship) ;
+
+		// sacuvamo novo stanje sa promenom statusa
+		searchFriendship.setStatus(FriendshipStatus.APPROVED);
+		return this.friendshipRepository.save(searchFriendship);
 	}
 
 	@Override
-	public boolean deleteFriend(Friendship fs) {
-		Friendship acceptFriendship = new Friendship();
-		acceptFriendship.setSender(this.userRepository.findByEmail(fs.getSender().getEmail()));
-		acceptFriendship.setReceiver(this.userRepository.findByEmail(fs.getReceiver().getEmail()));
-		acceptFriendship.setStatus(fs.getStatus());
-		
-		Friendship searchFriendship = this.friendshipRepository.findBySenderAndReceiver(acceptFriendship.getSender(), acceptFriendship.getReceiver());
-		if(searchFriendship == null){
-			//ne postoji, nije moguce izbrisati ga
-			return false;
+	public boolean deleteFriend(String user, String sessionUser) {
+		// 1. sender <- sessionUser, receiver <- user
+		Friendship deleteFriendship1 = new Friendship(FriendshipStatus.APPROVED, sessionUser, user);
+		// 2. sender <- user, receiver <- sessionUser
+		Friendship deleteFriendship2 = new Friendship(FriendshipStatus.APPROVED, user, sessionUser);
+
+		Friendship searchFriendship1 = this.friendshipRepository.findBySenderAndReceiverAndStatus(
+				deleteFriendship1.getSender(), deleteFriendship1.getReceiver(), deleteFriendship1.getStatus());
+
+		if (searchFriendship1 == null) {
+			Friendship searchFriendship2 = this.friendshipRepository.findBySenderAndReceiverAndStatus(
+					deleteFriendship2.getSender(), deleteFriendship2.getReceiver(), deleteFriendship2.getStatus());
+			if (searchFriendship2 == null) {
+				return false;
+			}
+			this.friendshipRepository.delete(searchFriendship2);
+			return true;
 		}
-		//sacuvamo novo stanje sa promenom statusa
-		friendshipRepository.delete(acceptFriendship);
+
+		friendshipRepository.delete(searchFriendship1);
 		return true;
+	}
+
+	@Override
+	public Friendship notAcceptFriendship(String sender, String receiver) {
+		//
+		Friendship searchFriendship = this.friendshipRepository.findBySenderAndReceiverAndStatus(sender, receiver,
+				FriendshipStatus.SEND_REQUEST);
+		if (searchFriendship == null) {
+			// ne postoji prijateljstvo
+			return null;
+		}
+		searchFriendship.setStatus(FriendshipStatus.NOT_APPROVED);
+		return this.friendshipRepository.save(searchFriendship);
 	}
 
 	@Override
 	public Collection<User> allFriends(User user) {
 		// TODO Auto-generated method stub
-		Collection<Friendship> sendFriend = this.friendshipRepository.findBySenderAndStatus(user, FriendshipStatus.APPROVED);
-		Collection<Friendship> acceptFriend = this.friendshipRepository.findByReceiverAndStatus(user, FriendshipStatus.APPROVED);
+		Collection<Friendship> sendFriend = this.friendshipRepository.findBySenderAndStatus(user.getEmail(),
+				FriendshipStatus.APPROVED);
+		Collection<Friendship> acceptFriend = this.friendshipRepository.findByReceiverAndStatus(user.getEmail(),
+				FriendshipStatus.APPROVED);
 		Collection<User> friends = new ArrayList<User>();
-		
-		for (Friendship fs : sendFriend){
-			friends.add(fs.getReceiver());
+
+		for (Friendship fs : sendFriend) {
+			User u = this.userRepository.findByEmail(fs.getReceiver());
+			friends.add(u);
 		}
-		for (Friendship fs : acceptFriend){
-			friends.add(fs.getSender());
+		for (Friendship fs : acceptFriend) {
+			User u = this.userRepository.findByEmail(fs.getSender());
+			friends.add(u);
 		}
 		return friends;
 	}
 
 	@Override
 	public Collection<User> allFriendshipRequest(User user) {
-		//pronadjemo sve poslate zahteve, trazimo da prosledjeni user bude receiver i status da bude send
-		Collection<Friendship> requests = this.friendshipRepository.findByReceiverAndStatus(user, FriendshipStatus.SEND_REQUEST);
+		// pronadjemo sve poslate zahteve, trazimo da prosledjeni user bude
+		// receiver i status da bude send
+		Collection<Friendship> requests = this.friendshipRepository.findByReceiverAndStatus(user.getEmail(),
+				FriendshipStatus.SEND_REQUEST);
 		Collection<User> users = new ArrayList<User>();
-		for(Friendship fs : requests){
-			users.add(fs.getSender());
+		for (Friendship fs : requests) {
+			User u = this.userRepository.findByEmail(fs.getSender());
+			users.add(u);
 		}
 		return users;
 	}
+
+
+	// all send request
+	public Collection<User> allSendRequests(User sender) {
+		Collection<Friendship> sendRequests = this.friendshipRepository.findBySenderAndStatus(sender.getEmail(),
+				FriendshipStatus.SEND_REQUEST);
+		Collection<User> users = new ArrayList<User>();
+		for (Friendship fs : sendRequests) {
+			User u = this.userRepository.findByEmail(fs.getReceiver());
+			users.add(u);
+		}
+		return users;
+	}
+
+	@Override
+	public Collection<User> allNotFriends(User user) {
+		// 1. uzmemo sve posetioce; 2. uzmemo sve prijatelje i dobijene zahteve
+		// //treba izbaciti usera
+
+		// 1. svi posetioci
+		Collection<User> allVisitors = this.userRepository.findByRole(RoleType.VISITOR);
+		// sad izbacimo usera koji je na sesiji
+		for (User u : allVisitors) {
+			if (u.getEmail().equals(user.getEmail())) {
+				allVisitors.remove(u);
+			}
+		}
+
+		// 2.svi prijatelji
+		Collection<User> friends = allFriends(user);
+		friends.addAll(allFriendshipRequest(user));
+		friends.addAll(allSendRequests(user));
+
+		Collection<User> allNotFriends = new ArrayList<User>();
+		for (User u : allVisitors) {
+			if (!(friends.contains(u))) {
+				allNotFriends.add(u);
+			}
+		}
+		return allNotFriends;
+
+	}
+
 	
 }

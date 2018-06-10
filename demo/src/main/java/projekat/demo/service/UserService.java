@@ -2,31 +2,36 @@ package projekat.demo.service;
 
 import java.util.Collection;
 
+import projekat.demo.dto.UserDTO;
 import projekat.demo.model.Friendship;
 import projekat.demo.model.User;
 
 public interface UserService {
 
-	User createUser(User u);
+	User createUser(UserDTO u);
 
 	User login(String username, String password);
 
 	User setActivateString(User createUser);
 
-	User activateUser(String email, String activateString);
+	boolean activateUser( String email);
 
 	User updateUser(User user);
 
 	User getUserByUsername(String username);
 
-	Friendship createFriendship(Friendship fs);
+	Friendship createFriendship(String sender, String receiver);
 
-	Friendship acceptFriendship(Friendship fs);
+	Friendship acceptFriendship(String sender, String receiver);
 
-	boolean deleteFriend(Friendship fs);
+	boolean deleteFriend(String user, String sessionUser);
 
 	Collection<User> allFriends(User user);
 
+	Friendship notAcceptFriendship(String sender, String receiver);
+
 	Collection<User> allFriendshipRequest(User user);
+
+	Collection<User> allNotFriends(User user);
 
 }

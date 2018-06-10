@@ -10,11 +10,13 @@ import projekat.demo.model.User;
 
 public interface FriendshipRepository extends CrudRepository<Friendship, Long>{
 	
-	Friendship findBySenderAndReceiverAndStatus(User sender, User receiver, FriendshipStatus status);
+Friendship findBySenderAndReceiverAndStatus(String sender, String receiver, FriendshipStatus status);
 	
-	Friendship findBySenderAndReceiver(User sender, User receiver);
-	
-	Collection<Friendship> findBySenderAndStatus(User sender, FriendshipStatus status);
-	
-	Collection<Friendship> findByReceiverAndStatus(User receiver, FriendshipStatus status);
+	Friendship findBySenderAndReceiver(String sender, String receiver);
+
+	Collection<User> findBySenderOrReceiver(String sender, String receiver);
+
+	Collection<Friendship> findBySenderAndStatus(String user, FriendshipStatus approved);
+
+	Collection<Friendship> findByReceiverAndStatus(String user, FriendshipStatus approved);
 }

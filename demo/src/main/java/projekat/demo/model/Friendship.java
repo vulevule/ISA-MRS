@@ -9,7 +9,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Friendship implements Serializable {
@@ -24,22 +23,37 @@ public class Friendship implements Serializable {
 	@Enumerated(EnumType.ORDINAL)
 	private FriendshipStatus status;
 
-	@OneToOne
-	private User sender;
+	@Column(nullable = false)
+	private String sender;
 
-	@OneToOne
-	private User receiver;
+	@Column(nullable = false)
+	private String receiver;
 
 	public Friendship() {
 
 	}
 
-	public Friendship(Long id, FriendshipStatus status, User sender, User receiver) {
+	public Friendship(FriendshipStatus status, String sender, String receiver) {
+		this();
+		this.status = status;
+		this.sender = sender;
+		this.receiver = receiver;
+	}
+
+	public Friendship(Long id, FriendshipStatus status, String sender, String receiver) {
 		this();
 		this.id = id;
 		this.status = status;
 		this.sender = sender;
 		this.receiver = receiver;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public FriendshipStatus getStatus() {
@@ -50,28 +64,20 @@ public class Friendship implements Serializable {
 		this.status = status;
 	}
 
-	public User getSender() {
+	public String getSender() {
 		return sender;
 	}
 
-	public void setSender(User sender) {
+	public void setSender(String sender) {
 		this.sender = sender;
 	}
 
-	public User getReceiver() {
+	public String getReceiver() {
 		return receiver;
 	}
 
-	public void setReceiver(User receiver) {
+	public void setReceiver(String receiver) {
 		this.receiver = receiver;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 }
