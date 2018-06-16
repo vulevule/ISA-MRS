@@ -42,7 +42,7 @@ public class ThematicPropServiceImpl implements ThematicPropService {
 			throw new UserException(null, "User " + thematicPropDto.getUserEmail() + "does not exist");
 		}
 
-		if (foundUser.get().getType() == RoleType.FAN_ZONE_ADMIN) {
+		if (foundUser.get().getRole() == RoleType.FAN_ZONE_ADMIN) {
 			ThematicProp findThematicProp = this.thematicPropRepository
 					.findByNameAndProjection(thematicPropDto.getName(), foundProjection.get());
 			if (findThematicProp == null) {

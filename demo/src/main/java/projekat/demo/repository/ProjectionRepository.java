@@ -9,4 +9,6 @@ public interface ProjectionRepository extends CrudRepository<Projection, Long>{
 	
 	Projection findByNameAndPlace(String name, Place place);
 	
+	Iterable<Projection> findByPlace(Place place);
+	
 }

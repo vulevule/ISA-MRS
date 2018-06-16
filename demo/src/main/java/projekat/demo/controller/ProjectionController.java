@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -91,6 +92,17 @@ public class ProjectionController {
 		Iterable<Projection> projections = projectionService.findAll();
 		
 		logger.info("<< find all projection");
+
+		return new ResponseEntity<Iterable<Projection>>(projections, HttpStatus.OK);
+	}
+	
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="/projectionId/{place}")
+	public ResponseEntity<Iterable<Projection>> findprojectionByPlace(@PathVariable int id) {
+		logger.info(">> find all projections by place id");
+		
+		Iterable<Projection> projections = projectionService.findAllByPlaceId(id);
+		
+		logger.info("<< find all projection by place id");
 
 		return new ResponseEntity<Iterable<Projection>>(projections, HttpStatus.OK);
 	}

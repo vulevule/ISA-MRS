@@ -68,7 +68,7 @@ public class PlaceServiceImpl implements PlaceService {
 			throw new UserException(null, "User " + placeDto.getUserEmail() + "does not exist");
 		}
 
-		if (foundUser.get().getType() == RoleType.SYSTEM_ADMIN) {
+		if (foundUser.get().getRole() == RoleType.SYSTEM_ADMIN) {
 			Place findPlace = this.placeRepository.findByNameAndAddress(placeDto.getName(), placeDto.getAddress());
 			if (findPlace == null) {
 				Place place = new Place();

@@ -8,8 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import projekat.demo.dto.UserDTO;
+import projekat.demo.model.Admin;
+import projekat.demo.model.FanZoneAdmin;
 import projekat.demo.model.Friendship;
 import projekat.demo.model.FriendshipStatus;
+import projekat.demo.model.PlaceAdmin;
 import projekat.demo.model.RoleType;
 import projekat.demo.model.User;
 import projekat.demo.model.Visitor;
@@ -63,6 +66,15 @@ public class UserServiceImpl implements UserService {
 			} else {
 				return null; // ne moze da se uloguje, nije aktiviran nalog
 			}
+		}else if (u.getRole() == RoleType.SYSTEM_ADMIN){
+			Admin a = (Admin) u;
+			return a;
+		}else if(u.getRole() == RoleType.FAN_ZONE_ADMIN){
+			FanZoneAdmin fa = (FanZoneAdmin) u;
+			return fa;
+		}else if (u.getRole() == RoleType.CINEMA_THEATER_ADMIN){
+			PlaceAdmin pa = (PlaceAdmin) u;
+			return pa;
 		}
 
 		return u;

@@ -49,7 +49,7 @@ $(document).ready(function(){
 		$('#modal_trigger1').hide();
 		$('#myAccount').show();
 		$('#log-out').show();
-		if (loginUser.type == "SYSTEM_ADMIN") {
+		if (loginUser.role == "SYSTEM_ADMIN") {
 			$('#modal_trigger_place').show();
 			$('#modal_trigger_projection').hide();
 		}

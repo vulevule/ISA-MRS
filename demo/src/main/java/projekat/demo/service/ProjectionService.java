@@ -11,4 +11,6 @@ public interface ProjectionService {
 	boolean deleteProjection(Projection p);
 	
 	Iterable<Projection> findAll();
+
+	Iterable<Projection> findAllByPlaceId(int id);
 }

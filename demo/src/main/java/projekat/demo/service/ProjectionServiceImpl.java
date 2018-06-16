@@ -3,7 +3,9 @@ package projekat.demo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import projekat.demo.model.Place;
 import projekat.demo.model.Projection;
+import projekat.demo.repository.PlaceRepository;
 import projekat.demo.repository.ProjectionRepository;
 
 @Service
@@ -11,6 +13,9 @@ public class ProjectionServiceImpl implements ProjectionService {
 
 	@Autowired
 	private ProjectionRepository projectionRepository;
+	
+	@Autowired
+	private PlaceRepository placeRepository;
 
 	@Override
 	public Projection createProjection(Projection p) {
@@ -47,5 +52,14 @@ public class ProjectionServiceImpl implements ProjectionService {
 	@Override
 	public Iterable<Projection> findAll() {
 		return projectionRepository.findAll();
+	}
+
+	@Override
+	public Iterable<Projection> findAllByPlaceId(int id) {
+		// TODO Auto-generated method stub
+		Place p = placeRepository.findById((long)id);
+		
+		return projectionRepository.findByPlace(p);
+		
 	}
 }

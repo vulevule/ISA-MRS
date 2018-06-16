@@ -7,4 +7,6 @@ import projekat.demo.model.Place;
 public interface PlaceRepository extends CrudRepository<Place, Long> {
 	
 	Place findByNameAndAddress(String name, String address);
+	
+	Place findById(long id);
 }

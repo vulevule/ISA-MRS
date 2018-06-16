@@ -143,9 +143,15 @@ public class UserController {
 	}
 
 	@GetMapping(value = "users/logOut", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UserException> logOut() {
+	public RedirectView logOut() {
+		logger.info("log out");
 		User loginUser = (User) this.session.getAttribute("loginUser");
-		UserException ue = new UserException(loginUser, "Successful log out");
+		if(loginUser != null){
+			this.session.setAttribute("loginUser", null);
+			return new RedirectView("http://localhost:8080");
+			
+		}
+		/*UserException ue = new UserException(loginUser, "Successful log out");
 		if (loginUser != null) {
 			this.session.setAttribute("loginUser", null);
 			return new ResponseEntity<UserException>(ue, HttpStatus.OK);
@@ -153,7 +159,8 @@ public class UserController {
 		}
 
 		ue.setMessage("Unsuccessful log out, because does not exist login user");
-		return new ResponseEntity<UserException>(ue, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<UserException>(ue, HttpStatus.BAD_REQUEST);*/
+		return new RedirectView("http://localhost:8080");
 
 	}
 	
