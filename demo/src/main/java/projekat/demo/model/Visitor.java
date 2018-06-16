@@ -40,6 +40,9 @@ public class Visitor extends User {
 		this.ads = ads;
 
 	}
+	
+	
+	
 
 	public Visitor(String firstName, String lastName, String email, String password, String address, String phone,
 			boolean b, RoleType role) {

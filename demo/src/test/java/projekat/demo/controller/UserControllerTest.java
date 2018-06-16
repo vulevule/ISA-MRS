@@ -36,6 +36,8 @@ public class UserControllerTest {
 	private static final String URL_ADD_FRIEND = "/users/addFriend";
 	private static final String URL_ACCEPT_FRIEND = "/users/acceptFriendship";
 	private static final String URL_DELETE_FRIEND = "/users/deleteFriendship";
+	private static final String URL_NOTACCEPT_FRIEND = "/users/notAcceptFriendship";
+
 
 
 	private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
@@ -62,7 +64,7 @@ public class UserControllerTest {
 		UserDTO user = new UserDTO();
 		user.setFirstName(UserConstants.NEW_FIRST_NAME);
 		user.setLastName(UserConstants.NEW_LAST_NAME);
-		user.setEmail("jovanaj33@gmail.com");
+		user.setEmail("jovanovicj296@gmail.com");
 		user.setAddress(UserConstants.NEW_ADDRESS);
 		user.setPassword(UserConstants.NEW_PASSWORD);
 		user.setPhone(UserConstants.NEW_PHONE);
@@ -81,7 +83,7 @@ public class UserControllerTest {
 		UserDTO user = new UserDTO();
 		user.setFirstName(UserConstants.NEW_FIRST_NAME);
 		user.setLastName(UserConstants.NEW_LAST_NAME);
-		user.setEmail("jocaftn15@gmail.com");
+		user.setEmail("jovanaj33@gmail.com");
 		user.setAddress(UserConstants.NEW_ADDRESS);
 		user.setPassword(UserConstants.NEW_PASSWORD);
 		user.setPhone(UserConstants.NEW_PHONE);
@@ -97,7 +99,7 @@ public class UserControllerTest {
 	//logovanje posetioca
 		@Test
 		public void testLogin() throws Exception{
-			LoginUser lu = new LoginUser("jocaftn15@gmail.com", "jovanajovanovic");
+			LoginUser lu = new LoginUser("jovanaj33@gmail.com", "jovanajovanovic");
 			String json = TestUtil.json(lu);
 			this.mockMvc.perform(post(URL_LOGIN).contentType(contentType).content(json)).andExpect(status().isOk());
 		}
@@ -113,13 +115,14 @@ public class UserControllerTest {
 		UserDTO user = new UserDTO();
 		user.setLastName(UserConstants.NEW_FIRST_NAME1);
 		user.setFirstName(UserConstants.NEW_LAST_NAME);
-		user.setEmail("jocaftn15@gmail.com");
+		user.setEmail("jovanaj33@gmail.com");
 		user.setAddress(UserConstants.NEW_ADDRESS2);
 		user.setPassword(UserConstants.NEW_PASSWORD1);
+		user.setRepeatPassword(UserConstants.NEW_PASSWORD1);
 		user.setPhone(UserConstants.NEW_PHONE);
 		user.setType(RoleType.VISITOR);
 
-		Visitor v = new Visitor("Joca", "Jovanovic", "jocaftn15@gmail.com", "jovanajovanovic", "nn 56,nn", "47733",
+		Visitor v = new Visitor("Jovana", "Jovanovic", "jovanaj33@gmail.com", "jovanajovanovic", "Novosadskog sajma 5, Novi Sad", "57464745",
 				true, RoleType.VISITOR);
 		session.setAttribute("loginUser", v);
 		
@@ -138,48 +141,63 @@ public class UserControllerTest {
 
 		String json = TestUtil.json(lu);
 		this.mockMvc.perform(post(URL_LOGIN).contentType(contentType).content(json)).andExpect(status().isNotFound());
-	}
-/*
+	}*/
+
 	@Test
 	@Transactional
 	@Rollback(true)
 	public void testAddFriend() throws Exception{
-		Friendship fs = new Friendship();
-		User u1 = new User(UserConstants.NEW_FIRST_NAME, UserConstants.NEW_LAST_NAME, UserConstants.NEW_EMAIL, UserConstants.NEW_PASSWORD, UserConstants.NEW_ADDRESS,UserConstants.NEW_PHONE, UserConstants.NEW_TYPE, true, "", null, null);
-		User u2 = new User(UserConstants.NEW_FIRST_NAME2, UserConstants.NEW_LAST_NAME2, UserConstants.NEW_EMAIL2, UserConstants.NEW_PASSWORD2, UserConstants.NEW_ADDRESS2,UserConstants.NEW_PHONE2, UserConstants.NEW_TYPE2, true, "", null, null);
-
-		fs.setSender(u1);
-		fs.setReceiver(u2);
-		fs.setStatus(FriendshipStatus.SEND_REQUEST);
-		String json = TestUtil.json(fs);
-		this.mockMvc.perform(post(URL_ADD_FRIEND).contentType(contentType).content(json)).andExpect(status().isCreated());
+		//sender
+		Visitor v = new Visitor("Jovana", "Jovanovic", "jocaftn15@gmail.com", "jovanajovanovic", "Novosadskog sajma 5, Novi Sad", "57878",
+				true, RoleType.VISITOR);
+		session.setAttribute("loginUser", v);
+		//receiver
+		Visitor receiver = new Visitor("Jovana", "Jovanovic", "jovanaftn@yahoo.com", "", "", "", true, RoleType.VISITOR, null, null);
+		String json = TestUtil.json(receiver);
+		this.mockMvc.perform(post(URL_ADD_FRIEND).session(session).contentType(contentType).content(json)).andExpect(status().isCreated());
 
 		
 	}
-	/*
+	
 	@Test
+	@Transactional
+	@Rollback(true)
 	public void testAcceptFriendship() throws Exception{
-		Friendship fs = new Friendship();
-		User u1 = new User(UserConstants.NEW_FIRST_NAME, UserConstants.NEW_LAST_NAME, UserConstants.NEW_EMAIL, UserConstants.NEW_PASSWORD, UserConstants.NEW_ADDRESS,UserConstants.NEW_PHONE, UserConstants.NEW_TYPE, true, "", null, null);
-		User u2 = new User(UserConstants.NEW_FIRST_NAME2, UserConstants.NEW_LAST_NAME2, UserConstants.NEW_EMAIL2, UserConstants.NEW_PASSWORD2, UserConstants.NEW_ADDRESS2,UserConstants.NEW_PHONE2, UserConstants.NEW_TYPE2, true, "", null, null);
-
-		fs.setSender(u1);
-		fs.setReceiver(u2);
-		fs.setStatus(FriendshipStatus.SEND_REQUEST);
-		String json = TestUtil.json(fs);
-		this.mockMvc.perform(post(URL_ACCEPT_FRIEND).contentType(contentType).content(json)).andExpect(status().isBadRequest());
+		//receiver - user sa sesije
+		Visitor v = new Visitor("Jovana", "Jovanovic", "jovanaftn@yahoo.com", "jovanajovanovic", "Novosadskog sajma 5, Novi Sad", "57464745",
+				true, RoleType.VISITOR);
+		session.setAttribute("loginUser", v);
+		
+		Visitor sender = new Visitor("Jovana", "Jovanovic", "jovanaj33@gmail.com", "", "", "", true, RoleType.VISITOR, null, null);
+		
+		String json = TestUtil.json(sender);
+		this.mockMvc.perform(post(URL_ACCEPT_FRIEND).session(session).contentType(contentType).content(json)).andExpect(status().isOk());
 	}
 	
 	@Test
+	@Transactional
+	@Rollback(true)
+	public void testNotAcceptFriendship() throws Exception{
+		//receiver - user sa sesije
+		Visitor v = new Visitor("Jovana", "Jovanovic", "jovanaftn@yahoo.com", "jovanajovanovic", "Novosadskog sajma 5, Novi Sad", "57464745",
+				true, RoleType.VISITOR);
+		session.setAttribute("loginUser", v);
+		
+		Visitor sender = new Visitor("Jovana", "Jovanovic", "jovanaj33@gmail.com", "", "", "", true, RoleType.VISITOR, null, null);
+		
+		String json = TestUtil.json(sender);
+		this.mockMvc.perform(post(URL_NOTACCEPT_FRIEND).session(session).contentType(contentType).content(json)).andExpect(status().isOk());
+	}
+	
+	@Test
+	@Transactional
+	@Rollback(true)
 	public void testDeleteFriend() throws Exception{
-		Friendship fs = new Friendship();
-		User u1 = new User(UserConstants.NEW_FIRST_NAME, UserConstants.NEW_LAST_NAME, UserConstants.NEW_EMAIL, UserConstants.NEW_PASSWORD, UserConstants.NEW_ADDRESS,UserConstants.NEW_PHONE, UserConstants.NEW_TYPE, true, "", null, null);
-		User u2 = new User(UserConstants.NEW_FIRST_NAME2, UserConstants.NEW_LAST_NAME2, UserConstants.NEW_EMAIL2, UserConstants.NEW_PASSWORD2, UserConstants.NEW_ADDRESS2,UserConstants.NEW_PHONE2, UserConstants.NEW_TYPE2, true, "", null, null);
-
-		fs.setSender(u1);
-		fs.setReceiver(u2);
-		fs.setStatus(FriendshipStatus.SEND_REQUEST);
-		String json = TestUtil.json(fs);
-		this.mockMvc.perform(post(URL_DELETE_FRIEND).contentType(contentType).content(json)).andExpect(status().isBadRequest());
-	}*/
+		Visitor v = new Visitor("Jovana", "Jovanovic", "jovanaj33@gmail.com", "jovanajovanovic", "Novosadskog sajma 5, Novi Sad", "57464745",
+				true, RoleType.VISITOR);
+		session.setAttribute("loginUser", v);
+		Visitor v1 = new Visitor("Jovana", "Jovanovic", "jocaftn15@gmail.com", "", "", "", true, RoleType.VISITOR, null, null);
+		String json = TestUtil.json(v1);
+		this.mockMvc.perform(post(URL_DELETE_FRIEND).session(session).contentType(contentType).content(json)).andExpect(status().isOk());
+	}
 }

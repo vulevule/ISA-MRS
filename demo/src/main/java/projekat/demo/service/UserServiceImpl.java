@@ -120,10 +120,27 @@ public class UserServiceImpl implements UserService {
 		Friendship saveFriendShip = new Friendship(FriendshipStatus.SEND_REQUEST, sender, receiver);
 		// mozemo jos samo da proverimo da li postoje posetioci sa ovim
 		// emailovima
+		
 		User senderUser = this.userRepository.findByEmailAndRole(sender, RoleType.VISITOR);
 		User receiverUser = this.userRepository.findByEmailAndRole(receiver, RoleType.VISITOR);
 
 		if (senderUser == null || receiverUser == null) {
+			return null;
+		}
+		//i mozemo da proverimo da vec ne postoji ovo prijateljstvo ili  da zahtev vec nije poslat
+		
+		Friendship findFriend = this.friendshipRepository.findBySenderAndReceiverAndStatus(sender, receiver, FriendshipStatus.APPROVED);
+		Friendship findFriend2 = this.friendshipRepository.findBySenderAndReceiverAndStatus(receiver, sender, FriendshipStatus.APPROVED);
+		
+		Friendship findFriendSend = this.friendshipRepository.findBySenderAndReceiverAndStatus(sender, receiver, FriendshipStatus.SEND_REQUEST);
+		Friendship findFriendSend2 = this.friendshipRepository.findBySenderAndReceiverAndStatus(receiver, sender, FriendshipStatus.SEND_REQUEST);
+		
+		if(findFriend != null || findFriend2 != null){
+			//postoji prijateljstvo 
+			return null;
+		}
+		if(findFriendSend != null || findFriendSend2 != null){
+			//zahtev vec poslat
 			return null;
 		}
 

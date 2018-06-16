@@ -226,6 +226,9 @@ public class UserController {
 			logger.info("<< add friend");
 			return new ResponseEntity<FriendshipException>(fe, HttpStatus.BAD_REQUEST);
 		}
+		
+		//poslati mejl korisniku kojem je poslat zahtev za prijateljstvo
+		
 
 		fe.setMessage("The request for friendship has been successfully sent");
 		logger.info("<< add friend");
@@ -243,7 +246,7 @@ public class UserController {
 		Friendship acceptFriendship = this.userService.acceptFriendship(sender.getEmail(), receiver.getEmail());
 		FriendshipException fe = new FriendshipException(acceptFriendship, "");
 		if (acceptFriendship == null) {
-			fe.setMessage("Does not exist friendship");
+			fe.setMessage("Does not exist send request");
 			logger.info("<< accept friendship");
 			return new ResponseEntity<FriendshipException>(fe, HttpStatus.BAD_REQUEST);
 		}
