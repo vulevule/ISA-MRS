@@ -6,7 +6,7 @@
 body{
 	font-size: 12px;
 	font-family: 'Open Sans', arial, tahoma, sans-serif;
-	background-color:black;
+	background-color : #111111;
 }
 label, input, button, select, textarea{
 	color:#ce3c5a;
@@ -86,7 +86,7 @@ section#copyright{
 	margin-right: -10px;	
 }
 section.header_text{
-	background-color:black;
+	background-color : black;
 	text-align:center;
 	padding:15px 0 20px 0;
 	font-size:16px;
@@ -148,7 +148,7 @@ iframe{
 /* top bar
 ----------------------------------------------------------------------------- */
 #top-bar{
-	background-color:black;
+	background: black;
 	padding:10px;
 	margin: 20px auto -22px auto;
 	-webkit-border-radius: 4px;
@@ -276,7 +276,7 @@ section#copyright{
 	-moz-border-radius: 0;	
 	border-radius: 0;
 	filter: none;	
-	background:url(../images/bg.gif) repeat 0 0 fixed;
+	background:url(../images/bg.gif);
 }
 .navbar-inner.main-menu a.logo{
 	position:absolute;
@@ -478,7 +478,7 @@ h4.title strong{
 	color:#ce3c5a;
 }
 h4.title span.text{
-	background-color:black;
+	background: url(../images/bg.gif) repeat 0 0 fixed;
 	color: #ce3c5a;
 	padding-right:10px;
 }
@@ -492,7 +492,7 @@ h4.title .right{
 	background-color: #262626;	
 }
 h4.title .pull-right{
-	background-color:black;
+	background: url(../images/bg.gif) repeat 0 0 fixed;
 	padding-left:10px;	
 }
 h4.title .left,h4.title .right{
