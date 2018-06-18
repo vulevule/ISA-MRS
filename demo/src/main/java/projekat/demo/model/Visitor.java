@@ -2,6 +2,7 @@ package projekat.demo.model;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -25,6 +26,9 @@ public class Visitor extends User {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	private Set<Ad> ads;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="user", cascade = CascadeType.ALL)
+	private Set<Reservation> reservations;
 
 	public Visitor() {
 		super();
@@ -32,12 +36,13 @@ public class Visitor extends User {
 	}
 
 	public Visitor(String name, String surname, String email, String password, String address, String phone,
-			boolean activate, RoleType role, Set<Bid> bids, Set<Ad> ads) {
+			boolean activate, RoleType role, Set<Bid> bids, Set<Ad> ads, Set<Reservation> reservations) {
 		super(name, surname, email, password, address, phone, role);
 		// TODO Auto-generated constructor stub
 		this.activate = activate;
 		this.bids = bids;
 		this.ads = ads;
+		this.reservations = reservations;
 
 	}
 	
@@ -73,6 +78,14 @@ public class Visitor extends User {
 
 	public void setAds(Set<Ad> ads) {
 		this.ads = ads;
+	}
+
+	public Set<Reservation> getReservations() {
+		return reservations;
+	}
+
+	public void setReservations(Set<Reservation> reservations) {
+		this.reservations = reservations;
 	}
 
 }

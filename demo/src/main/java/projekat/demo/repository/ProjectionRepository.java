@@ -11,4 +11,6 @@ public interface ProjectionRepository extends CrudRepository<Projection, Long>{
 	
 	Iterable<Projection> findByPlace(Place place);
 	
+	Projection findById(long id);
+	
 }

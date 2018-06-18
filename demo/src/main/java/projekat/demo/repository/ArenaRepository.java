@@ -8,5 +8,7 @@ import projekat.demo.model.Place;
 public interface ArenaRepository extends CrudRepository<Arena, Long> {
 
 	Arena findByNameAndPlace(String name, Place place);
+	
+	Arena findById(long id);
 
 }

@@ -3,10 +3,14 @@ package projekat.demo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import projekat.demo.model.Arena;
 import projekat.demo.model.Place;
 import projekat.demo.model.Projection;
+import projekat.demo.model.Term;
+import projekat.demo.repository.ArenaRepository;
 import projekat.demo.repository.PlaceRepository;
 import projekat.demo.repository.ProjectionRepository;
+import projekat.demo.repository.TermRepository;
 
 @Service
 public class ProjectionServiceImpl implements ProjectionService {
@@ -16,7 +20,13 @@ public class ProjectionServiceImpl implements ProjectionService {
 	
 	@Autowired
 	private PlaceRepository placeRepository;
+	
+	@Autowired
+	private TermRepository termRepository;
 
+	@Autowired
+	private ArenaRepository arenaRepository;
+	
 	@Override
 	public Projection createProjection(Projection p) {
 		Projection findProj = this.projectionRepository.findByNameAndPlace(p.getName(), p.getPlace());
@@ -61,5 +71,27 @@ public class ProjectionServiceImpl implements ProjectionService {
 		
 		return projectionRepository.findByPlace(p);
 		
+	}
+
+	@Override
+	public Iterable<Term> findTermByProjectionId(int id) {
+		// prvo pronadjemo projekciju
+		Projection p = projectionRepository.findById((long)id);
+		return termRepository.findByProjection(p);
+	}
+	
+	
+	@Override
+	public Term findTermById(long id){
+		Term t = termRepository.findById(id);
+		
+		return t;
+	}
+	
+	@Override 
+	public Arena findArenaByTermId(long id){
+		Term t = termRepository.findById(id);
+		
+		return t.getArena();
 	}
 }

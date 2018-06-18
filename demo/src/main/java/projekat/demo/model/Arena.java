@@ -32,6 +32,7 @@ public class Arena implements Serializable {
 	@Column
 	private int columnSeats;
 
+	@JsonManagedReference
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="arena")
 	private Set<Term> terms;
 

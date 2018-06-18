@@ -6,14 +6,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import projekat.demo.exceptions.ProjectionException;
+import projekat.demo.model.Arena;
 import projekat.demo.model.Projection;
+import projekat.demo.model.Term;
 import projekat.demo.service.ProjectionService;
 
 @RestController
@@ -96,14 +98,43 @@ public class ProjectionController {
 		return new ResponseEntity<Iterable<Projection>>(projections, HttpStatus.OK);
 	}
 	
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="/projectionId/{place}")
-	public ResponseEntity<Iterable<Projection>> findprojectionByPlace(@PathVariable int id) {
-		logger.info(">> find all projections by place id");
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="/projectionId")
+	public ResponseEntity<Iterable<Projection>> findprojectionByPlace(@RequestParam("id") int id) {
+		logger.info(">> find all projections by place id " + id);
 		
 		Iterable<Projection> projections = projectionService.findAllByPlaceId(id);
 		
 		logger.info("<< find all projection by place id");
 
 		return new ResponseEntity<Iterable<Projection>>(projections, HttpStatus.OK);
+	}
+	
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="/termsId")
+	public ResponseEntity<Iterable<Term>> findTermsByProjectionId(@RequestParam("id") int id) {
+		logger.info(">> find all term by projection id " + id);
+		
+		Iterable<Term> terms = projectionService.findTermByProjectionId(id);
+		
+		logger.info("<< find all term by projection id");
+
+		return new ResponseEntity<Iterable<Term>>(terms, HttpStatus.OK);
+	}
+	
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="/termId")
+	public ResponseEntity<Term> findTermById(@RequestParam("id") long id){
+		logger.info(">> find term by id");
+		Term t = projectionService.findTermById(id);
+		
+		logger.info("<< find term by id");
+		return new ResponseEntity<Term>(t, HttpStatus.OK);
+	}
+	
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="/arenaId")
+	public ResponseEntity<Arena> findArenaByTermId(@RequestParam("id") long id){
+		logger.info(">> find arena by term id");
+		Arena t = projectionService.findArenaByTermId(id);
+		
+		logger.info("<< find arena by term id");
+		return new ResponseEntity<Arena>(t, HttpStatus.OK);
 	}
 }

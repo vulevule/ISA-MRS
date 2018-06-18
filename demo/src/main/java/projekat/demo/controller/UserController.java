@@ -39,11 +39,10 @@ public class UserController {
 	@Autowired
 	private EmailService emailService;
 
-	@Autowired
-	private HttpSession session;
+	
 
 	@GetMapping(value = "users/exists", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UserException> userInSession() {
+	public ResponseEntity<UserException> userInSession(HttpSession session) {
 		logger.info("> exists user");
 		User user = (User) session.getAttribute("loginUser");
 		UserException ue = new UserException(user, "Exists login user");
@@ -125,9 +124,9 @@ public class UserController {
 
 	
 	@PostMapping(value = "users/loginUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UserException> loginUser(@RequestBody LoginUser lu) {
+	public ResponseEntity<UserException> loginUser(@RequestBody LoginUser lu, HttpSession session) {
 		logger.info("> login");
-		if ((User) this.session.getAttribute("loginUser") != null) {
+		if ((User) session.getAttribute("loginUser") != null) {
 			return new ResponseEntity<UserException>(new UserException(null, "Already exists login user"),
 					HttpStatus.BAD_REQUEST);
 		}
@@ -143,11 +142,11 @@ public class UserController {
 	}
 
 	@GetMapping(value = "users/logOut", produces = MediaType.APPLICATION_JSON_VALUE)
-	public RedirectView logOut() {
+	public RedirectView logOut(HttpSession session) {
 		logger.info("log out");
-		User loginUser = (User) this.session.getAttribute("loginUser");
+		User loginUser = (User) session.getAttribute("loginUser");
 		if(loginUser != null){
-			this.session.setAttribute("loginUser", null);
+			session.setAttribute("loginUser", null);
 			return new RedirectView("http://localhost:8080");
 			
 		}
@@ -165,11 +164,11 @@ public class UserController {
 	}
 	
 	@PostMapping(value = "users/updateAccount", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UserException> updateAccount(@RequestBody UserDTO user) {
+	public ResponseEntity<UserException> updateAccount(@RequestBody UserDTO user, HttpSession session) {
 		logger.info(">> update account");
 
 		// user sa sesije se menja
-		User sessionUser = (User) this.session.getAttribute("loginUser");
+		User sessionUser = (User) session.getAttribute("loginUser");
 		logger.info("Update user: email: " + sessionUser.getEmail() + " name: " + sessionUser.getName() + " surname: "
 				+ sessionUser.getSurname() + " address: " + sessionUser.getAddress() + " phone: "
 				+ sessionUser.getPhone() + " password: " + sessionUser.getPassword());
@@ -204,7 +203,7 @@ public class UserController {
 		} else {
 			ue.setMessage("Successful update account");
 		}
-		this.session.setAttribute("loginUser", user);
+		session.setAttribute("loginUser", user);
 		logger.info("<< update account");
 		return new ResponseEntity<UserException>(ue, HttpStatus.OK);
 
@@ -212,7 +211,7 @@ public class UserController {
 
 
 	@PostMapping(value = "users/addFriend", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<FriendshipException> addFriend(@RequestBody Visitor receiver) {
+	public ResponseEntity<FriendshipException> addFriend(@RequestBody Visitor receiver, HttpSession session) {
 		// sender - sa sesije, receiver - prosledjeni user, status - send
 		logger.info(">> add friend");
 		logger.info("add user: " + receiver.getEmail());
@@ -237,12 +236,12 @@ public class UserController {
 	}
 	
 	@PostMapping(value = "users/acceptFriendship", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<FriendshipException> acceptFriendship(@RequestBody Visitor sender) {
+	public ResponseEntity<FriendshipException> acceptFriendship(@RequestBody Visitor sender, HttpSession session) {
 		// receiver-> user sa sesije (primio zahtev i sad ga prihvata), sender
 		// <- user , status - approved
 		logger.info(">> accept friendship");
 		// receiver sa sesije
-		Visitor receiver = (Visitor) this.session.getAttribute("loginUser");
+		Visitor receiver = (Visitor) session.getAttribute("loginUser");
 		Friendship acceptFriendship = this.userService.acceptFriendship(sender.getEmail(), receiver.getEmail());
 		FriendshipException fe = new FriendshipException(acceptFriendship, "");
 		if (acceptFriendship == null) {
@@ -258,10 +257,10 @@ public class UserController {
 	}
 	
 	@PostMapping(value = "users/notAcceptFriendship", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<FriendshipException> notAcceptFriendship(@RequestBody Visitor user) {
+	public ResponseEntity<FriendshipException> notAcceptFriendship(@RequestBody Visitor user, HttpSession session) {
 		logger.info(">> not accept friendship request");
 		// sender <- user, receiver <- user sa sesije, status - not approved
-		Visitor receiver = (Visitor) this.session.getAttribute("loginUser");
+		Visitor receiver = (Visitor) session.getAttribute("loginUser");
 		logger.info("sender: " + user.getEmail() + ", receiver: " + receiver.getEmail());
 		Friendship notAcceptFriendship = this.userService.notAcceptFriendship(user.getEmail(), receiver.getEmail());
 		FriendshipException fe = new FriendshipException(notAcceptFriendship, "");
@@ -270,19 +269,19 @@ public class UserController {
 			logger.info("<< NOT ACCEPT FRIENDSHIP");
 			return new ResponseEntity<FriendshipException>(fe, HttpStatus.BAD_REQUEST);
 		}
-		fe.setMessage("Ä request for friendship is not accept");
+		fe.setMessage("A request for friendship is not accept");
 		logger.info("<< not accept friendship request");
 		return new ResponseEntity<FriendshipException>(fe, HttpStatus.OK);
 
 	}
 	
 	@PostMapping(value = "users/deleteFriendship", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<FriendshipException> deleteFriend(@RequestBody Visitor user) {
+	public ResponseEntity<FriendshipException> deleteFriend(@RequestBody Visitor user, HttpSession session) {
 		logger.info(">> delete friend");
 		logger.info(">> delete friend: " + user.getEmail());
 		// prosledicemo servisu i sendera i receivera pa cemo tamo odraditi
 		// ostalu logiku
-		Visitor sessionUser = (Visitor) this.session.getAttribute("loginUser");
+		Visitor sessionUser = (Visitor) session.getAttribute("loginUser");
 		boolean deleteFriendship = this.userService.deleteFriend(user.getEmail(), sessionUser.getEmail());
 		FriendshipException fe = new FriendshipException(null, "");
 		if (deleteFriendship == false) {
@@ -298,9 +297,9 @@ public class UserController {
 	}
 	//all friends
 	@RequestMapping(value= "users/allFriends", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Collection<User>> getAllFriends(){
+	public ResponseEntity<Collection<User>> getAllFriends(HttpSession session){
 			logger.info("> all friends");
-			User user =(User)this.session.getAttribute("loginUser");
+			User user =(User)session.getAttribute("loginUser");
 			Collection<User> allFriends = this.userService.allFriends(user);			
 			logger.info("< all friends");
 			return new ResponseEntity<Collection<User>>(allFriends, HttpStatus.OK);
@@ -308,9 +307,9 @@ public class UserController {
 		}
 	//all friendship request
 	@RequestMapping(value= "users/allFriendshipRequest", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Collection<User>> getAllFriendshipRequest(){
+	public ResponseEntity<Collection<User>> getAllFriendshipRequest(HttpSession session){
 			logger.info("> all friendship request");
-			User user =(User)this.session.getAttribute("loginUser");
+			User user =(User)session.getAttribute("loginUser");
 			Collection<User> allFriends = this.userService.allFriendshipRequest(user);			
 			logger.info("< all friendship request");
 			return new ResponseEntity<Collection<User>>(allFriends, HttpStatus.OK);
@@ -318,10 +317,10 @@ public class UserController {
 		}
 	
 	// all not friends
-		@RequestMapping(value = "users/allNotFriends", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-		public ResponseEntity<Collection<User>> getAllNotFriends() {
+	@RequestMapping(value = "users/allNotFriends", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Collection<User>> getAllNotFriends(HttpSession session) {
 			logger.info(">> all not friends");
-			Visitor user = (Visitor) this.session.getAttribute("loginUser");
+			Visitor user = (Visitor)session.getAttribute("loginUser");
 			Collection<User> allNotFriends = this.userService.allNotFriends(user);
 			logger.info("<< all not friends");
 			return new ResponseEntity<Collection<User>>(allNotFriends, HttpStatus.OK);

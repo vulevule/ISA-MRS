@@ -152,7 +152,7 @@ public class UserControllerTest {
 				true, RoleType.VISITOR);
 		session.setAttribute("loginUser", v);
 		//receiver
-		Visitor receiver = new Visitor("Jovana", "Jovanovic", "jovanaftn@yahoo.com", "", "", "", true, RoleType.VISITOR, null, null);
+		Visitor receiver = new Visitor("Jovana", "Jovanovic", "jovanaftn@yahoo.com", "", "", "", true, RoleType.VISITOR);
 		String json = TestUtil.json(receiver);
 		this.mockMvc.perform(post(URL_ADD_FRIEND).session(session).contentType(contentType).content(json)).andExpect(status().isCreated());
 
@@ -168,7 +168,7 @@ public class UserControllerTest {
 				true, RoleType.VISITOR);
 		session.setAttribute("loginUser", v);
 		
-		Visitor sender = new Visitor("Jovana", "Jovanovic", "jovanaj33@gmail.com", "", "", "", true, RoleType.VISITOR, null, null);
+		Visitor sender = new Visitor("Jovana", "Jovanovic", "jovanaj33@gmail.com", "", "", "", true, RoleType.VISITOR);
 		
 		String json = TestUtil.json(sender);
 		this.mockMvc.perform(post(URL_ACCEPT_FRIEND).session(session).contentType(contentType).content(json)).andExpect(status().isOk());
@@ -183,7 +183,7 @@ public class UserControllerTest {
 				true, RoleType.VISITOR);
 		session.setAttribute("loginUser", v);
 		
-		Visitor sender = new Visitor("Jovana", "Jovanovic", "jovanaj33@gmail.com", "", "", "", true, RoleType.VISITOR, null, null);
+		Visitor sender = new Visitor("Jovana", "Jovanovic", "jovanaj33@gmail.com", "", "", "", true, RoleType.VISITOR);
 		
 		String json = TestUtil.json(sender);
 		this.mockMvc.perform(post(URL_NOTACCEPT_FRIEND).session(session).contentType(contentType).content(json)).andExpect(status().isOk());
@@ -196,7 +196,7 @@ public class UserControllerTest {
 		Visitor v = new Visitor("Jovana", "Jovanovic", "jovanaj33@gmail.com", "jovanajovanovic", "Novosadskog sajma 5, Novi Sad", "57464745",
 				true, RoleType.VISITOR);
 		session.setAttribute("loginUser", v);
-		Visitor v1 = new Visitor("Jovana", "Jovanovic", "jocaftn15@gmail.com", "", "", "", true, RoleType.VISITOR, null, null);
+		Visitor v1 = new Visitor("Jovana", "Jovanovic", "jocaftn15@gmail.com", "", "", "", true, RoleType.VISITOR);
 		String json = TestUtil.json(v1);
 		this.mockMvc.perform(post(URL_DELETE_FRIEND).session(session).contentType(contentType).content(json)).andExpect(status().isOk());
 	}

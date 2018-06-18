@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class Term implements Serializable {
 
@@ -29,6 +31,7 @@ public class Term implements Serializable {
 	@Column(nullable = false)
 	private double price;
 
+	@JsonBackReference
 	@ManyToOne(optional = false)
 	private Arena arena; // sala u kojoj se odrzava film ili predstava
 

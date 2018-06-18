@@ -1,6 +1,8 @@
 package projekat.demo.service;
 
+import projekat.demo.model.Arena;
 import projekat.demo.model.Projection;
+import projekat.demo.model.Term;
 
 public interface ProjectionService {
 
@@ -13,4 +15,10 @@ public interface ProjectionService {
 	Iterable<Projection> findAll();
 
 	Iterable<Projection> findAllByPlaceId(int id);
+
+	Iterable<Term> findTermByProjectionId(int id);
+
+	Term findTermById(long id);
+	
+	Arena findArenaByTermId(long id);
 }
