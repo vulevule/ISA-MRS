@@ -94,4 +94,11 @@ public class ProjectionServiceImpl implements ProjectionService {
 		
 		return t.getArena();
 	}
+
+	@Override
+	public Iterable<Term> findTermByArenaId(int id) {
+		Arena a = arenaRepository.findById(id);
+		
+		return termRepository.findByArena(a);
+	}
 }

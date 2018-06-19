@@ -8,25 +8,35 @@ $(document).ready(function(){
 	$("#add_new_term_button").click( function(event){
 		event.preventDefault();
 		
-		var input = $('<li><label>Arena: </label><select id="selectArena" name="selected_arena"></select><label>Start: </label><input type="datetime-local" id="datetime"/><label>Price: </label></li>');
+		var input = $('<label>Start: </label><input type="datetime-local" id="datetime" onchange="updateArenas()"/><li><label>Arena: </label><select id="selectArena" name="selected_arena"></select><label>Price: </label><input type="number" id="price"/><br/></li>');
 		$('#terms_section').append(input);
 		
-		$.ajax({
-			type : 'GET',
-			url : '../users/exists',
-			dataType : 'json',
-			success : function(data) {
-				var arenas = data.user.place.arenas;
-				var list = arenas == null ? [] : (arenas instanceof Array ? arenas : [ arenas ]);
-				
-				$.each(list, function(index, arena) {
-					$('#terms_section li:last-child #selectArena').append('<option value="' + arena.name + '">' + arena.name + '</option>');
-				});
-			}
-		})
+		
 	});
 });
 
+function updateArenas() {
+	// TODO Do all stuff
+	
+	$.ajax({
+		type : 'GET',
+		url : '../arenas/arenaByPlace',
+		dataType : 'json',
+		success : function(data) {
+			
+			var arenas = data;
+			if (arenas == null) {
+				alert("ARENAS ARE NULL");
+			}
+			var list = arenas == null ? [] : (arenas instanceof Array ? arenas : [ arenas ]);
+			$.each(list, function(index, arena) {
+				
+				$('#terms_section li:last-child #selectArena').append('<option value="' + arena.name + '">' + arena.name + '</option>');
+			});
+			
+		}
+	});
+}
 
 function create_projection(){
 	
@@ -45,11 +55,11 @@ function create_projection(){
 		url : '../users/exists',
 		dataType : 'json',
 		success : function(data) {
-//			if (data.user.place == "CINEMA") {
-//				projection["type"] = "MOVIE";
-//			} else {
-//				projection["type"] = "PLAY";
-//			}
+			if (data.user.place.type == "CINEMA") {
+				projection["type"] = "MOVIE";
+			} else {
+				projection["type"] = "PLAY";
+			}
 				
 		}
 	});

@@ -1,0 +1,18 @@
+package projekat.demo.model;
+
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
+@Entity
+@DiscriminatorValue("Theater_place_admin")
+public class PlaceAdmin extends User {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	@Column
+	private boolean activate;
+}

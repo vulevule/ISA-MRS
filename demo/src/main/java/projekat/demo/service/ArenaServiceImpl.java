@@ -130,4 +130,10 @@ public class ArenaServiceImpl implements ArenaService {
 		arenaRepository.deleteById(arenaId);
 
 	}
+
+	@Override
+	public Iterable<Arena> findArenaByPlace(Place place) {
+		// TODO Auto-generated method stub
+		return arenaRepository.findByPlace( place);
+	}
 }

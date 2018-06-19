@@ -88,7 +88,7 @@ public class PlaceServiceImpl implements PlaceService {
 				}
 				place.setProjections(Sets.newHashSet(projectionRepository.findAllById(projectionsIds)));
 				
-				place.setUser(foundUser.get());
+				//place.setUser(foundUser.get());
 				return this.placeRepository.save(place);
 			} else {
 				throw new PlaceException(findPlace, "Place already exists");
@@ -144,7 +144,7 @@ public class PlaceServiceImpl implements PlaceService {
 			Set<Projection> allProjections = (Set<Projection>) projectionRepository.findAllById(projectionsIds);
 			place.setProjections(allProjections);
 			
-			place.setUser(foundUser.get());
+			//place.setUser(foundUser.get());
 			return placeRepository.save(place);
 		}
 	}

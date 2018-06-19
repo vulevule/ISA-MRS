@@ -3,13 +3,17 @@ package projekat.demo.model;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -35,13 +39,37 @@ public class Term implements Serializable {
 	@ManyToOne(optional = false)
 	private Arena arena; // sala u kojoj se odrzava film ili predstava
 
-	@Column(nullable = false)
-	private int freeSeats;
+	@JsonBackReference(value = "reservations")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "term")
+	private Set<Reservation> reservations;
 
 	@ManyToOne
 	private Projection projection;
 
 	public Term() {
+	}
+
+	public Term(Long id, Date projectionDate, Time projectionTime, double price, Arena arena,
+			Set<Reservation> reservations, Projection projection) {
+		super();
+		this.id = id;
+		this.projectionDate = projectionDate;
+		this.projectionTime = projectionTime;
+		this.price = price;
+		this.arena = arena;
+		this.reservations = reservations;
+		this.projection = projection;
+	}
+
+	public Term(Date projectionDate, Time projectionTime, double price, Arena arena, Set<Reservation> reservations,
+			Projection projection) {
+		super();
+		this.projectionDate = projectionDate;
+		this.projectionTime = projectionTime;
+		this.price = price;
+		this.arena = arena;
+		this.reservations = reservations;
+		this.projection = projection;
 	}
 
 	public Long getId() {
@@ -84,12 +112,12 @@ public class Term implements Serializable {
 		this.arena = arena;
 	}
 
-	public int getFreeSeats() {
-		return freeSeats;
+	public Set<Reservation> getReservations() {
+		return reservations;
 	}
 
-	public void setFreeSeats(int freeSeats) {
-		this.freeSeats = freeSeats;
+	public void setReservations(Set<Reservation> reservations) {
+		this.reservations = reservations;
 	}
 
 	public Projection getProjection() {
@@ -99,5 +127,11 @@ public class Term implements Serializable {
 	public void setProjection(Projection projection) {
 		this.projection = projection;
 	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	
 
 }

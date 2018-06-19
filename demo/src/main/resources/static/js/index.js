@@ -49,9 +49,10 @@ $(document).ready(function(){
 		$('#modal_trigger1').hide();
 		$('#myAccount').show();
 		$('#log-out').show();
-		if (loginUser.role == "SYSTEM_ADMIN") {
-			$('#modal_trigger_place').show();
-			$('#modal_trigger_projection').hide();
+		if (loginUser.role == "CINEMA_THEATER_ADMIN") {
+			
+			
+			
 		}
 	}
 	

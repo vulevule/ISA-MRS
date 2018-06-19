@@ -1,5 +1,9 @@
 package projekat.demo.controller;
 
+import java.util.Collection;
+
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +23,7 @@ import projekat.demo.exceptions.ArenaException;
 import projekat.demo.exceptions.PlaceException;
 import projekat.demo.exceptions.TermException;
 import projekat.demo.model.Arena;
+import projekat.demo.model.PlaceAdmin;
 import projekat.demo.service.ArenaService;
 
 @RestController
@@ -39,6 +44,17 @@ public class ArenaController {
 		return new ResponseEntity<Iterable<Arena>>(arenas, HttpStatus.OK);
 	}
 
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="/arenaByPlace")
+	public ResponseEntity<Iterable<Arena>> getArenasByPlace(HttpSession s) {
+
+		logger.info("> getArenas");
+		PlaceAdmin pa = (PlaceAdmin)s.getAttribute("loginUser");
+		
+		Iterable<Arena> arenas = arenaService.findArenaByPlace(pa.getPlace());
+		logger.info("< getArenas");
+		return new ResponseEntity<Iterable<Arena>>(arenas, HttpStatus.OK);
+	}
+	
 	@PostMapping(consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> createArena(@RequestBody ArenaDto arenaDto) {
 		logger.info("> adding arena started");
@@ -92,5 +108,7 @@ public class ArenaController {
 		}
 
 	}
+	
+	
 
 }

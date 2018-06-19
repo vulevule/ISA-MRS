@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Theaterize</title>
+		<link rel="icon" href="./themes/images/sitelogo.png">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<!--[if ie]><meta content='IE=8' http-equiv='X-UA-Compatible'/><![endif]-->
+		<!-- bootstrap -->
+		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">      
+		<link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+		
+		<link href="themes/css/bootstrappage.css" rel="stylesheet"/>
+		
+		<!-- global styles -->
+		<link href="themes/css/flexslider.css" rel="stylesheet"/>
+		<link href="themes/css/main.css" rel="stylesheet"/>
+
+		<!-- scripts -->
+		<script src="themes/js/jquery-1.7.2.min.js"></script>
+		<script src="bootstrap/js/bootstrap.min.js"></script>				
+		<script src="themes/js/superfish.js"></script>	
+		<script src="themes/js/jquery.scrolltotop.js"></script>
+		<!--[if lt IE 9]>			
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+			<script src="js/respond.min.js"></script>
+		<![endif]-->
+		<script src="js/myAccount.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+		<link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,700italic,400italic'>
+		<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css'>
+		<link rel="stylesheet" href="themes/css/style.css">
+		
+	</head>
+    <body>	
+   		<script src="js/logOut.js"></script>	
+		<div id="top-bar" class="container">
+			<div class="row">
+				<div class="span4">
+					<form method="POST" class="search_form">
+						<input type="text" class="input-block-level search-query" Placeholder="eg. CineStar">
+					</form>
+				</div>
+				<div class="span8">
+					<div class="account pull-right">
+						<ul class="user-menu">				
+								<li><a id='myAccount' href='myaccount.html' class='btn'>My Account</a></li>			
+								<li><a id='log-out' href='index.html' class='btn'>Log out</a></li>	
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+		
+		<div id="wrapper" class="container">
+			<section class="navbar main-menu">
+				<div class="navbar-inner main-menu">				
+					<a href="index.html" class="logo pull-left"><img src="./themes/images/logo.png" class="site_logo" alt=""></a>
+					<nav id="menu" class="pull-right">
+						<ul>
+							<li><a href="./products.html">Thematic Props</a>					
+								<ul>
+									<li><a href="./products.html">Add</a></li>									
+									<li><a href="./products.html">Change</a></li>
+									<li><a href="./products.html">Remove</a></li>									
+								</ul>
+							</li>															
+							<li><a href="./products.html">Reservation</a></li>			
+							<li><a href="./products.html">Ad</a>
+								<ul>									
+									<li><a href="./products.html">List</a></li>
+									<li><a href="./products.html">Bids</a></li>
+								</ul>
+							</li>							
+						</ul>
+					</nav>
+				</div>
+			</section>
+			
+			<section class="header_text sub">
+				<h4><span><img src="./themes/images/myacc.png" class="site_logo" alt=""></span></h4>
+			</section>
+			
+			
+			
+			<section class="main-content">
+				<div class="row">
+						<div class="span9">					
+							<fieldset>
+								<h4 class="title">
+									<span class="pull-left"><span class="text"><span class="line">MY PROFILE</span></span></span>
+								</h4>
+								<div class="control-group">
+									<label class="control-label">Username: </label>
+									<div class="controls" id="email_id">
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">Name:</label>
+									<div class="controls">
+										<input type="text" id="name_id" class="input-xlarge">
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">Surname:</label>
+									<div class="controls">
+										<input type="text" id="surname_id" class="input-xlarge">
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">Password:</label>
+									<div class="controls">
+										<input type="password" placeholder="Enter your new password" id="pass_id" class="input-xlarge">
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">Repeat password:</label>
+									<div class="controls">
+										<input type="password" placeholder="Enter your  new password again" id="repeat_pass_id" class="input-xlarge">
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">Phone:</label>
+									<div class="controls">
+										<input type="text" id="phone_id" class="input-xlarge">
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">Address:</label>
+									<div class="controls">
+										<input type="text" id="address_id" class="input-xlarge">
+									</div>
+								</div>
+								<p class="buttons center">				
+								<button class="btn" type="button" id="update_button">Update</button>
+								<button class="btn" type="button">Continue</button>
+								</p>
+							</fieldset>
+							
+												
+						</div>
+						<div class="span3 col">
+							<div class="block">
+								<ul class="nav nav-list">
+									<li class="nav-header">MY PROFILE</li>
+									<li class="active"><a href="products.html">Informations</a></li>
+									<li><a href="myFriends.html">My friends</a></li>
+									<li><a href="products.html">Tickets</a></li>
+									<li><a href="products.html">My ads</a></li>
+									<li><a href="products.html">My bids</a></li>
+								</ul>
+								<br/>
+							</div>
+							<div class="block">
+								<h4 class="title">
+									<span class="pull-left"><span class="text">Your ads</span></span>
+									<span class="pull-right">
+										<a class="left button" href="#myCarousel" data-slide="prev"></a><a class="right button" href="#myCarousel" data-slide="next"></a>
+									</span>
+								</h4>
+								<div id="myCarousel" class="carousel slide">
+									<div class="carousel-inner">
+										<div class="active item">
+											<ul class="thumbnails listing-products">
+												<li class="span3">
+													<div class="product-box">
+														<span class="sale_tag"></span>												
+														<a href="product_detail.html" class="title">Thematic prop 1</a><br/>
+														<a href="#" class="category">Movie</a>
+														<p class="price">$261</p>
+													</div>
+												</li>
+											</ul>
+										</div>
+										<div class="item">
+											<ul class="thumbnails listing-products">
+												<li class="span3">
+													<div class="product-box">												
+														<a href="product_detail.html" class="title">Thematic prop 2</a><br/>
+														<a href="#" class="category">Theater</a>
+														<p class="price">$134</p>
+													</div>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>						
+						</div>
+				</div>	
+			</section>
+			
+			<section id="footer-bar">
+				<div class="row">
+					<div class="span3">
+						<h4>Navigation</h4>
+						<ul class="nav">
+							<li><a href="./index.html">Homepage</a></li>  
+							<li><a href="./about.html">About Us</a></li>
+							<li><a href="./contact.html">Contact Us</a></li>
+							<li><a href="./cart.html">Your Cart</a></li>
+							<li><a href="./register.html">Register</a></li>
+							<li><a href="./login.html">Login</a></li>							
+						</ul>					
+					</div>
+					<div class="span4">
+						<h4>My Account</h4>
+						<ul class="nav">
+							<li><a href="#">My Account</a></li>
+							<li><a href="#">Order History</a></li>
+							<li><a href="#">Wish List</a></li>
+							<li><a href="#">Newsletter</a></li>
+						</ul>
+					</div>
+					<div class="span5">
+						<p class="logo"><img src="./themes/images/logo.png" class="site_logo" alt=""></p>
+						<p>Theaterize is a site for viewing and reserving tickets in cinemas and theaters.</p>
+						<br/>
+					</div>					
+				</div>	
+			</section>
+			<section id="copyright">
+				<span>Copyright 2018 All right reserved.</span>
+			</section>
+		</div>
+		<script src="themes/js/common.js"></script>
+		<script>
+			$(document).ready(function() {
+				$('#checkout').click(function (e) {
+					document.location.href = "checkout.html";
+				})
+			});
+		</script>
+		<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+		<script src='themes/js/leanModal.min_.js'></script>
+		<script  src="themes/js/index.js"></script>
+    </body>
+</html>

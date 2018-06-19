@@ -1,0 +1,6 @@
+INDEX VERSION 1.4+C:\Users\Vule\MRS\ISA-MRS06\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+386535705.index
+1261631249.index
+3824151752.index
+4278594993.index
+818379653.index

@@ -37,10 +37,6 @@ public class Projection implements Serializable {
 	@JsonManagedReference(value = "projection-place")
 	@ManyToOne
 	private Place place;
-	
-	@JsonBackReference(value = "arenasOfProjection")
-	@ManyToMany
-	private Set<Arena> arenasOfProjection;
 
 	@Column(nullable = false)
 	private String cast;
@@ -108,14 +104,6 @@ public class Projection implements Serializable {
 
 	public void setPlace(Place place) {
 		this.place = place;
-	}
-
-	public Set<Arena> getArenasOfProjection() {
-		return arenasOfProjection;
-	}
-
-	public void setArenasOfProjection(Set<Arena> arenasOfProjection) {
-		this.arenasOfProjection = arenasOfProjection;
 	}
 
 	public String getCast() {
