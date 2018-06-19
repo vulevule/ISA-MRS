@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
+import projekat.demo.dto.FriendUser;
 import projekat.demo.dto.UserDTO;
 import projekat.demo.exceptions.FriendshipException;
 import projekat.demo.exceptions.UserException;
@@ -200,16 +201,17 @@ public class UserController {
 
 	}
 
+	
 
-	@PostMapping(value = "users/addFriend", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<FriendshipException> addFriend(@RequestBody Visitor receiver, HttpSession session) {
+	@GetMapping(value = "users/addFriend", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<FriendshipException> addFriend(@RequestParam("email") String email, HttpSession session) {
 		// sender - sa sesije, receiver - prosledjeni user, status - send
 		logger.info(">> add friend");
-		logger.info("add user: " + receiver.getEmail());
+		logger.info("add user: " + email);
 		// uzmemo kompletnog korisnika iz baze na osnovu email-a
 		Visitor sender = (Visitor) session.getAttribute("loginUser"); // user sa
 		// sesije
-		Friendship newFriendship = this.userService.createFriendship(sender.getEmail(), receiver.getEmail());
+		Friendship newFriendship = this.userService.createFriendship(sender.getEmail(), email);
 		FriendshipException fe = new FriendshipException(newFriendship, "");
 		if (newFriendship == null) {
 			fe.setMessage("Requset for friendship has not been sent");
@@ -226,14 +228,15 @@ public class UserController {
 
 	}
 	
-	@PostMapping(value = "users/acceptFriendship", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<FriendshipException> acceptFriendship(@RequestBody Visitor sender, HttpSession session) {
+	@GetMapping(value = "users/acceptFriendship", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<FriendshipException> acceptFriendship(@RequestParam("email") String email, HttpSession session) {
 		// receiver-> user sa sesije (primio zahtev i sad ga prihvata), sender
 		// <- user , status - approved
 		logger.info(">> accept friendship");
 		// receiver sa sesije
+		logger.info("accept friends email: " + email);
 		Visitor receiver = (Visitor) session.getAttribute("loginUser");
-		Friendship acceptFriendship = this.userService.acceptFriendship(sender.getEmail(), receiver.getEmail());
+		Friendship acceptFriendship = this.userService.acceptFriendship(email, receiver.getEmail());
 		FriendshipException fe = new FriendshipException(acceptFriendship, "");
 		if (acceptFriendship == null) {
 			fe.setMessage("Does not exist send request");
@@ -247,13 +250,13 @@ public class UserController {
 
 	}
 	
-	@PostMapping(value = "users/notAcceptFriendship", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<FriendshipException> notAcceptFriendship(@RequestBody Visitor user, HttpSession session) {
+	@GetMapping(value = "users/notAcceptFriendship",  produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<FriendshipException> notAcceptFriendship(@RequestParam("email") String email, HttpSession session) {
 		logger.info(">> not accept friendship request");
 		// sender <- user, receiver <- user sa sesije, status - not approved
 		Visitor receiver = (Visitor) session.getAttribute("loginUser");
-		logger.info("sender: " + user.getEmail() + ", receiver: " + receiver.getEmail());
-		Friendship notAcceptFriendship = this.userService.notAcceptFriendship(user.getEmail(), receiver.getEmail());
+		logger.info("sender: " + email + ", receiver: " + receiver.getEmail());
+		Friendship notAcceptFriendship = this.userService.notAcceptFriendship(email,  receiver.getEmail());
 		FriendshipException fe = new FriendshipException(notAcceptFriendship, "");
 		if (notAcceptFriendship == null) {
 			fe.setMessage("Does not exist friendship");
@@ -266,14 +269,15 @@ public class UserController {
 
 	}
 	
-	@PostMapping(value = "users/deleteFriendship", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<FriendshipException> deleteFriend(@RequestBody Visitor user, HttpSession session) {
+	@GetMapping(value = "users/deleteFriendship", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<FriendshipException> deleteFriend(@RequestParam("email") String email, HttpSession session) {
 		logger.info(">> delete friend");
-		logger.info(">> delete friend: " + user.getEmail());
+		logger.info(">> delete friend: " + email);
 		// prosledicemo servisu i sendera i receivera pa cemo tamo odraditi
 		// ostalu logiku
 		Visitor sessionUser = (Visitor) session.getAttribute("loginUser");
-		boolean deleteFriendship = this.userService.deleteFriend(user.getEmail(), sessionUser.getEmail());
+		
+		boolean deleteFriendship = this.userService.deleteFriend(email, sessionUser.getEmail());
 		FriendshipException fe = new FriendshipException(null, "");
 		if (deleteFriendship == false) {
 			fe.setMessage("Does not exist friendship");
@@ -318,4 +322,22 @@ public class UserController {
 
 		}
 
+	@RequestMapping(value="users/findUser", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<FriendUser> findUser(@RequestParam("email") String email, HttpSession session){
+		logger.info(">> find user: " + email);
+		
+		Visitor loginUser = (Visitor)session.getAttribute("loginUser");
+		FriendUser fu = null;
+		if(loginUser.getEmail().equals(email)){
+			//trazeni user je i ulogovani vraticemo
+			fu = new FriendUser(loginUser, "me");
+		}
+		else{
+			fu = this.userService.findUser(loginUser, email);
+		}
+		
+		logger.info("<< find user");
+		
+		return new ResponseEntity<FriendUser>(fu, HttpStatus.OK);
+	}
 }

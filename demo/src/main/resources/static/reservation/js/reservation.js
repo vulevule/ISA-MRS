@@ -5,6 +5,9 @@
  */
 
 $(document).ready(function(){
+	
+	
+	
 	$.ajax({
 		type : 'GET',
 		url : '../places',
@@ -24,6 +27,23 @@ $(document).ready(function(){
 			alert("AJAX ERROR: " + errorThrown);
 		}
 	});
+	
+	//popuniti listu prijatelja
+	$.ajax({
+		type : 'GET',
+		url : "../users/allFriends",
+		dataType : 'json',
+		success : function(data){
+			var list = data == null ? [] : (data instanceof Array ? data: [ data ]);
+			
+			$.each(list, function(index, friend){
+				var option = $("<option> </option>");
+				option.attr("value",friend.email).text(friend.email);
+				$("#friends_list").append(option);
+			})
+		}
+	})
+	
 })
 $(function(){ /* DOM ready */
     $("#place").change(function() {
@@ -99,7 +119,7 @@ $(function(){ /* DOM ready */
 
 
 function FindTerm(term_id){
-	
+	//ocistiti div u kojem se nalazi arena
 	var id = term_id;
 	$.ajax({
 		type : 'GET',
@@ -232,16 +252,17 @@ $(document).on('click', "#book_button", function(event){
 	
 	var inviteFriends = [];	
 	var friends = $("#friends_list").val();
-	for(let i=0; i < friends.length; i++){
-		inviteFriends.push(friends[i]);
+	if(friends != null){
+		for(let i=0; i < friends.length; i++){
+			inviteFriends.push(friends[i]);
+		}
 	}
-		
 	//povukli smo sve podatke, sad samo treba da ih prosledimo serveru
 	var res = {};
 	res["term"] = $("#term").val();
 	res["seats"] = seats;
 	res["inviteFriends"] = inviteFriends;
-	
+	var termid = $("#term").val();
 	$.ajax({
 		type : "POST",		
 		url : "../reservation/createReservation",
@@ -250,13 +271,15 @@ $(document).on('click', "#book_button", function(event){
 		data : JSON.stringify(res),
 		success : function(data){
 			alert(data.message);
+			//ovde cemo osvezavanje uraditi, opet pozvati funkciju za iscrtavanje sale
+			FindTerm(termid);
 		},
 		error : function(XMLHttpRequest, Textstatus, Errorthrown){
 			console.log("ajax error: " + Errorthrown + ", status: " + Textstatus);
 		}
 	})
-	
-	var place = $("#place").val();
+	location.reload();
+/*	var place = $("#place").val();
 	var projection = $("#projection").val();
 	var term = $("#term").val();
 	
@@ -265,7 +288,7 @@ $(document).on('click', "#book_button", function(event){
 	$("#place").val(place);
 	$("#projection").val(projection);
 	$("#term").val(term);
-	
+	*/
 });
 	
 

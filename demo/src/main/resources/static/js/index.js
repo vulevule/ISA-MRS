@@ -61,22 +61,35 @@ function showFriends(){
 				div4.append(a2);
 				div4.append(a3);
 				li.append(div4);
-				ul.append(li);
-			})
+				$('#myFriends').append(li);
+			});
 			
-		//zavrsiti for petlju
-			div3.append(ul);
-			div2.append(div3);
-			div1.append(div2);
-			div.append(title);
-			div.append(div1);
+			$('#friends_list').show();
 			
-			$('#my_friends').append(div);
 				
 			
 		}
 	});
 }
+
+$(document).on('click', '#delete_friend', function(event){
+	var user = {};
+	var email = $(this).find("input[type=hidden]").val();
+	$.ajax({
+		type : "GET",		
+		url : "../users/deleteFriendship?email=" + email,
+		contentType : "application/json",
+		success : function(data){
+			alert(data.message);
+			location.reload();
+		},
+		error : function(data){
+			alert(data.message);
+
+		}
+	})
+})
+
 
 function showReservation(){
 	$.ajax({
@@ -94,11 +107,14 @@ function showReservation(){
 				var p1 = $('<p class="title"> Projection name: ' + r.term.projection.name + ' <br/> Place: ' + r.term.projection.place.name + '</p> ');
 				var a1 = $('<p> Date: ' + r.term.projectionDate + ' Time: ' + r.term.projectionTime +  '</p><br/>');
 				var a2 = $('<p> Row: ' + r.row + ' Seat: ' + r.seatNum + '</p>');
-				
+				var a3 = $('<form id="cancel_res"> <input type="button" id="cancel_btn" class="btn" value="Cancel" >'+
+						'<input type="hidden" name="res_id" id="res_id" value=' + r.id +'> </form>' );
+						
 				div4.append(span1);
 				div4.append(p1);
 				div4.append(a1);
 				div4.append(a2);
+				div4.append(a3);
 				li.append(div4);
 				$('#my_reservations').append(li);
 			});
@@ -111,6 +127,26 @@ function showReservation(){
 	})
 	
 }
+
+$(document).on('click', '#cancel_res', function(event){
+	var id = $(this).find("input[type=hidden]").val();
+	$.ajax({
+		type : "GET",		
+		url : "../reservation/cancelReservation?id=" + id,
+		contentType : "application/json",
+		success : function(data){
+			alert(data.message);
+			location.reload();
+		},
+		error : function(data){
+			alert(data.message);
+
+		}
+	})
+})
+
+
+
 
 $(document).ready(function(){
 	$.ajax({

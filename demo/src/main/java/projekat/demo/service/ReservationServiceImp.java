@@ -1,6 +1,9 @@
 package projekat.demo.service;
 
+import java.sql.Time;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -9,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import projekat.demo.dto.ReservationDTO;
 import projekat.demo.dto.Seat;
+import projekat.demo.exceptions.ReservationException;
 import projekat.demo.model.Reservation;
 import projekat.demo.model.Term;
 import projekat.demo.model.Visitor;
@@ -110,6 +114,25 @@ public class ReservationServiceImp implements ReservationService {
 		Term t = termRepo.findById(id);
 		
 		return resRepo.findByTerm(t);
+	}
+	@Override
+	public ReservationException cancelReservation(long id) {
+		// pronadjemo trazenu rezervaciju pogladom vreme i onda vidimo da li moze brisanje ili ne
+		Reservation findRes = resRepo.findById(id);
+		
+		ZonedDateTime currentTime = ZonedDateTime.now();
+		
+		Date resDate = findRes.getTerm().getProjectionDate();
+		Time resTime = findRes.getTerm().getProjectionTime();
+		
+		//treba spojiti ovo vreme i datum i onda da nadjemo razliku izmedju trenutnog vremena i vremena projekcije
+		
+		
+		
+		
+		
+		
+		return null;
 	}
 
 }
