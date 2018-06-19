@@ -2,7 +2,9 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Theaterize</title>
+<link rel="icon" href="../themes/images/sitelogo.png">
+		
 <!-- bootstrap -->
 <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">      
 <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
@@ -42,8 +44,8 @@
 				<div class="span8">
 					<div class="account pull-right">
 						<ul class="user-menu">				
-								<li><a id='myAccount' href='myaccount.html' class='btn'>My Account</a></li>			
-								<li><a id='log-out' href='index.html' class='btn'>Log out</a></li>	
+								<li><a id='myAccount' href='../myaccount.html' class='btn'>My Account</a></li>			
+								<li><a id='log-out' href='../index.html' class='btn'>Log out</a></li>	
 						</ul>
 					</div>
 				</div>
@@ -56,19 +58,11 @@
 					<a href="../index.html" class="logo pull-left"><img src="../themes/images/logo.png" class="site_logo" alt=""></a>
 					<nav id="menu" class="pull-right">
 						<ul>
-							<li><a href="./products.html">Thematic Props</a>					
-								<ul>
-									<li><a href="./products.html">Add</a></li>									
-									<li><a href="./products.html">Change</a></li>
-									<li><a href="./products.html">Remove</a></li>									
-								</ul>
+							<li><a href="reservation.html">Add Reservation</a>					
 							</li>															
-							<li><a href="./products.html">Reservation</a></li>			
-							<li><a href="./products.html">Ad</a>
-								<ul>									
-									<li><a href="./products.html">List</a></li>
-									<li><a href="./products.html">Bids</a></li>
-								</ul>
+							<li><a href="../reservation.html">View Reservation</a></li>			
+							<li><a href="../myFriends.html">Friends</a>
+								
 							</li>							
 						</ul>
 					</nav>
@@ -108,7 +102,7 @@
 					<li>Invite friends</li>
 				</ul>
 				<ul>
-					<li>: <select id="friends_list" multiple="multiple"> <option>friend 1 </option> <option> friend 2 </option></select>
+					<li>: <select id="friends_list" multiple="multiple"></select>
 				</ul>
 				<button class="btn" type="button" id="book_button">Book now</button>
 				<div id="legend"></div>

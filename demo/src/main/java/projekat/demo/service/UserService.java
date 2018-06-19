@@ -2,9 +2,11 @@ package projekat.demo.service;
 
 import java.util.Collection;
 
+import projekat.demo.dto.FriendUser;
 import projekat.demo.dto.UserDTO;
 import projekat.demo.model.Friendship;
 import projekat.demo.model.User;
+import projekat.demo.model.Visitor;
 
 public interface UserService {
 
@@ -33,5 +35,7 @@ public interface UserService {
 	Collection<User> allFriendshipRequest(User user);
 
 	Collection<User> allNotFriends(User user);
+
+	FriendUser findUser(Visitor loginUser, String email);
 
 }

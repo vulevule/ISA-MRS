@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import projekat.demo.dto.FriendUser;
 import projekat.demo.dto.UserDTO;
 import projekat.demo.model.Admin;
 import projekat.demo.model.FanZoneAdmin;
@@ -254,13 +255,13 @@ public class UserServiceImpl implements UserService {
 		// 1. svi posetioci
 		Collection<User> allVisitors = this.userRepository.findByRole(RoleType.VISITOR);
 		// sad izbacimo usera koji je na sesiji
-		for (User u : allVisitors) {
+		/*for (User u : allVisitors) {
 			if (u.getEmail().equals(user.getEmail())) {
 				allVisitors.remove(u);
 			}
 		}
 
-		// 2.svi prijatelji
+		//2.svi prijatelji
 		Collection<User> friends = allFriends(user);
 		friends.addAll(allFriendshipRequest(user));
 		friends.addAll(allSendRequests(user));
@@ -270,9 +271,47 @@ public class UserServiceImpl implements UserService {
 			if (!(friends.contains(u))) {
 				allNotFriends.add(u);
 			}
-		}
-		return allNotFriends;
+		}*/
+		return allVisitors;
 
+	}
+
+	@Override
+	public FriendUser findUser(Visitor loginUser, String email) {
+		// TODO Auto-generated method stub
+		Visitor v= (Visitor)this.userRepository.findByEmail(email);
+		
+		//trazimo u friendship sledece 
+		//1. loginUser <- sender, email <- receiver
+		Friendship fs = this.friendshipRepository.findBySenderAndReceiver(loginUser.getEmail(), email);
+		//2. loginUser <- receiver, email <- sender
+		Friendship fs1 = this.friendshipRepository.findBySenderAndReceiver(email, loginUser.getEmail());
+		FriendUser fu = new FriendUser();
+		fu.setV(v);
+		if(fs != null){
+			if(fs.getStatus() == FriendshipStatus.APPROVED){
+				//prijatelji su 
+				fu.setStatus("friends");
+			}else if (fs.getStatus() == FriendshipStatus.NOT_APPROVED){//znaci da trazeni korisnik nije prihvatio zahtev
+				fu.setStatus("not_accept_friendship");
+			}else if(fs.getStatus() == FriendshipStatus.SEND_REQUEST){
+				//zahetv poslat trazenom korisniku
+				fu.setStatus("send_request");
+			}
+		}else if(fs1 != null){
+			if(fs1.getStatus() == FriendshipStatus.SEND_REQUEST){//trazeni korisnik poslao zahtev ulogovanom korisniku
+				fu.setStatus("accept_request");
+			}else if(fs1.getStatus() == FriendshipStatus.NOT_APPROVED){
+				//korisnik je vec primao zahtev za prijateljstvo, ali ga nije prihavtio, moze sad opet da ga posalje
+				fu.setStatus("not_friends");
+			}
+				
+		}else{
+			//nije pronadjeno prijateljstvo
+			fu.setStatus("not_friends");
+		}
+		
+		return fu;
 	}
 
 	

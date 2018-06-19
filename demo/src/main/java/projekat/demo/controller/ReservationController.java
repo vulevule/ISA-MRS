@@ -3,6 +3,7 @@ package projekat.demo.controller;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import projekat.demo.exceptions.ReservationException;
 import projekat.demo.model.Reservation;
 import projekat.demo.model.Term;
 import projekat.demo.model.Visitor;
+import projekat.demo.service.EmailService;
 import projekat.demo.service.ReservationService;
 
 @RestController
@@ -28,6 +30,9 @@ public class ReservationController {
 	
 	@Autowired
 	private ReservationService resService;
+	
+	@Autowired
+	private EmailService emailService;
 	
 	private Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass());
 
@@ -46,17 +51,21 @@ public class ReservationController {
 	    while(it.hasNext()){
 	    	logger.info("seats: " + it.next());
 	    }
-		/*
-		 * slanje podataka radi, sad jos samo sve to lepo obraditi u servisu
-		 */
-				
+						
 		Visitor v = (Visitor)session.getAttribute("loginUser");
-		//ovde napravimo rezervacije i listu rezervacija prosledimo servisu
-		
+			
 		
 		ArrayList<Reservation> allReservation = resService.save(reservation, v);
 		
 		ReservationException re = new ReservationException(allReservation,"Successful reservation");
+		//kada prodju rezervacije treba poslati mejlove
+		try {
+			emailService.sendReservation(re.getR(), v);
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		if(allReservation == null){
 			re.setMessage("Can not reservation selected seats");
 			return new ResponseEntity<ReservationException>(re, HttpStatus.BAD_REQUEST);
@@ -94,5 +103,16 @@ public class ReservationController {
 		logger.info("<< find all reservation by term");
 
 		return new ResponseEntity<Iterable<Reservation>>(reservations, HttpStatus.OK);
+	}
+	
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="reservation/cancelReservation")
+	public ResponseEntity<ReservationException> cancelReservation(@RequestParam("id") long id){
+		logger.info(">> cancel reservation by id: " + id);
+		
+		ReservationException re = this.resService.cancelReservation(id);
+		
+		logger.info("<< cancel reservation");
+		
+		return new ResponseEntity<ReservationException>(re, HttpStatus.OK);
 	}
 }
