@@ -96,7 +96,7 @@ public class ProjectionServiceImpl implements ProjectionService {
 	}
 
 	@Override
-	public Iterable<Term> findTermByArenaId(int id) {
+	public Iterable<Term> findTermByArenaId(long id) {
 		Arena a = arenaRepository.findById(id);
 		
 		return termRepository.findByArena(a);

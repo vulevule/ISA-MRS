@@ -22,6 +22,6 @@ public interface ProjectionService {
 	
 	Arena findArenaByTermId(long id);
 	
-	Iterable<Term> findTermByArenaId(int id);
+	Iterable<Term> findTermByArenaId(long id);
 
 }

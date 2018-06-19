@@ -1,10 +1,16 @@
 package projekat.demo.controller;
 
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Set;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.servlet.http.HttpSession;
 
+import org.assertj.core.util.DateUtil;
+import org.h2.util.DateTimeUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,8 +32,9 @@ import projekat.demo.exceptions.PlaceException;
 import projekat.demo.exceptions.TermException;
 import projekat.demo.model.Arena;
 import projekat.demo.model.PlaceAdmin;
-import projekat.demo.model.Projection;
+import projekat.demo.model.Term;
 import projekat.demo.service.ArenaService;
+import projekat.demo.service.ProjectionService;
 
 @RestController
 @RequestMapping("/arenas")
@@ -37,6 +44,9 @@ public class ArenaController {
 
 	@Autowired
 	private ArenaService arenaService;
+	
+	@Autowired
+	private ProjectionService projectionService;
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Iterable<Arena>> getArenas() {
@@ -59,20 +69,64 @@ public class ArenaController {
 	}
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="/availableArenas")
-	public ResponseEntity<Iterable<Arena>> getAvailableAreans(HttpSession s, @RequestParam("date") String date, @RequestParam("duration") int duration) {
-		logger.info("");
+	public ResponseEntity<Iterable<Arena>> getAvailableAreans(@RequestParam("date") String datetime, @RequestParam("duration") int duration, HttpSession s) throws ParseException {
+		
+		logger.info("> Searching available arenas for " + datetime + " in duration of " + duration);
+		ArrayList<Arena> retVal = new ArrayList<Arena>();
+		
+		boolean available = false;
+		
+		String sdate = datetime.split("T")[0];
+		String stime = datetime.split("T")[1];
+		
+		Date date = new SimpleDateFormat("yyyy-MM-dd").parse(sdate);
+		Date time =  new SimpleDateFormat("hh:mm").parse(stime);
+		
+		Date startdate = new Date(date.getYear(), date.getMonth(), date.getDate(), time.getHours(), time.getMinutes());
+		Calendar start = Calendar.getInstance();
+		start.setTime(startdate);
+		Calendar end = Calendar.getInstance();
+		end.setTime(startdate);
+		end.add(Calendar.MINUTE, duration);
+		
+		logger.info("> Parsed start date " + start.getTime());
+		logger.info("> Parsed end date " + end.getTime());
 		
 		PlaceAdmin pa = (PlaceAdmin)s.getAttribute("loginUser");
 		ArrayList<Arena> arenas = (ArrayList<Arena>) arenaService.findArenaByPlace(pa.getPlace());
-		ArrayList<Arena> retVal = new ArrayList<Arena>();
-		
+
 		for(Arena a : arenas) {
+			ArrayList<Term> terms = (ArrayList<Term>) projectionService.findTermByArenaId(a.getId());
 			
+			available = true;
+			for(Term t : terms) {
+				logger.info("> Arena: " + a.getName() + " Term: " + t.getId());			
+				
+				Date termstartdate = new Date(t.getProjectionDate().getYear(), t.getProjectionDate().getMonth(), t.getProjectionDate().getDate(), t.getProjectionTime().getHours(), t.getProjectionTime().getMinutes());
+				Calendar termstart = Calendar.getInstance();
+				termstart.setTime(termstartdate);
+				Calendar termend = Calendar.getInstance();
+				termend.setTime(termstartdate);
+				termend.add(Calendar.MINUTE, t.getProjection().getDuration());
+				
+				if ((start.after(termstart) && start.before(termend)) || (termstart.after(start) && termstart.before(end))) {
+					logger.info("> CONFLICT!");
+					available = false;
+					break;
+				}
+			}
+			
+			if (available) {
+				logger.info("Arena " + a.getName() + " is available");
+				retVal.add(a);
+			} else {
+				logger.info("Arena " + a.getName() + " is NOT available");
+			}
 		}
 		
 			
 		
-		logger.info("");
+		logger.info("< Searching available arenas");
 
 		return new ResponseEntity<Iterable<Arena>>(retVal, HttpStatus.OK);
 	}

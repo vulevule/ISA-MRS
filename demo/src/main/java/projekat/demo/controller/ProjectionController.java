@@ -120,17 +120,6 @@ public class ProjectionController {
 		return new ResponseEntity<Iterable<Term>>(terms, HttpStatus.OK);
 	}
 	
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="/arenaId")
-	public ResponseEntity<Iterable<Term>> findTermsByArenaId(@RequestParam("id") int id) {
-		logger.info(">> find all term by arena id " + id);
-		
-		Iterable<Term> terms = projectionService.findTermByArenaId(id);
-		
-		logger.info("<< find all term by arena id");
-
-		return new ResponseEntity<Iterable<Term>>(terms, HttpStatus.OK);
-	}
-	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="/termId")
 	public ResponseEntity<Term> findTermById(@RequestParam("id") long id){
 		logger.info(">> find term by id");
