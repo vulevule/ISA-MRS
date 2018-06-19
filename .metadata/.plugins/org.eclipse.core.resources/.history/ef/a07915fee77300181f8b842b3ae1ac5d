@@ -146,4 +146,20 @@ $(document).ready(function(){
 		}
 	})
 	
+<<<<<<< HEAD
+	if (loginUser != null) {
+		$('#modal_trigger').hide();
+		$('#modal_trigger1').hide();
+		$('#myAccount').show();
+		$('#log-out').show();
+		if (loginUser.role == "CINEMA_THEATER_ADMIN") {
+			
+			
+			
+		}
+	}
+=======
+	
+>>>>>>> 7220d6d5d083f254def5a2fa20986b95986502e0
+	
 	showPlaces();});

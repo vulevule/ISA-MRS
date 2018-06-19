@@ -17,7 +17,6 @@ INDEX VERSION 1.130+C:\Users\Vule\MRS\ISA-MRS06\.metadata\.plugins\org.eclipse.j
 3254944171.index
 1312586118.index
 669693905.index
-3435648363.index
 920041242.index
 4212302562.index
 2349671270.index

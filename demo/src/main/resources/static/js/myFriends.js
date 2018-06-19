@@ -15,7 +15,7 @@ $(document).ready(function(){
 	
 	renderFriends();
 	renderRequest();
-	renderAllVisitor();
+	renderAllVisitor();//ovo nam ne treba ovde, izbrisacemo ga
 	
 	
 
@@ -41,11 +41,14 @@ function renderAllVisitor(){
 			var div1 = $('<div id="myCarousel" class="myCarousel carousel slide"> </div>');
 			var div2 = $('<div class="carousel-inner"> </div>');
 			var div3 = $('<div class="active item"> </div> ');
-			var ul = $('<ul class="thumbnails" id="add_friend">	</ul>');
+			/*var ul = $('<ul class="thumbnails" id="add_friend">	</ul>');*/
 			
 			$.each(list, function(index, user) {
-					
-					var li = $('<li class="span3"> </li>');
+				var newOption = $("<option></option>");
+				alert(user.name);
+				newOption.attr("value",user.username).text(user.name + " " + user.surname);
+				$("#add_friends").append(newOption);
+				/*	var li = $('<li class="span3"> </li>');
 					var div4 = $('<div class="product-box" id="friends"> </div>');
 					var span1 = $('<span class="sale_tag"> </span>');
 					var p1 = $('<p><a href="product_detail.html"><img src="./themes/images/user.jpg" alt="" /></a></p> ');
@@ -61,13 +64,11 @@ function renderAllVisitor(){
 					div4.append(a2);
 					div4.append(a3);
 					li.append(div4);
-					ul.append(li);
+					ul.append(li);*/
 			})
 			
 			
 		//zavrsiti for petlju
-		
-			div3.append(ul);
 			div2.append(div3);
 			div1.append(div2);
 			div.append(title);

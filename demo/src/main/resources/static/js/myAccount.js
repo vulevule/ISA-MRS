@@ -10,6 +10,22 @@ $(document).ready(function(){
 		url : '../users/exists',
 		dataType : 'json',
 		success : function(data){
+			if(data.user.role == "VISITOR"){
+				var li1 = $("<li> <a href='./reservation/reservation.html'> Add Reservation </a> </li>");
+				var li3 = $("<li> <a href='./reservation/reservation.html'> View Reservation </a> </li>");
+				var li2 = $("<li> <a href='myFriends.html'> Friends </a> </li>");
+				$("#menu_list").append(li1);
+				$("#menu_list").append(li3);
+				$("#menu_list").append(li2);
+				
+				var a1 = $("<a href='myFriends.html'> My friends </a>");
+				var a2 = $("<a href='myReservations.html'> My reservations </a>");
+				
+				$("#friend_id").append(a1);
+				$("#reservation_id").append(a2);
+			}
+			
+			
 			loginUser = data
 			var email_lab = $("<label class='control-label'>"+ data.user.email + "</label>")
 			$('#email_id').append(email_lab);
@@ -25,6 +41,8 @@ $(document).ready(function(){
 			$('#address_id').val(data.user.address);
 			$('#pass_id').val(data.user.password);
 			$('#repeat_pass_id').val(data.user.password);
+			
+			
 			
 		}
 	});
