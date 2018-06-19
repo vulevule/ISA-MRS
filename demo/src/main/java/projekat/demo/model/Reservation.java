@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class Reservation implements Serializable {
 	
@@ -19,6 +21,7 @@ public class Reservation implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 
+	@JsonBackReference
 	@ManyToOne(optional=false)
 	private Visitor user;
 	

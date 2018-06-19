@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @DiscriminatorValue("Visitor")
 public class Visitor extends User {
@@ -27,6 +29,7 @@ public class Visitor extends User {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	private Set<Ad> ads;
 	
+	@JsonManagedReference(value="reservations")
 	@OneToMany(fetch = FetchType.LAZY, mappedBy="user", cascade = CascadeType.ALL)
 	private Set<Reservation> reservations;
 

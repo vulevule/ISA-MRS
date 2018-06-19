@@ -1,10 +1,4 @@
-/**
- * 
- */
 
-/**
- * 
- */
 /*1. funkcija koja se aktivira prilikom ucitavanja reservation.html stranice, 
  * popunjava polje sa bioskopima i pozoristima 
  * 
@@ -153,7 +147,7 @@ function FindTerm(term_id){
 						},
 						click: function () { //Click event
 							if (this.status() == 'available') { //optional seat
-								$('<li>Row'+(this.settings.row+1)+' Seat'+this.settings.label+'</li>')
+								$('<li> '+(this.settings.row+1)+'-'+this.settings.label+'</li>')
 									.attr('id', 'cart-item-'+this.settings.id)
 									.data('seatId', this.settings.id)
 									.appendTo($cart);
@@ -181,9 +175,28 @@ function FindTerm(term_id){
 
 					});
 					
-
-					//sold seat, treba povezati sa backendom
-					sc.get(['1_2', '4_4','4_5','6_6']).status('unavailable');
+					
+					
+					$.ajax({
+						type : 'GET',
+						url : '../reservationByTerm?id='+term_id,
+						success : function(data){
+							var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+							
+							var sold_seat = [];
+							$.each(list, function(index, reservation) { 
+								var seat = '';
+								seat = seat + reservation.row + '_' + reservation.seatNum;
+								sold_seat.push(seat);
+							});
+							
+							sc.get(sold_seat).status('unavailable');//sold seats
+							
+						},
+						error : function(XMLHttpRequest, textStatus, errorThrown) {
+							alert("AJAX ERROR: " + errorThrown);
+						}
+					});
 					
 				}
 			});
@@ -206,6 +219,53 @@ function FindTerm(term_id){
 	
 }
 
+$(document).on('click', "#book_button", function(event){
+	
+	event.preventDefault();
+	
+	var seats = [];
+	const listItems = document.querySelectorAll('#selected-seats li');
+	for (let i = 0; i < listItems.length; i++) {
+	  seats.push(listItems[i].textContent);
+	}
 
-
+	
+	var inviteFriends = [];	
+	var friends = $("#friends_list").val();
+	for(let i=0; i < friends.length; i++){
+		inviteFriends.push(friends[i]);
+	}
+		
+	//povukli smo sve podatke, sad samo treba da ih prosledimo serveru
+	var res = {};
+	res["term"] = $("#term").val();
+	res["seats"] = seats;
+	res["inviteFriends"] = inviteFriends;
+	
+	$.ajax({
+		type : "POST",		
+		url : "../reservation/createReservation",
+		contentType : "application/json",
+		dataType : "json",
+		data : JSON.stringify(res),
+		success : function(data){
+			alert(data.message);
+		},
+		error : function(XMLHttpRequest, Textstatus, Errorthrown){
+			console.log("ajax error: " + Errorthrown + ", status: " + Textstatus);
+		}
+	})
+	
+	var place = $("#place").val();
+	var projection = $("#projection").val();
+	var term = $("#term").val();
+	
+	
+	location.reload();
+	$("#place").val(place);
+	$("#projection").val(projection);
+	$("#term").val(term);
+	
+});
+	
 

@@ -1,58 +1,43 @@
 package projekat.demo.dto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Set;
 
 public class ReservationDTO implements Serializable{
-	private String place;
-	private String projection;
-	private String term;
-	private ArrayList<String> seats;
-	private ArrayList<String> inviteFriends;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private int term;
+	private Set<String> seats;
+	private Set<String> inviteFriends;
 	
 	public ReservationDTO(){}
 	
-	public ReservationDTO(String place, String projection, String term, ArrayList<String> seats, ArrayList<String> inviteFriends) {
+	public ReservationDTO(int term, Set<String> seats, Set<String> inviteFriends) {
 		this();
-		this.place = place;
-		this.projection = projection;
 		this.term = term;
 		this.seats = seats;
 		this.inviteFriends = inviteFriends;
 	}
 	
-	
-	
-	public String getPlace() {
-		return place;
-	}
 
-	public void setPlace(String place) {
-		this.place = place;
-	}
-
-	public String getProjection() {
-		return projection;
-	}
-	public void setProjection(String projection) {
-		this.projection = projection;
-	}
-	public String getTerm() {
+	public int getTerm() {
 		return term;
 	}
-	public void setTerm(String term) {
+	public void setTerm(int term) {
 		this.term = term;
 	}
-	public ArrayList<String> getSeats() {
+	public Set<String> getSeats() {
 		return seats;
 	}
-	public void setSeats(ArrayList<String> seats) {
+	public void setSeats(Set<String> seats) {
 		this.seats = seats;
 	}
-	public ArrayList<String> getInviteFriends() {
+	public Set<String> getInviteFriends() {
 		return inviteFriends;
 	}
-	public void setInviteFriends(ArrayList<String> inviteFriends) {
+	public void setInviteFriends(Set<String> inviteFriends) {
 		this.inviteFriends = inviteFriends;
 	}
 	

@@ -150,15 +150,6 @@ public class UserController {
 			return new RedirectView("http://localhost:8080");
 			
 		}
-		/*UserException ue = new UserException(loginUser, "Successful log out");
-		if (loginUser != null) {
-			this.session.setAttribute("loginUser", null);
-			return new ResponseEntity<UserException>(ue, HttpStatus.OK);
-
-		}
-
-		ue.setMessage("Unsuccessful log out, because does not exist login user");
-		return new ResponseEntity<UserException>(ue, HttpStatus.BAD_REQUEST);*/
 		return new RedirectView("http://localhost:8080");
 
 	}
