@@ -62,15 +62,12 @@ public class ArenaController {
 	public ResponseEntity<Iterable<Arena>> getAvailableAreans(HttpSession s, @RequestParam("date") String date, @RequestParam("duration") int duration) {
 		logger.info("");
 		
+		ArrayList<Arena> list = new ArrayList<Arena>();
+		
 		PlaceAdmin pa = (PlaceAdmin)s.getAttribute("loginUser");
-		ArrayList<Arena> arenas = (ArrayList<Arena>) arenaService.findArenaByPlace(pa.getPlace());
-		ArrayList<Arena> retVal = new ArrayList<Arena>();
-		
-		for(Arena a : arenas) {
-			
-		}
-		
-			
+		Iterable<Arena> arenas = arenaService.findArenaByPlace(pa.getPlace());
+
+		Iterable<Arena> retVal = list;		
 		
 		logger.info("");
 

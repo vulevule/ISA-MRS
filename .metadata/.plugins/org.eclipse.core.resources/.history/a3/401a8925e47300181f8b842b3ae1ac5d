@@ -1,7 +1,6 @@
 package projekat.demo.controller;
 
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.Collection;
 
 import javax.servlet.http.HttpSession;
 
@@ -59,22 +58,14 @@ public class ArenaController {
 	}
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="/availableArenas")
-	public ResponseEntity<Iterable<Arena>> getAvailableAreans(HttpSession s, @RequestParam("date") String date, @RequestParam("duration") int duration) {
-		logger.info("");
+	public ResponseEntity<Iterable<Projection>> getAvailableAreans(HttpSession s, @RequestParam("date") String date, @RequestParam("duration") int duration) {
+		logger.info(">> find all projections by place id " + id);
 		
-		PlaceAdmin pa = (PlaceAdmin)s.getAttribute("loginUser");
-		ArrayList<Arena> arenas = (ArrayList<Arena>) arenaService.findArenaByPlace(pa.getPlace());
-		ArrayList<Arena> retVal = new ArrayList<Arena>();
+		Iterable<Projection> projections = projectionService.findAllByPlaceId(id);
 		
-		for(Arena a : arenas) {
-			
-		}
-		
-			
-		
-		logger.info("");
+		logger.info("<< find all projection by place id");
 
-		return new ResponseEntity<Iterable<Arena>>(retVal, HttpStatus.OK);
+		return new ResponseEntity<Iterable<Projection>>(projections, HttpStatus.OK);
 	}
 	
 	@PostMapping(consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)

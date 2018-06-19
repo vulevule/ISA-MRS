@@ -1,7 +1,6 @@
 package projekat.demo.controller;
 
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.Collection;
 
 import javax.servlet.http.HttpSession;
 
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import projekat.demo.dto.ArenaDto;
@@ -26,7 +24,6 @@ import projekat.demo.exceptions.PlaceException;
 import projekat.demo.exceptions.TermException;
 import projekat.demo.model.Arena;
 import projekat.demo.model.PlaceAdmin;
-import projekat.demo.model.Projection;
 import projekat.demo.service.ArenaService;
 
 @RestController
@@ -58,24 +55,7 @@ public class ArenaController {
 		return new ResponseEntity<Iterable<Arena>>(arenas, HttpStatus.OK);
 	}
 	
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="/availableArenas")
-	public ResponseEntity<Iterable<Arena>> getAvailableAreans(HttpSession s, @RequestParam("date") String date, @RequestParam("duration") int duration) {
-		logger.info("");
-		
-		PlaceAdmin pa = (PlaceAdmin)s.getAttribute("loginUser");
-		ArrayList<Arena> arenas = (ArrayList<Arena>) arenaService.findArenaByPlace(pa.getPlace());
-		ArrayList<Arena> retVal = new ArrayList<Arena>();
-		
-		for(Arena a : arenas) {
-			
-		}
-		
-			
-		
-		logger.info("");
-
-		return new ResponseEntity<Iterable<Arena>>(retVal, HttpStatus.OK);
-	}
+	
 	
 	@PostMapping(consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> createArena(@RequestBody ArenaDto arenaDto) {

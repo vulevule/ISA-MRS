@@ -64,13 +64,12 @@ public class ArenaController {
 		
 		PlaceAdmin pa = (PlaceAdmin)s.getAttribute("loginUser");
 		ArrayList<Arena> arenas = (ArrayList<Arena>) arenaService.findArenaByPlace(pa.getPlace());
-		ArrayList<Arena> retVal = new ArrayList<Arena>();
-		
+
 		for(Arena a : arenas) {
 			
 		}
 		
-			
+		Iterable<Arena> retVal = list;		
 		
 		logger.info("");
 
