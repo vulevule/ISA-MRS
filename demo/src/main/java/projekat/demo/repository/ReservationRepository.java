@@ -13,6 +13,8 @@ public interface ReservationRepository extends CrudRepository<Reservation, Long>
 	Iterable<Reservation> findByTerm(Term t);
 	
 	Reservation findById(long id);
+
+	Reservation findByTermAndRowAndSeatNum(Term t, int row, int column);
 	
 
 }

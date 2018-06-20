@@ -1,8 +1,8 @@
 package projekat.demo.model;
 
 import java.io.Serializable;
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Term implements Serializable {
@@ -23,10 +24,10 @@ public class Term implements Serializable {
 	private Long id;
 
 	@Column(nullable = false)
-	private Date projectionDate;
+	private LocalDate projectionDate;
 
 	@Column(nullable = false)
-	private Time projectionTime;
+	private LocalTime projectionTime;
 
 	@Column(nullable = false)
 	private double price;
@@ -38,6 +39,7 @@ public class Term implements Serializable {
 	@Column(nullable = false)
 	private int freeSeats;
 
+	@JsonManagedReference
 	@ManyToOne
 	private Projection projection;
 
@@ -52,19 +54,19 @@ public class Term implements Serializable {
 		this.id = id;
 	}
 
-	public Date getProjectionDate() {
+	public LocalDate getProjectionDate() {
 		return projectionDate;
 	}
 
-	public void setProjectionDate(Date projectionDate) {
+	public void setProjectionDate(LocalDate projectionDate) {
 		this.projectionDate = projectionDate;
 	}
 
-	public Time getProjectionTime() {
+	public LocalTime getProjectionTime() {
 		return projectionTime;
 	}
 
-	public void setProjectionTime(Time projectionTime) {
+	public void setProjectionTime(LocalTime projectionTime) {
 		this.projectionTime = projectionTime;
 	}
 

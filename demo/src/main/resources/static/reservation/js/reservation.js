@@ -270,15 +270,14 @@ $(document).on('click', "#book_button", function(event){
 		dataType : "json",
 		data : JSON.stringify(res),
 		success : function(data){
-			alert(data.message);
-			//ovde cemo osvezavanje uraditi, opet pozvati funkciju za iscrtavanje sale
-			FindTerm(termid);
+			alert("Successful reservation");
+			location.reload();
 		},
 		error : function(XMLHttpRequest, Textstatus, Errorthrown){
 			console.log("ajax error: " + Errorthrown + ", status: " + Textstatus);
 		}
 	})
-	location.reload();
+	//location.reload();
 /*	var place = $("#place").val();
 	var projection = $("#projection").val();
 	var term = $("#term").val();

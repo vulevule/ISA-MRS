@@ -107,8 +107,8 @@ function showReservation(){
 				var p1 = $('<p class="title"> Projection name: ' + r.term.projection.name + ' <br/> Place: ' + r.term.projection.place.name + '</p> ');
 				var a1 = $('<p> Date: ' + r.term.projectionDate + ' Time: ' + r.term.projectionTime +  '</p><br/>');
 				var a2 = $('<p> Row: ' + r.row + ' Seat: ' + r.seatNum + '</p>');
-				var a3 = $('<form id="cancel_res"> <input type="button" id="cancel_btn" class="btn" value="Cancel" >'+
-						'<input type="hidden" name="res_id" id="res_id" value=' + r.id +'> </form>' );
+				var a3 = $('<form> <input type="button" id='+ r.id + ' class="btn" value="Cancel" onclick="deleteRes(this)" >'+
+						' </form>' );
 						
 				div4.append(span1);
 				div4.append(p1);
@@ -126,10 +126,13 @@ function showReservation(){
 		}
 	})
 	
+	
 }
 
-$(document).on('click', '#cancel_res', function(event){
-	var id = $(this).find("input[type=hidden]").val();
+function deleteRes(button){
+	alert(button.id);
+	
+	var id = button.id;
 	$.ajax({
 		type : "GET",		
 		url : "../reservation/cancelReservation?id=" + id,
@@ -137,14 +140,15 @@ $(document).on('click', '#cancel_res', function(event){
 		success : function(data){
 			alert(data.message);
 			location.reload();
+			
 		},
 		error : function(data){
-			alert(data.message);
+			alert("Reservation can not be canceled.");
+			location.reload();
 
 		}
 	})
-})
-
+}
 
 
 
