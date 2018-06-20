@@ -85,6 +85,28 @@ public class Projection implements Serializable {
 		this.id = id;
 	}
 
+	public Projection() {}
+	
+	public Projection(String name, ProjectionType type, Place place, String cast, String genre, String director,
+			int duration, String banner, int numOfVisitors, double averageRating, String description, Set<Term> terms,
+			Set<Ad> ads, Set<ThematicProp> thematicProps) {
+		super();
+		this.name = name;
+		this.type = type;
+		this.place = place;
+		this.cast = cast;
+		this.genre = genre;
+		this.director = director;
+		this.duration = duration;
+		this.banner = banner;
+		this.numOfVisitors = numOfVisitors;
+		this.averageRating = averageRating;
+		this.description = description;
+		this.terms = terms;
+		this.ads = ads;
+		this.thematicProps = thematicProps;
+	}
+
 	public String getName() {
 		return name;
 	}

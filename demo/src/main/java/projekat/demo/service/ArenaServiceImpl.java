@@ -40,38 +40,39 @@ public class ArenaServiceImpl implements ArenaService {
 	@Override
 	public Arena createArena(ArenaDto arenaDto) {
 
-		Optional<Place> foundPlace = placeRepository.findById(arenaDto.getPlaceId());
-		if (!foundPlace.isPresent()) {
-			throw new PlaceException(null, "Place with id " + arenaDto.getPlaceId() + "does not exist");
-		}
-
-		for (TermDto term : arenaDto.getTerms()) {
-			Optional<Term> foundTerm = termRepository.findById(term.getId());
-			if (!foundTerm.isPresent()) {
-				throw new TermException(null, "Term with id " + term.getId() + "does not exist");
-			}
-		}
-
-		Arena findArena = this.arenaRepository.findByNameAndPlace(arenaDto.getName(), foundPlace.get());
-		if (findArena == null) {
-			Arena arena = new Arena();
-			arena.setName(arenaDto.getName());
-			arena.setPlace(foundPlace.get());
-			
-			Collection<Long> termsIds = new ArrayList<>();
-			for (TermDto termDto : arenaDto.getTerms()) {
-				termsIds.add(termDto.getId());
-				
-			}
-			Set<Term> allTerms = (Set<Term>) termRepository.findAllById(termsIds);
-			arena.setTerms(allTerms);
-			
-			arena.setColumnSeats(arenaDto.getColumnSeats());
-			arena.setRowSeats(arenaDto.getRowSeats());
-			return this.arenaRepository.save(arena);
-		} else {
-			throw new ArenaException(findArena, "Arena already exists");
-		}
+		return null;
+//		Optional<Place> foundPlace = placeRepository.findById(arenaDto.getPlaceId());
+//		if (!foundPlace.isPresent()) {
+//			throw new PlaceException(null, "Place with id " + arenaDto.getPlaceId() + "does not exist");
+//		}
+//
+//		for (TermDto term : arenaDto.getTerms()) {
+//			Optional<Term> foundTerm = termRepository.findById(term.getId());
+//			if (!foundTerm.isPresent()) {
+//				throw new TermException(null, "Term with id " + term.getId() + "does not exist");
+//			}
+//		}
+//
+//		Arena findArena = this.arenaRepository.findByNameAndPlace(arenaDto.getName(), foundPlace.get());
+//		if (findArena == null) {
+//			Arena arena = new Arena();
+//			arena.setName(arenaDto.getName());
+//			arena.setPlace(foundPlace.get());
+//			
+//			Collection<Long> termsIds = new ArrayList<>();
+//			for (TermDto termDto : arenaDto.getTerms()) {
+//				termsIds.add(termDto.getId());
+//				
+//			}
+//			Set<Term> allTerms = (Set<Term>) termRepository.findAllById(termsIds);
+//			arena.setTerms(allTerms);
+//			
+//			arena.setColumnSeats(arenaDto.getColumnSeats());
+//			arena.setRowSeats(arenaDto.getRowSeats());
+//			return this.arenaRepository.save(arena);
+//		} else {
+//			throw new ArenaException(findArena, "Arena already exists");
+//		}
 
 		/*
 		 * Place searchPlace =
@@ -98,8 +99,8 @@ public class ArenaServiceImpl implements ArenaService {
 		}
 
 		for (TermDto term : arenaDto.getTerms()) {
-			Optional<Term> foundTerm = termRepository.findById(term.getId());
-			if (!foundTerm.isPresent()) {
+			Term foundTerm = termRepository.findById(term.getId());
+			if (foundTerm == null) {
 				throw new TermException(null, "Term with id " + term.getId() + "does not exist");
 			}
 		}
@@ -135,5 +136,17 @@ public class ArenaServiceImpl implements ArenaService {
 	public Iterable<Arena> findArenaByPlace(Place place) {
 		// TODO Auto-generated method stub
 		return arenaRepository.findByPlace( place);
+	}
+
+	@Override
+	public Arena findArenaById(long id) {
+		
+		return arenaRepository.findById(id);
+	}
+
+	@Override
+	public Arena findArenaByNameAndPlace(String name, Place place) {
+		// TODO Auto-generated method stub
+		return arenaRepository.findByNameAndPlace(name, place);
 	}
 }

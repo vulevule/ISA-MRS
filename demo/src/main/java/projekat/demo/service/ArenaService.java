@@ -16,6 +16,8 @@ public interface ArenaService {
 
 	Iterable<Arena> findArenaByPlace(Place place);
 	
+	Arena findArenaById(long id);
 	
+	Arena findArenaByNameAndPlace(String name, Place place);
 
 }

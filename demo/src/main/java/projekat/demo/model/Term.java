@@ -43,10 +43,6 @@ public class Term implements Serializable, Comparable<Term> {
 	@ManyToOne(optional = false)
 	private Arena arena; // sala u kojoj se odrzava film ili predstava
 
-	@JsonBackReference(value = "reservations")
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "term")
-	private Set<Reservation> reservations;
-
 	@JsonManagedReference(value = "term-projection")
 	@ManyToOne(optional = false)
 	private Projection projection;
@@ -55,25 +51,23 @@ public class Term implements Serializable, Comparable<Term> {
 	}
 
 	public Term(Long id, Date projectionDate, Time projectionTime, double price, Arena arena,
-			Set<Reservation> reservations, Projection projection) {
+			 Projection projection) {
 		super();
 		this.id = id;
 		this.projectionDate = projectionDate;
 		this.projectionTime = projectionTime;
 		this.price = price;
 		this.arena = arena;
-		this.reservations = reservations;
 		this.projection = projection;
 	}
 
-	public Term(Date projectionDate, Time projectionTime, double price, Arena arena, Set<Reservation> reservations,
+	public Term(Date projectionDate, Time projectionTime, double price, Arena arena, 
 			Projection projection) {
 		super();
 		this.projectionDate = projectionDate;
 		this.projectionTime = projectionTime;
 		this.price = price;
 		this.arena = arena;
-		this.reservations = reservations;
 		this.projection = projection;
 	}
 
@@ -115,14 +109,6 @@ public class Term implements Serializable, Comparable<Term> {
 
 	public void setArena(Arena arena) {
 		this.arena = arena;
-	}
-
-	public Set<Reservation> getReservations() {
-		return reservations;
-	}
-
-	public void setReservations(Set<Reservation> reservations) {
-		this.reservations = reservations;
 	}
 
 	public Projection getProjection() {

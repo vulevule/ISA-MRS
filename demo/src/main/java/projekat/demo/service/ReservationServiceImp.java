@@ -1,18 +1,19 @@
 package projekat.demo.service;
 
-import java.sql.Time;
-import java.time.ZonedDateTime;
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import projekat.demo.dto.ReservationDTO;
 import projekat.demo.dto.Seat;
-import projekat.demo.exceptions.ReservationException;
+import projekat.demo.exceptions.ExceptionReservation;
 import projekat.demo.model.Reservation;
 import projekat.demo.model.Term;
 import projekat.demo.model.Visitor;
@@ -58,8 +59,9 @@ public class ReservationServiceImp implements ReservationService {
 		return allSeat;
 	}
 
+	@Transactional(readOnly=false, propagation = Propagation.REQUIRES_NEW ,rollbackFor=Exception.class)
 	@Override
-	public ArrayList<Reservation> save(ReservationDTO r, Visitor v) {
+	public ArrayList<Reservation> save(ReservationDTO r, Visitor v) throws ExceptionReservation {
 		//izvucemo termin na osnovu id-a
 		Term t = termRepo.findById(r.getTerm());
 		
@@ -73,6 +75,11 @@ public class ReservationServiceImp implements ReservationService {
 			allFriends = makeFriends(r.getInviteFriends());
 			//3. sad prolazimo kroz listu prijatelja i dodeljujemo im sedista, odnosno pravimo rezervacije 
 			for(int i = 0; i < allFriends.size(); i++){
+				//prvo proverimo da li mozda vec postoji rezervacija za to sediste
+				Reservation findRes =  this.resRepo.findByTermAndRowAndSeatNum(t,allSelectedSeats.get(i).getRow(), allSelectedSeats.get(i).getColumn());
+				if(findRes != null){
+					throw new ExceptionReservation("Seat is already reserved.");
+				}
 				Reservation res = new Reservation(allFriends.get(i),t, allSelectedSeats.get(i).getRow(), allSelectedSeats.get(i).getColumn());
 				//setujemo da je sediste dodeljeno
 				allSelectedSeats.get(i).setFree(false);
@@ -83,6 +90,11 @@ public class ReservationServiceImp implements ReservationService {
 			//prolazimo kroz listu sedista trazimo slobodna i dodeljujemo ulogovanom korisniku
 			for(int i = 0; i< allSelectedSeats.size(); i++){
 				if(allSelectedSeats.get(i).isFree() == true){
+					//opet uradimo istu proveru
+					Reservation findRes =  this.resRepo.findByTermAndRowAndSeatNum(t,allSelectedSeats.get(i).getRow(), allSelectedSeats.get(i).getColumn());
+					if(findRes != null){
+						throw new ExceptionReservation("Seat is already reserved.");
+					}
 					Reservation rese = new Reservation(v, t, allSelectedSeats.get(i).getRow(), allSelectedSeats.get(i).getColumn());
 					Reservation save = resRepo.save(rese);
 					allReservation.add(save);
@@ -92,6 +104,13 @@ public class ReservationServiceImp implements ReservationService {
 			//ako nismo pozvali prijatelja onda sva sedista dodelimo ulogovanom korisniku
 			for(int i = 0; i< allSelectedSeats.size(); i++){
 				if(allSelectedSeats.get(i).isFree() == true){
+					//i ovde izvrsimo istu proveru
+					int row = allSelectedSeats.get(i).getRow();
+					int colum = allSelectedSeats.get(i).getColumn();
+					Reservation findRes =  this.resRepo.findByTermAndRowAndSeatNum(t,row, colum);
+					if(findRes != null){
+						throw new ExceptionReservation("Seat is already reserved.");
+					}
 					Reservation rese = new Reservation(v, t, allSelectedSeats.get(i).getRow(), allSelectedSeats.get(i).getColumn());
 					Reservation save = resRepo.save(rese);
 					allReservation.add(save);
@@ -116,23 +135,29 @@ public class ReservationServiceImp implements ReservationService {
 		return resRepo.findByTerm(t);
 	}
 	@Override
-	public ReservationException cancelReservation(long id) {
+	public Reservation cancelReservation(long id) {
 		// pronadjemo trazenu rezervaciju pogladom vreme i onda vidimo da li moze brisanje ili ne
-		Reservation findRes = resRepo.findById(id);
+Reservation findRes = resRepo.findById(id);
 		
-		ZonedDateTime currentTime = ZonedDateTime.now();
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MINUTE, 30);
+		Date temp = new Date(cal.getTimeInMillis());
 		
-		Date resDate = findRes.getTerm().getProjectionDate();
-		Time resTime = findRes.getTerm().getProjectionTime();
+		Date comp = new Date(findRes.getTerm().getProjectionDate().getTime() + findRes.getTerm().getProjectionTime().getTime());
 		
-		//treba spojiti ovo vreme i datum i onda da nadjemo razliku izmedju trenutnog vremena i vremena projekcije
-		
-		
-		
-		
-		
-		
+		if(temp.before(comp)){
+			//brisemo rezervaciju
+			this.resRepo.delete(findRes);	
+			
+			return findRes;
+		}
+				
 		return null;
+	}
+	@Override
+	public Reservation findResById(long id) {
+		// TODO Auto-generated method stub
+		return this.resRepo.findById(id);
 	}
 
 }

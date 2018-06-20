@@ -11,31 +11,36 @@ public class TermDto implements Serializable {
 
 	private static final long serialVersionUID = 4949242372989023929L;
 
-	private Long id;
+	private long id;
 	private Date projectionDate;
 	private Time projectionTime;
 	private double price;
-	private ArenaDto arena;
-	private ProjectionDto projection;
+	private String arenaName;
+	
+	public TermDto(Date projectionDate, Time projectionTime, double price, String arenaName) {
+		super();
+		this.projectionDate = projectionDate;
+		this.projectionTime = projectionTime;
+		this.price = price;
+		this.arenaName = arenaName;
+	}
 
-	@JsonCreator
-	public TermDto(@JsonProperty("id") Long id, @JsonProperty("projectionDate") Date projectionDate,
-			@JsonProperty("projectionTime") Time projectionTime, @JsonProperty("price") double price,
-			@JsonProperty("arena") ArenaDto arena,
-			@JsonProperty("projection") ProjectionDto projection) {
+	public TermDto(long id, Date projectionDate, Time projectionTime, double price, String arenaName) {
+		super();
 		this.id = id;
 		this.projectionDate = projectionDate;
 		this.projectionTime = projectionTime;
 		this.price = price;
-		this.arena = arena;
-		this.projection = projection;
+		this.arenaName = arenaName;
 	}
 
-	public Long getId() {
+	public TermDto() {}
+
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -63,21 +68,14 @@ public class TermDto implements Serializable {
 		this.price = price;
 	}
 
-	public ArenaDto getArena() {
-		return arena;
+	public String getArenaName() {
+		return arenaName;
 	}
 
-	public void setArena(ArenaDto arena) {
-		this.arena = arena;
+	public void setArenaName(String arenaName) {
+		this.arenaName = arenaName;
 	}
-
-
-	public ProjectionDto getProjection() {
-		return projection;
-	}
-
-	public void setProjection(ProjectionDto projection) {
-		this.projection = projection;
-	}
+	
+	
 
 }

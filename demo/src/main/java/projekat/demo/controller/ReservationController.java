@@ -18,9 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import projekat.demo.dto.ReservationDTO;
+import projekat.demo.exceptions.LockedObject;
+import projekat.demo.exceptions.ResException;
 import projekat.demo.exceptions.ReservationException;
 import projekat.demo.model.Reservation;
-import projekat.demo.model.Term;
 import projekat.demo.model.Visitor;
 import projekat.demo.service.EmailService;
 import projekat.demo.service.ReservationService;
@@ -33,6 +34,8 @@ public class ReservationController {
 	
 	@Autowired
 	private EmailService emailService;
+	
+	LockedObject object  = new LockedObject();
 	
 	private Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass());
 
@@ -53,22 +56,25 @@ public class ReservationController {
 	    }
 						
 		Visitor v = (Visitor)session.getAttribute("loginUser");
-			
+		ArrayList<Reservation> allReservation = null;
+		ReservationException re = null;
+		//ovde try/catch blok7
+		synchronized (object.getObject(v.getEmail())) {
+			try{
+				allReservation = resService.save(reservation, v);
+				re = new ReservationException(allReservation,"Successful reservation");
+			}catch (Exception e){
+				re.setMessage("Can not reservation selected seats");
+				return new ResponseEntity<ReservationException>(re, HttpStatus.BAD_REQUEST);
+			}
+		}
 		
-		ArrayList<Reservation> allReservation = resService.save(reservation, v);
-		
-		ReservationException re = new ReservationException(allReservation,"Successful reservation");
 		//kada prodju rezervacije treba poslati mejlove
 		try {
 			emailService.sendReservation(re.getR(), v);
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
-		if(allReservation == null){
-			re.setMessage("Can not reservation selected seats");
-			return new ResponseEntity<ReservationException>(re, HttpStatus.BAD_REQUEST);
 		}
 		
 		return new ResponseEntity<ReservationException>(re, HttpStatus.CREATED);
@@ -106,13 +112,31 @@ public class ReservationController {
 	}
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="reservation/cancelReservation")
-	public ResponseEntity<ReservationException> cancelReservation(@RequestParam("id") long id){
+	public ResponseEntity<ResException> cancelReservation(@RequestParam("id") long id){
 		logger.info(">> cancel reservation by id: " + id);
 		
-		ReservationException re = this.resService.cancelReservation(id);
+		Reservation cancel = this.resService.cancelReservation(id);
 		
+		ResException re =  new ResException(cancel, "");
+		if(cancel == null){
+			//nije moguce otkazati rezervaciju
+			re.setMessage("Reservation can not been canceled");
+			logger.info("<< cancel reservation");
+			
+			return new ResponseEntity<ResException>(re, HttpStatus.BAD_REQUEST);
+		}
+		
+		
+		re.setMessage("Reservation canceled");
 		logger.info("<< cancel reservation");
 		
-		return new ResponseEntity<ReservationException>(re, HttpStatus.OK);
+		return new ResponseEntity<ResException>(re, HttpStatus.OK);
+	}
+	
+	
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="reservationid")
+	public ResponseEntity<Reservation> findById(@RequestParam("id") long id){
+		Reservation r = this.resService.findResById(id);
+		return new ResponseEntity<Reservation>(r, HttpStatus.OK);
 	}
 }

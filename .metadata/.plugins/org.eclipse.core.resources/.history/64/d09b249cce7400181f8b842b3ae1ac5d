@@ -1,0 +1,28 @@
+package projekat.demo.dto;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import projekat.demo.model.ProjectionType;
+
+public class ProjectionDto implements Serializable {
+
+	private static final long serialVersionUID = 1781494581374828651L;
+	
+	private String name;
+	private ProjectionType type;
+	private String cast;
+	private String genre;
+	private String director;
+	private int duration;
+	private String banner;
+	private int numOfVisitors;
+	private double averageRating;
+	private String description;
+
+	private ArrayList<TermDTO> terms;
+
+}
