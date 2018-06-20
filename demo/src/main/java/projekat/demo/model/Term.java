@@ -1,8 +1,8 @@
 package projekat.demo.model;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.sql.Date;
+import java.sql.Time;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,10 +24,10 @@ public class Term implements Serializable {
 	private Long id;
 
 	@Column(nullable = false)
-	private LocalDate projectionDate;
+	private Date projectionDate;
 
 	@Column(nullable = false)
-	private LocalTime projectionTime;
+	private Time projectionTime;
 
 	@Column(nullable = false)
 	private double price;
@@ -36,11 +36,9 @@ public class Term implements Serializable {
 	@ManyToOne(optional = false)
 	private Arena arena; // sala u kojoj se odrzava film ili predstava
 
-	@Column(nullable = false)
-	private int freeSeats;
 
-	@JsonManagedReference
-	@ManyToOne
+	@JsonManagedReference("projection")
+	@ManyToOne(optional = false)
 	private Projection projection;
 
 	public Term() {
@@ -54,19 +52,19 @@ public class Term implements Serializable {
 		this.id = id;
 	}
 
-	public LocalDate getProjectionDate() {
+	public Date getProjectionDate() {
 		return projectionDate;
 	}
 
-	public void setProjectionDate(LocalDate projectionDate) {
+	public void setProjectionDate(Date projectionDate) {
 		this.projectionDate = projectionDate;
 	}
 
-	public LocalTime getProjectionTime() {
+	public Time getProjectionTime() {
 		return projectionTime;
 	}
 
-	public void setProjectionTime(LocalTime projectionTime) {
+	public void setProjectionTime(Time projectionTime) {
 		this.projectionTime = projectionTime;
 	}
 
@@ -86,13 +84,7 @@ public class Term implements Serializable {
 		this.arena = arena;
 	}
 
-	public int getFreeSeats() {
-		return freeSeats;
-	}
-
-	public void setFreeSeats(int freeSeats) {
-		this.freeSeats = freeSeats;
-	}
+	
 
 	public Projection getProjection() {
 		return projection;

@@ -1,7 +1,8 @@
 package projekat.demo.service;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -58,9 +59,8 @@ public class ReservationServiceImp implements ReservationService {
 		return allSeat;
 	}
 
-	@Transactional(readOnly=false, propagation = Propagation.REQUIRES_NEW ,rollbackFor=Exception.class)
 	@Override
-	public ArrayList<Reservation> save(ReservationDTO r, Visitor v) throws ExceptionReservation {
+	public ArrayList<Reservation> save(ReservationDTO r, Visitor v) {
 		//izvucemo termin na osnovu id-a
 		Term t = termRepo.findById(r.getTerm());
 		
@@ -77,7 +77,7 @@ public class ReservationServiceImp implements ReservationService {
 				//prvo proverimo da li mozda vec postoji rezervacija za to sediste
 				Reservation findRes =  this.resRepo.findByTermAndRowAndSeatNum(t,allSelectedSeats.get(i).getRow(), allSelectedSeats.get(i).getColumn());
 				if(findRes != null){
-					throw new ExceptionReservation("Seat is already reserved.");
+					return null;
 				}
 				Reservation res = new Reservation(allFriends.get(i),t, allSelectedSeats.get(i).getRow(), allSelectedSeats.get(i).getColumn());
 				//setujemo da je sediste dodeljeno
@@ -92,7 +92,7 @@ public class ReservationServiceImp implements ReservationService {
 					//opet uradimo istu proveru
 					Reservation findRes =  this.resRepo.findByTermAndRowAndSeatNum(t,allSelectedSeats.get(i).getRow(), allSelectedSeats.get(i).getColumn());
 					if(findRes != null){
-						throw new ExceptionReservation("Seat is already reserved.");
+						return null;
 					}
 					Reservation rese = new Reservation(v, t, allSelectedSeats.get(i).getRow(), allSelectedSeats.get(i).getColumn());
 					Reservation save = resRepo.save(rese);
@@ -108,7 +108,7 @@ public class ReservationServiceImp implements ReservationService {
 					int colum = allSelectedSeats.get(i).getColumn();
 					Reservation findRes =  this.resRepo.findByTermAndRowAndSeatNum(t,row, colum);
 					if(findRes != null){
-						throw new ExceptionReservation("Seat is already reserved.");
+						return null;
 					}
 					Reservation rese = new Reservation(v, t, allSelectedSeats.get(i).getRow(), allSelectedSeats.get(i).getColumn());
 					Reservation save = resRepo.save(rese);
@@ -138,16 +138,23 @@ public class ReservationServiceImp implements ReservationService {
 		// pronadjemo trazenu rezervaciju pogladom vreme i onda vidimo da li moze brisanje ili ne
 		Reservation findRes = resRepo.findById(id);
 		
-		LocalDateTime termin = LocalDateTime.of(findRes.getTerm().getProjectionDate(), findRes.getTerm().getProjectionTime());
-		if ((termin.minusMinutes(30).compareTo(LocalDateTime.now()) < 0)){
-			return null;
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MINUTE, 30);
+		Date temp = new Date(cal.getTimeInMillis());
+		
+		Date comp = new Date(findRes.getTerm().getProjectionDate().getTime() + findRes.getTerm().getProjectionTime().getTime());
+		
+		if(temp.before(comp)){
+			//brisemo rezervaciju
+			this.resRepo.delete(findRes);	
+			
+			return findRes;
 		}
+				
+		return null;
 		
 		
-		//brisemo rezervaciju
-		this.resRepo.delete(findRes);	
 		
-		return findRes;
 	}
 	@Override
 	public Reservation findResById(long id) {

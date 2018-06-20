@@ -104,18 +104,19 @@ $(document).on('click', '#friend_search', function(event){
 });
 
 function viewFriend(data){
+		$('#search_friend').empty();
 	
-	var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
-	var div = $('<div class="span12"> </div>');
-	var title = $('<h4 class="title">'+
-			'<span class="pull-left"><span class="text"><span class="line">Search</span></span></span>'+
-			'<span class="pull-right">'+
-				'<a class="left button" href="#myCarousel" data-slide="prev"></a><a class="right button" href="#myCarousel" data-slide="next"></a>'+
-			'</span></h4>');
-	var div1 = $('<div id="myCarousel" class="myCarousel carousel slide"> </div>');
-	var div2 = $('<div class="carousel-inner"> </div>');
-	var div3 = $('<div class="active item"> </div> ');
-	var ul = $('<ul class="thumbnails" id="requests">	</ul>');
+		var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+		var div = $('<div class="span12"> </div>');
+		var title = $('<h4 class="title">'+
+				'<span class="pull-left"><span class="text"><span class="line">Search</span></span></span>'+
+				'<span class="pull-right">'+
+					'<a class="left button" href="#myCarousel" data-slide="prev"></a><a class="right button" href="#myCarousel" data-slide="next"></a>'+
+				'</span></h4>');
+		var div1 = $('<div id="myCarousel" class="myCarousel carousel slide"> </div>');
+		var div2 = $('<div class="carousel-inner"> </div>');
+		var div3 = $('<div class="active item"> </div> ');
+		var ul = $('<ul class="thumbnails" id="requests">	</ul>');
 	
 	
 	

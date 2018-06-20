@@ -11,7 +11,7 @@ import projekat.demo.model.Visitor;
 
 public interface ReservationService {
 	
-	public ArrayList<Reservation> save(ReservationDTO r, Visitor v) throws ExceptionReservation;
+	public ArrayList<Reservation> save(ReservationDTO r, Visitor v);
 
 	public Iterable<Reservation> findReservationByUser(Visitor v);
 
