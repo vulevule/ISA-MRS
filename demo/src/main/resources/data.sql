@@ -29,8 +29,8 @@ insert into configurationexample.projection (id, average_rating, banner, cast, d
 insert into configurationexample.arena (id, column_seats, name, row_seats, place_id)
 values(1, 10, "Arena 1", 6, 1);
 
-insert into configurationexample.term (id, free_seats, price, projection_date, projection_time, arena_id, projection_id)
-values (1, 3,200, '2018-7-04', "15:50:00",1,1);
+insert into configurationexample.term (id, price, projection_date, projection_time, arena_id, projection_id)
+values (1,200, '2018-7-04', "15:50:00",1,1);
 
 insert into configurationexample.reservation (id, row, seat_num, version, term_id, user_email)
 values (1,2,5,0,1,"jocaftn15@gmail.com");

@@ -1,5 +1,6 @@
 package projekat.demo.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -137,17 +138,7 @@ public class UserControllerTest {
 				.andExpect(status().isOk());
 	}
 	
-	
-/*	
-	@Test
-	public void testLoginNotActivateVisitor() throws Exception {
-		LoginUser lu = new LoginUser();
-		lu.setUsername(UserConstants.LOGIN_EMAIL);
-		lu.setPassword(UserConstants.LOGIN_PASSWORD);
 
-		String json = TestUtil.json(lu);
-		this.mockMvc.perform(post(URL_LOGIN).contentType(contentType).content(json)).andExpect(status().isNotFound());
-	}*/
 
 	@Test
 	@Transactional
@@ -157,10 +148,8 @@ public class UserControllerTest {
 		Visitor v = new Visitor("Jovana", "Jovanovic", "jocaftn15@gmail.com", "jovanajovanovic", "Novosadskog sajma 5, Novi Sad", "57878",
 				true, RoleType.VISITOR);
 		session.setAttribute("loginUser", v);
-		//receiver
-		Visitor receiver = new Visitor("Jovana", "Jovanovic", "jovanaftn@yahoo.com", "", "", "", true, RoleType.VISITOR);
-		String json = TestUtil.json(receiver);
-		this.mockMvc.perform(post(URL_ADD_FRIEND).session(session).contentType(contentType).content(json)).andExpect(status().isCreated());
+	
+		this.mockMvc.perform(get(URL_ADD_FRIEND + "?email=jovanaftn@yahoo.com" ).session(session)).andExpect(status().isCreated());
 
 		
 	}
@@ -174,10 +163,7 @@ public class UserControllerTest {
 				true, RoleType.VISITOR);
 		session.setAttribute("loginUser", v);
 		
-		Visitor sender = new Visitor("Jovana", "Jovanovic", "jovanaj33@gmail.com", "", "", "", true, RoleType.VISITOR);
-		
-		String json = TestUtil.json(sender);
-		this.mockMvc.perform(post(URL_ACCEPT_FRIEND).session(session).contentType(contentType).content(json)).andExpect(status().isOk());
+		this.mockMvc.perform(get(URL_ACCEPT_FRIEND + "?email=" + "jovanaj33@gmail.com").session(session)).andExpect(status().isOk());
 	}
 	
 	@Test
@@ -189,10 +175,7 @@ public class UserControllerTest {
 				true, RoleType.VISITOR);
 		session.setAttribute("loginUser", v);
 		
-		Visitor sender = new Visitor("Jovana", "Jovanovic", "jovanaj33@gmail.com", "", "", "", true, RoleType.VISITOR);
-		
-		String json = TestUtil.json(sender);
-		this.mockMvc.perform(post(URL_NOTACCEPT_FRIEND).session(session).contentType(contentType).content(json)).andExpect(status().isOk());
+		this.mockMvc.perform(get(URL_NOTACCEPT_FRIEND + "?email="+"jovanaj33@gmail.com").session(session)).andExpect(status().isOk());
 	}
 	
 	@Test
@@ -202,8 +185,6 @@ public class UserControllerTest {
 		Visitor v = new Visitor("Jovana", "Jovanovic", "jovanaj33@gmail.com", "jovanajovanovic", "Novosadskog sajma 5, Novi Sad", "57464745",
 				true, RoleType.VISITOR);
 		session.setAttribute("loginUser", v);
-		Visitor v1 = new Visitor("Jovana", "Jovanovic", "jocaftn15@gmail.com", "", "", "", true, RoleType.VISITOR);
-		String json = TestUtil.json(v1);
-		this.mockMvc.perform(post(URL_DELETE_FRIEND).session(session).contentType(contentType).content(json)).andExpect(status().isOk());
+		this.mockMvc.perform(get(URL_DELETE_FRIEND + "?email=" + "jocaftn15@gmail.com").session(session)).andExpect(status().isOk());
 	}
 }
