@@ -1,0 +1,106 @@
+
+$(document).ready(function(){
+	var urlParams = new URLSearchParams(window.location.search);
+	var placeId = urlParams.get('id');
+	
+	$.ajax({
+		type : 'GET',
+		url : '../users/exists',
+		dataType : 'json',
+		success : function(data){
+			var loginUser = data.user;
+			
+			if (loginUser == null) {
+				$('#update_cinema_button').hide();
+				$('#update_schedule_button').hide();
+				$('#myAccount').hide();
+				$('#log-out').hide();
+				 
+			} else {
+				$('#myAccount').show();
+				$('#log-out').show();
+				if (loginUser.role == "CINEMA_THEATER_ADMIN" && loginUser.place.id == placeId) {
+					$('#update_cinema_button').show();
+					$('#update_schedule_button').show();
+				} else {
+					$('#update_cinema_button').hide();
+					$('#update_schedule_button').hide();
+				}
+			}
+		}
+	});
+	
+	var place = {};
+	
+	$.ajax({
+		type : 'GET',
+		url : '../places/getPlace',
+		dataType : 'json',
+		data: { id : placeId },
+		success : function(data){			
+			place = data;
+		}
+	});
+	
+	$('#name_id').text(place.name);
+	$('#type_id').text(place.type);
+	$('#address_id').text(place.address);
+	$('#description_id').text(place.description);
+	
+	var arenas = [];
+	
+	$.ajax({
+		type : 'GET',
+		url : '../arenas/arenaByPlaceId',
+		async: false,
+		dataType : 'json',
+		data: { id : placeId },
+		success : function(data){
+			arenas = data;		
+		}
+	});
+	
+	var list = arenas == null ? [] : (arenas instanceof Array ? arenas : [ arenas ]);
+	
+	$('#arenas_id').empty();
+	$.each(list, function(index, arena) {
+		//$('#arenas_id').append('<li><label>- TEST</label></li>')
+		$('#arenas_id').append('<li><label>- ' + arena.name + ' - Rows: ' + arena.rowSeats + ' Columns: ' + arena.columnSeats + ' - Capacity: ' + arena.rowSeats*arena.columnSeats + ' </label></li>');
+	});
+	
+	loadProjections(placeId);
+});
+
+function loadProjections(placeId) { 
+	$.ajax({
+		type : "GET",		
+		url : "../projections/projectionId",
+		dataType : "json",
+		data: { id : placeId },
+		success : function(data){
+			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+			$('#cinema_theater').empty();
+			
+			$.each(list, function(index, place) { 
+				var li = $('<li class="span3"> </li>');
+				var div4 = $('<div class="product-box" id="cinema_theater"> </div>');
+				var span1 = $('<span class="sale_tag"> </span>');
+				var p1 = $('<p><a href="place.html?id=' + place.id + '"><img src="themes/images/sitelogo.png" alt="" /></a></p> ');
+				var a1 = $('<a href="place.html?id=' + place.id + '" class="title">' + place.name + '</a><br/>');
+				var a2 = $('<a href="place.html?id=' + place.id + '" class="category">' + place.address + '</a>');
+				
+				div4.append(span1);
+				div4.append(p1);
+				div4.append(a1);
+				div4.append(a2);
+				li.append(div4);
+				$('#cinema_theater').append(li);
+			});
+			
+			$('#place_list').show();
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX ERROR: " + errorThrown);
+		}
+	})
+}

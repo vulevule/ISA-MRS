@@ -50,7 +50,6 @@
 							<li><a id='modal_trigger' href='#modalR' class='btn'>Register</a></li>			
 							<li><a id='modal_trigger1' href='#modal' class='btn'>Login</a></li>	
 							<li><a id='modal_trigger_place' href='#modalPlace' class='btn' style='display:none'>Create place</a></li>
-							<li><a id='modal_trigger_projection' href='#modalP' class='btn' style='display:none'>Create projection</a></li>
 							<li><a id='myAccount' href='myaccount.html' class='btn'style='display:none'>My Account</a></li>			
 							<li><a id='log-out' href='' class='btn' style='display:none'>Log out</a></li>	
 						</ul>
@@ -124,8 +123,6 @@
 										<input type="text" id="phone"/>
 										<br />
 										
-										<br />
-										
 										<div class="action_btns">
 												<div class="one_half last"><input type="button" id="register_button" value="Register"></div>
 										</div>
@@ -172,16 +169,19 @@
 										<br />
 										
 										<label>Banner</label>
-										<input type="file" id="banner" required="required"/>
+										<input type="file" id="banner" accept="image/*" required="required"/>
 										<br />
-
+										
+										<br />
 										<label>Terms</label>
 										<ul id="terms_section">
 											
 										</ul>
 										<div class="one_half last"><input type="button" id="add_new_term_button" value="Add new term"></div>
 										
+										
 										<div class="action_btns">
+										<br />
 											<div class="one_half last"><input type="button" id="create_projection_button" class='btn btn_red' value="Create"></div>
 										</div>
 								</form>
@@ -249,7 +249,19 @@
 					<a href="index.html" class="logo pull-left"><img src="./themes/images/logo.png" class="site_logo" alt=""></a>
 					<nav id="menu" class="pull-right">
 						<ul id="menu_list">
-													
+							<li><a href="">Projections</a>					
+								<ul>
+									<li><a id='modal_trigger_projection' href='#modalP'>Add</a></li>									
+									<li><a href="">Change</a></li>
+									<li><a href="">Remove</a></li>									
+								</ul>
+							</li>															
+							<li><a href="">My place</a>
+								<ul>									
+									<li><a href="">View</a></li>
+									<li><a href="">Update</a></li>
+								</ul>
+							</li>								
 						</ul>
 					</nav>
 				</div>
@@ -263,22 +275,22 @@
 							<h4 class="title">
 							<span class="pull-left"><span class="text"><span class="line">Cinema and theater list</span></span></span>
 							<span class="pull-right">
-							<a class="left button" href="#myCarousel" data-slide="prev"></a><a class="right button" href="#myCarousel" data-slide="next"></a>
+							<a class="left button" href="#myCarouselPlace" data-slide="prev"></a><a class="right button" href="#myCarouselPlace" data-slide="next"></a>
 							</span></h4>
-							<div id="myCarousel" class="myCarousel carousel slide"> </div>
+							<div id="myCarouselPlace" class="myCarousel carousel slide"> </div>
 							<div class="carousel-inner"> </div>
 							<ul class="thumbnails" id="cinema_theater">	</ul>
 						</div>
-						
+
 						<br/>
 						<div class="row" id="reservation_list" style="display: none">
 							<div class="span12"> </div>
 							<h4 class="title">
 							<span class="pull-left"><span class="text"><span class="line">Reservations</span></span></span>
 							<span class="pull-right">
-							<a class="left button" href="#myCarousel" data-slide="prev"></a><a class="right button" href="#myCarousel" data-slide="next"></a>
+							<a class="left button" href="#myCarouselReservations" data-slide="prev"></a><a class="right button" href="#myCarouselReservations" data-slide="next"></a>
 							</span></h4>
-							<div id="myCarousel" class="myCarousel carousel slide"> </div>
+							<div id="myCarouselReservations" class="myCarousel carousel slide"> </div>
 							<div class="carousel-inner"> </div>
 							<ul class="thumbnails" id="my_reservations">	</ul>
 						</div>

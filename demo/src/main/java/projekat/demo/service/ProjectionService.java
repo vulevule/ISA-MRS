@@ -14,11 +14,16 @@ public interface ProjectionService {
 	
 	Iterable<Projection> findAll();
 
-	Iterable<Projection> findAllByPlaceId(int id);
+	Iterable<Projection> findAllByPlaceId(long id);
 
-	Iterable<Term> findTermByProjectionId(int id);
+	Iterable<Term> findTermByProjectionId(long id);
 
 	Term findTermById(long id);
 	
 	Arena findArenaByTermId(long id);
+	
+	Iterable<Term> findTermByArenaId(long id);
+	
+	Term createTerm(Term t);
+
 }

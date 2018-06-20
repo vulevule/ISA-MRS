@@ -49,60 +49,62 @@ public class PlaceServiceImpl implements PlaceService {
 
 	@Override
 	public Place createPlace(PlaceDto placeDto) {
-		for (ProjectionDto projection : placeDto.getProjections()) {
-			Optional<Projection> foundProjection = projectionRepository.findById(projection.getId());
-			if (!foundProjection.isPresent()) {
-				throw new ProjectionException(null, "Projection with id " + projection.getId() + "does not exist");
-			}
-		}
-
-		for (ArenaDto arena : placeDto.getArenas()) {
-			Optional<Arena> foundArena = arenaRepository.findById(arena.getId());
-			if (!foundArena.isPresent()) {
-				throw new ArenaException(null, "Arena with id " + arena.getId() + "does not exist");
-			}
-		}
-
-		Optional<User> foundUser = userRepository.findById(placeDto.getUserEmail());
-		if (!foundUser.isPresent()) {
-			throw new UserException(null, "User " + placeDto.getUserEmail() + "does not exist");
-		}
-
-		if (foundUser.get().getRole() == RoleType.SYSTEM_ADMIN) {
-			Place findPlace = this.placeRepository.findByNameAndAddress(placeDto.getName(), placeDto.getAddress());
-			if (findPlace == null) {
-				Place place = new Place();
-				place.setName(placeDto.getName());
-				place.setDescription(placeDto.getDescription());
-				place.setAddress(placeDto.getAddress());
-				place.setType(placeDto.getType());
-				Collection<Long> arenasIds = new ArrayList<>();
-				for (ArenaDto arenaDto : placeDto.getArenas()) {
-					arenasIds.add(arenaDto.getId());
-				}
-				place.setArenas(Sets.newHashSet(arenaRepository.findAllById(arenasIds)));
-				
-				Collection<Long> projectionsIds = new ArrayList<>();
-				for (ProjectionDto projectionDto : placeDto.getProjections()) {
-					projectionsIds.add(projectionDto.getId());
-				}
-				place.setProjections(Sets.newHashSet(projectionRepository.findAllById(projectionsIds)));
-				
-				place.setUser(foundUser.get());
-				return this.placeRepository.save(place);
-			} else {
-				throw new PlaceException(findPlace, "Place already exists");
-			}
-		} else {
-			throw new UserException(foundUser.get(), "User is not system admin");
-		}
+		
+		return null;
+//		for (ProjectionDto projection : placeDto.getProjections()) {
+//			Optional<Projection> foundProjection = projectionRepository.findById(projection.getId());
+//			if (!foundProjection.isPresent()) {
+//				throw new ProjectionException(null, "Projection with id " + projection.getId() + "does not exist");
+//			}
+//		}
+//
+//		for (ArenaDto arena : placeDto.getArenas()) {
+//			Optional<Arena> foundArena = arenaRepository.findById(arena.getId());
+//			if (!foundArena.isPresent()) {
+//				throw new ArenaException(null, "Arena with id " + arena.getId() + "does not exist");
+//			}
+//		}
+//
+//		Optional<User> foundUser = userRepository.findById(placeDto.getUserEmail());
+//		if (!foundUser.isPresent()) {
+//			throw new UserException(null, "User " + placeDto.getUserEmail() + "does not exist");
+//		}
+//
+//		if (foundUser.get().getRole() == RoleType.SYSTEM_ADMIN) {
+//			Place findPlace = this.placeRepository.findByNameAndAddress(placeDto.getName(), placeDto.getAddress());
+//			if (findPlace == null) {
+//				Place place = new Place();
+//				place.setName(placeDto.getName());
+//				place.setDescription(placeDto.getDescription());
+//				place.setAddress(placeDto.getAddress());
+//				place.setType(placeDto.getType());
+//				Collection<Long> arenasIds = new ArrayList<>();
+//				for (ArenaDto arenaDto : placeDto.getArenas()) {
+//					arenasIds.add(arenaDto.getId());
+//				}
+//				place.setArenas(Sets.newHashSet(arenaRepository.findAllById(arenasIds)));
+//				
+//				Collection<Long> projectionsIds = new ArrayList<>();
+//				for (ProjectionDto projectionDto : placeDto.getProjections()) {
+//					projectionsIds.add(projectionDto.getId());
+//				}
+//				place.setProjections(Sets.newHashSet(projectionRepository.findAllById(projectionsIds)));
+//				
+//				//place.setUser(foundUser.get());
+//				return this.placeRepository.save(place);
+//			} else {
+//				throw new PlaceException(findPlace, "Place already exists");
+//			}
+//		} else {
+//			throw new UserException(foundUser.get(), "User is not system admin");
+//		}
 	}
 
 	@Override
 	public Place updatePlace(Long placeId, PlaceDto placeDto) {
 		for (ProjectionDto projection : placeDto.getProjections()) {
-			Optional<Projection> foundProjection = projectionRepository.findById(projection.getId());
-			if (!foundProjection.isPresent()) {
+			Projection foundProjection = projectionRepository.findById(projection.getId());
+			if (foundProjection == null) {
 				throw new ProjectionException(null, "Projection with id " + projection.getId() + "does not exist");
 			}
 		}
@@ -144,7 +146,7 @@ public class PlaceServiceImpl implements PlaceService {
 			Set<Projection> allProjections = (Set<Projection>) projectionRepository.findAllById(projectionsIds);
 			place.setProjections(allProjections);
 			
-			place.setUser(foundUser.get());
+			//place.setUser(foundUser.get());
 			return placeRepository.save(place);
 		}
 	}
@@ -152,6 +154,18 @@ public class PlaceServiceImpl implements PlaceService {
 	@Override
 	public void deletePlace(Long placeId) {
 		placeRepository.deleteById(placeId);
+	}
+
+	@Override
+	public Place findPlaceByNameAndAddress(String name, String address) {
+		// TODO Auto-generated method stub
+		return placeRepository.findByNameAndAddress(name, address);
+	}
+
+	@Override
+	public Place findPlaceById(long id) {
+		// TODO Auto-generated method stub
+		return placeRepository.findById(id);
 	}
 
 }

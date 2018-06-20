@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;pe&apos; in &apos;projekat.demo.controller.ProjectionController.createTerm(...)&apos; to &apos;te&apos;&#x0D;&#x0A;- Original project: &apos;demo&apos;&#x0D;&#x0A;- Original element: &apos;projekat.demo.controller.ProjectionController.createTerm(Term, HttpSession).pe&apos;&#x0D;&#x0A;- Renamed element: &apos;pe&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename local variable &apos;pe&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src\/main\/java&lt;projekat.demo.controller{ProjectionController.java[ProjectionController~createTerm~QTerm;~QHttpSession;@pe!2659!2711!2673!2674!QTermException;!0!false" name="te" references="true" stamp="1529460516250" version="1.0"/>
+</session>

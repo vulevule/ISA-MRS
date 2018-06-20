@@ -136,6 +136,7 @@ public class ReservationServiceImp implements ReservationService {
 	@Override
 	public Reservation cancelReservation(long id) {
 		// pronadjemo trazenu rezervaciju pogladom vreme i onda vidimo da li moze brisanje ili ne
+
 		Reservation findRes = resRepo.findById(id);
 		
 		Calendar cal = Calendar.getInstance();
@@ -152,9 +153,6 @@ public class ReservationServiceImp implements ReservationService {
 		}
 				
 		return null;
-		
-		
-		
 	}
 	@Override
 	public Reservation findResById(long id) {

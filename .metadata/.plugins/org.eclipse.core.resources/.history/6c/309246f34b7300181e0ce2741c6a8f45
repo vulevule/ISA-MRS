@@ -1,0 +1,115 @@
+package projekat.demo.controller;
+
+import java.util.Collection;
+
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import projekat.demo.dto.ArenaDto;
+import projekat.demo.exceptions.ArenaException;
+import projekat.demo.exceptions.PlaceException;
+import projekat.demo.exceptions.TermException;
+import projekat.demo.model.Arena;
+import projekat.demo.model.PlaceAdmin;
+import projekat.demo.service.ArenaService;
+
+@RestController
+@RequestMapping("/arenas")
+public class ArenaController {
+
+	private Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass());
+
+	@Autowired
+	private ArenaService arenaService;
+	
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Iterable<Arena>> getArenas() {
+
+		logger.info("> getArenas");
+		Iterable<Arena> arenas = arenaService.findAllArenas();
+		logger.info("< getArenas");
+		return new ResponseEntity<Iterable<Arena>>(arenas, HttpStatus.OK);
+	}
+
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="/arenaByPlace")
+	public ResponseEntity<Iterable<Arena>> getArenasByPlace(HttpSession s) {
+
+		logger.info("> getArenas");
+		PlaceAdmin pa = (PlaceAdmin)s.getAttribute("loginUser");
+		
+		Iterable<Arena> arenas = arenaService.findArenaByPlace(pa.getPlace());
+		logger.info("< ARENAS: " + arenas == null ? "NULL" : (arenas instanceof Collection<Arena> ? Integer.toString(((Collection<Arena>)arenas).size()) : "UNDEFINED"));
+		logger.info("< getArenas");
+		return new ResponseEntity<Iterable<Arena>>(arenas, HttpStatus.OK);
+	}
+	
+	@PostMapping(consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> createArena(@RequestBody ArenaDto arenaDto) {
+		logger.info("> adding arena started");
+
+		try {
+			arenaService.createArena(arenaDto);
+			logger.info("< adding arena");
+			return new ResponseEntity<String>("Arena successfully created", HttpStatus.CREATED);
+		} catch (PlaceException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		} catch (TermException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		} catch (ArenaException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.ALREADY_REPORTED);
+		}
+
+	}
+	
+	@PutMapping(value = "/{arenaId}", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> updateArena(@PathVariable Long arenaId, @RequestBody ArenaDto arenaDto) {
+		logger.info("> updating arena started");
+
+		try {
+			arenaService.updateArena(arenaId, arenaDto);
+			logger.info("< updating arena");
+			return new ResponseEntity<String>("Arena successfully updated", HttpStatus.CREATED);
+		} catch (PlaceException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		} catch (TermException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		} catch (ArenaException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+		}
+
+	}
+	
+	@DeleteMapping(value = "/{arenaId}", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> deleteArena(@PathVariable Long arenaId) {
+		logger.info("> deleting arena started");
+
+		try {
+			arenaService.deleteArena(arenaId);
+			logger.info("< deleting arena");
+			return new ResponseEntity<String>("Arena successfully deleted", HttpStatus.CREATED);
+		} catch (PlaceException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		} catch (TermException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		} catch (ArenaException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+		}
+
+	}
+	
+	
+
+}

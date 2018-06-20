@@ -1,0 +1,126 @@
+package projekat.demo.controller;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import projekat.demo.dto.PlaceDto;
+import projekat.demo.exceptions.ArenaException;
+import projekat.demo.exceptions.PlaceException;
+import projekat.demo.exceptions.ProjectionException;
+import projekat.demo.exceptions.UserException;
+import projekat.demo.model.Arena;
+import projekat.demo.model.Place;
+import projekat.demo.model.PlaceType;
+import projekat.demo.service.PlaceService;
+
+@Controller
+@RequestMapping("/places")
+public class PlaceController {
+
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	@Autowired
+	private PlaceService placeService;
+
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Iterable<Place>> getPlaces() {
+		logger.info("> getPlaces");
+		Iterable<Place> places = placeService.findAllPlaces();
+		logger.info("< getPlaces");
+		return new ResponseEntity<Iterable<Place>>(places, HttpStatus.OK);
+	}
+
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="/getPlace")
+	public ResponseEntity<Place> findArenaByTermId(@RequestParam("id") long id){
+		
+		logger.info(">> find place by id " + id);
+		Place p = placeService.findPlaceById(id);
+		
+		logger.info("<< find place by id " + id);
+		return new ResponseEntity<Place>(p, HttpStatus.OK);
+	}
+	
+	@PostMapping(consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> createPlace(@RequestBody @Valid PlaceDto placeDto) {
+		logger.info("> adding cinema/theater started");
+
+		try {
+			placeService.createPlace(placeDto);
+			logger.info("> adding cinema/theater");
+			return new ResponseEntity<String>("Cinema/theater successfully created", HttpStatus.CREATED);
+		} catch (ProjectionException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		} catch (ArenaException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		} catch (UserException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		} catch (PlaceException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.ALREADY_REPORTED);
+		}
+	}
+
+	@PutMapping(value = "/{placeId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> updatePlace(@RequestBody PlaceDto placeDto, @PathVariable Long placeId) {
+		logger.info("> updating cinema/theater started");
+
+		try {
+			placeService.updatePlace(placeId, placeDto);
+			logger.info("< updating cinema/theater");
+			return new ResponseEntity<String>("Cinema/theater successfully updated!", HttpStatus.OK);
+		} catch (ProjectionException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		} catch (ArenaException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		} catch (UserException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		} catch (PlaceException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@DeleteMapping(value = "/{placeId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> deleteThematicProp(@PathVariable Long placeId) {
+		logger.info("> deleting cinema/theater started");
+
+		try {
+			placeService.deletePlace(placeId);
+			logger.info("< deleting cinema/theater");
+			return new ResponseEntity<String>("Cinema/theater successfully deleted!", HttpStatus.OK);
+		} catch (ProjectionException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		} catch (ArenaException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		} catch (UserException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		} catch (PlaceException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@GetMapping(value = "/types", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<PlaceType>> getPlaceTypes() {
+		List<PlaceType> placeTypes = new ArrayList<>();
+		Collections.addAll(placeTypes, PlaceType.values());
+		return new ResponseEntity<List<PlaceType>>(placeTypes, HttpStatus.OK);
+	}
+
+}

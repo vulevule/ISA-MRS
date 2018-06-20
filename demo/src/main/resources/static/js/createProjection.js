@@ -8,25 +8,53 @@ $(document).ready(function(){
 	$("#add_new_term_button").click( function(event){
 		event.preventDefault();
 		
-		var input = $('<li><label>Arena: </label><select id="selectArena" name="selected_arena"></select><label>Start: </label><input type="datetime-local" id="datetime"/><label>Price: </label></li>');
+		var input = $('<li><br/><label>Start: </label><input type="datetime-local" id="dateTimeEdit" onchange="updateArenas()"/><label id="checkDate" style="display:none"">*No available arenas for selected date and time</label><label>Arena: </label><select id="selectArena" name="selected_arena"></select><br/><br/><label>Price: </label><input type="number" id="price"/><br/></li>');
 		$('#terms_section').append(input);
 		
-		$.ajax({
-			type : 'GET',
-			url : '../users/exists',
-			dataType : 'json',
-			success : function(data) {
-				var arenas = data.user.place.arenas;
-				var list = arenas == null ? [] : (arenas instanceof Array ? arenas : [ arenas ]);
-				
-				$.each(list, function(index, arena) {
-					$('#terms_section li:last-child #selectArena').append('<option value="' + arena.name + '">' + arena.name + '</option>');
-				});
-			}
-		})
+		
 	});
 });
 
+
+function updateArenas() {
+	// TODO Do all stuff
+	
+	//alert($('#datetime').val());
+	var datetime = $('#dateTimeEdit').val();
+	var dur = $('#duration').val();
+		
+	$.ajax({
+		type : 'GET',
+		url : '../arenas/availableArenas',
+		dataType : 'json',
+		data : {
+			date : datetime,
+			duration : dur
+		},
+		success : function(data) {
+			$('#terms_section li:last-child #selectArena').empty();
+			
+			var arenas = data;
+			if (arenas == null) {
+				alert("ARENAS ARE NULL");
+			}
+			var list = arenas == null ? [] : (arenas instanceof Array ? arenas : [ arenas ]);
+			
+			if (list.length == 0) {
+				$('#checkDate').css("display","block");
+			} else {
+				$('#checkDate').css("display","none");
+			}
+			
+			
+			$.each(list, function(index, arena) {
+				
+				$('#terms_section li:last-child #selectArena').append('<option value="' + arena.name + '">' + arena.name + '</option>');
+			});
+			
+		}
+	});
+}
 
 function create_projection(){
 	
@@ -38,34 +66,28 @@ function create_projection(){
 	projection["duration"] = $("#duration").val();
 	projection["description"] = $("#description").val();
 	
+	projection["numOfVisitors"] = "0";
+	
 	var terms = [];
 	
-	$.ajax({
-		type : 'GET',
-		url : '../users/exists',
-		dataType : 'json',
-		success : function(data) {
-//			if (data.user.place == "CINEMA") {
+//	$.ajax({
+//		type : 'GET',
+//		url : '../users/exists',
+//		dataType : 'json',
+//		success : function(data) {
+//			if (data.user.place.type == "CINEMA") {
 //				projection["type"] = "MOVIE";
 //			} else {
 //				projection["type"] = "PLAY";
 //			}
-				
-		}
-	});
+//				
+//		}
+//	});
 	
-	$('#terms_section li').each(function() {
-		var term = {};
-		term["projectionDate"] = $(this).find("datetime-local").value.split("T")[0];
-		term["projectionTime"] = $(this).find("datetime-local").value.split("T")[1];
-		term["arena"] = {};
-		term["arena"]["name"] = $(this).find("selectArena").value;
-		term["projection"] = projection;
-		terms.push(term);
-	});
+	projection["type"] = "MOVIE";
 	
 	projection["terms"] = terms;
-	
+		
 	$.ajax({
 		type : 'POST',
 		url : '../projections/createProjection',
@@ -74,7 +96,26 @@ function create_projection(){
 		data : JSON.stringify(projection),
 		success : function(data) {
 			alert(data.message);
+		}, error : function(XMLHttpRequest, Textstatus, Errorthrown){
+			console.log("ajax error: " + Errorthrown + ", status: " + Textstatus);
 		}
+	});
+	
+	$('#terms_section li').each(function() {
+		var term = {};
+		var res = $(this).find("#dateTimeEdit").val();
+		var x = res.split("T");
+		term["projectionDate"] = x[0];
+		term["projectionTime"] = x[1];
+		term["price"] = $(this).find("#price").val();
+		term["reservations"] = [];
+		var arena = {};
+		arena["name"] = $(this).find("#selectArena").val();
+		term["arena"] = arena;
+		var proj = {};
+		proj["name"] = $("#name").val();
+		term["projection"] = proj;
+		terms.push(term);
 	});
 	
 }

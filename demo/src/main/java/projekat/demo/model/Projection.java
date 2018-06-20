@@ -3,6 +3,7 @@ package projekat.demo.model;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,14 +12,16 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
+
 public class Projection implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -37,10 +40,6 @@ public class Projection implements Serializable {
 	@JsonManagedReference(value = "projection-place")
 	@ManyToOne
 	private Place place;
-	
-	@JsonBackReference(value = "arenasOfProjection")
-	@ManyToMany
-	private Set<Arena> arenasOfProjection;
 
 	@Column(nullable = false)
 	private String cast;
@@ -67,7 +66,7 @@ public class Projection implements Serializable {
 	private String description;
 
 	@JsonBackReference(value = "terms")
-	@OneToMany(mappedBy = "projection")
+	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "projection")
 	private Set<Term> terms;
 	
 	@JsonBackReference(value = "ads")
@@ -84,6 +83,28 @@ public class Projection implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Projection() {}
+	
+	public Projection(String name, ProjectionType type, Place place, String cast, String genre, String director,
+			int duration, String banner, int numOfVisitors, double averageRating, String description, Set<Term> terms,
+			Set<Ad> ads, Set<ThematicProp> thematicProps) {
+		super();
+		this.name = name;
+		this.type = type;
+		this.place = place;
+		this.cast = cast;
+		this.genre = genre;
+		this.director = director;
+		this.duration = duration;
+		this.banner = banner;
+		this.numOfVisitors = numOfVisitors;
+		this.averageRating = averageRating;
+		this.description = description;
+		this.terms = terms;
+		this.ads = ads;
+		this.thematicProps = thematicProps;
 	}
 
 	public String getName() {
@@ -108,14 +129,6 @@ public class Projection implements Serializable {
 
 	public void setPlace(Place place) {
 		this.place = place;
-	}
-
-	public Set<Arena> getArenasOfProjection() {
-		return arenasOfProjection;
-	}
-
-	public void setArenasOfProjection(Set<Arena> arenasOfProjection) {
-		this.arenasOfProjection = arenasOfProjection;
 	}
 
 	public String getCast() {
