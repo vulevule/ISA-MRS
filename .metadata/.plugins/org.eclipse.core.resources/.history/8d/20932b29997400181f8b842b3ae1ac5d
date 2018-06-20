@@ -1,0 +1,59 @@
+
+$(document).ready(function(){
+	var urlParams = new URLSearchParams(window.location.search);
+	var placeId = urlParams.get('id');
+	
+	$.ajax({
+		type : 'GET',
+		url : '../users/exists',
+		dataType : 'json',
+		success : function(data){
+			var loginUser = data.user;
+			
+			if (loginUser == null) {
+				$('#update_cinema_button').hide();
+				$('#update_schedule_button').hide();
+				$('#myAccount').hide();
+				$('#log-out').hide();
+				 
+			} else {
+				$('#myAccount').show();
+				$('#log-out').show();
+				if (loginUser.role == "CINEMA_THEATER_ADMIN" && loginUser.place.id == placeId) {
+					$('#update_cinema_button').show();
+					$('#update_schedule_button').show();
+				} else {
+					$('#update_cinema_button').hide();
+					$('#update_schedule_button').hide();
+				}
+			}
+		}
+	});
+	
+	$.ajax({
+		type : 'GET',
+		url : '../places/getPlace',
+		dataType : 'json',
+		data: { id : placeId },
+		success : function(data){
+			alert("NASAO " + data.name);
+			
+			var place = data;
+			
+			$('#name_id').text(place.name);
+			$('#type_id').text(place.type);
+			$('#address_id').text(place.address);
+			$('#description_id').text(place.description);
+			
+			var arenas = place.arenas
+			var list = arenas == null ? [] : (arenas instanceof Array ? arenas : [ arenas ]);
+			$('#arenas_id').empty();
+			$.each(list, function(index, arena) {
+				alert("USAO");
+				$('#arenas_id').append('<li><label>- TEST</label></li>')
+				//$('#arenas_id').append('<li><label>- ' + arena.name + ' - Rows: ' + arena.rowSeats + ' Columns: ' + arena.columnSeats + ' - Capacity: ' + arena.rowSeats*arena.columnSeats + ' </label></li>');
+			});
+		
+		}
+	});
+});

@@ -15,5 +15,7 @@ public interface ArenaService {
 	void deleteArena(Long arenaId);
 
 	Iterable<Arena> findArenaByPlace(Place place);
+	
+	
 
 }

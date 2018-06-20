@@ -1,5 +1,10 @@
 package projekat.demo.controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import projekat.demo.exceptions.ProjectionException;
+import projekat.demo.exceptions.TermException;
 import projekat.demo.model.Arena;
+import projekat.demo.model.PlaceAdmin;
 import projekat.demo.model.Projection;
 import projekat.demo.model.Term;
 import projekat.demo.service.ProjectionService;
@@ -28,8 +35,11 @@ public class ProjectionController {
 	private ProjectionService projectionService;
 
 	@PostMapping(value = "/createProjection", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ProjectionException> createProjection(@RequestBody Projection p) {
+	public ResponseEntity<ProjectionException> createProjection(@RequestBody Projection p, HttpSession s) {
 		logger.info("> adding projection");
+		
+		PlaceAdmin pa = (PlaceAdmin)s.getAttribute("loginUser");
+		p.setPlace(pa.getPlace());
 		
 		Projection createProjection = null;
 		ProjectionException pe = new ProjectionException(createProjection, "");
@@ -53,6 +63,32 @@ public class ProjectionController {
 		return new ResponseEntity<ProjectionException>(pe, HttpStatus.CREATED);
 	}
 
+	@PostMapping(value = "/createTerm", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<TermException> createTerm(@RequestBody Term t, HttpSession s) {
+		logger.info("> adding term");	
+		
+		Term createTerm = null;
+		TermException te = new TermException(createTerm, "");
+
+		try {
+			createTerm = projectionService.createTerm(t);
+			if (createTerm == null) {
+				te.setMessage("Term with same name and place already exists!");
+				te.setTerm(createTerm);
+				return new ResponseEntity<TermException>(te, HttpStatus.ALREADY_REPORTED);
+			}
+			te.setTerm(createTerm);
+			te.setMessage("Term successfully created!");
+
+		} catch (Exception e) {
+			te.setMessage(e.getMessage());
+			return new ResponseEntity<TermException>(te, HttpStatus.EXPECTATION_FAILED);
+		}
+
+		logger.info("< adding projection");
+		return new ResponseEntity<TermException>(te, HttpStatus.CREATED);
+	}
+	
 	@PostMapping(value = "/updateProjection", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ProjectionException> updateProjection(@RequestBody Projection projection) {
 		logger.info(">> update projection");
@@ -110,7 +146,7 @@ public class ProjectionController {
 	}
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="/termsId")
-	public ResponseEntity<Iterable<Term>> findTermsByProjectionId(@RequestParam("id") int id) {
+	public ResponseEntity<Iterable<Term>> findTermsByProjectionId(@RequestParam("id") long id) {
 		logger.info(">> find all term by projection id " + id);
 		
 		Iterable<Term> terms = projectionService.findTermByProjectionId(id);
@@ -118,6 +154,26 @@ public class ProjectionController {
 		logger.info("<< find all term by projection id");
 
 		return new ResponseEntity<Iterable<Term>>(terms, HttpStatus.OK);
+	}
+	
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="/findTermsForPlace")
+	public ResponseEntity<Iterable<Term>> findAllTermsForPlace(@RequestParam("id") long id) {
+		logger.info(">> find all terms for place " + id);
+		
+		ArrayList<Term> retVal = new ArrayList<Term>();
+		
+		Iterable<Projection> projections = projectionService.findAllByPlaceId(id);
+		
+		for(Projection proj : projections) {
+			ArrayList<Term> terms = (ArrayList<Term>) projectionService.findTermByProjectionId(proj.getId());
+			retVal.addAll(terms);
+		}
+		
+		Collections.sort(retVal);
+		
+		logger.info("<< find all terms for place " + id);
+
+		return new ResponseEntity<Iterable<Term>>(retVal, HttpStatus.OK);
 	}
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="/termId")

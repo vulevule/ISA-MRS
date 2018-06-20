@@ -154,4 +154,16 @@ public class PlaceServiceImpl implements PlaceService {
 		placeRepository.deleteById(placeId);
 	}
 
+	@Override
+	public Place findPlaceByNameAndAddress(String name, String address) {
+		// TODO Auto-generated method stub
+		return placeRepository.findByNameAndAddress(name, address);
+	}
+
+	@Override
+	public Place findPlaceById(long id) {
+		// TODO Auto-generated method stub
+		return placeRepository.findById(id);
+	}
+
 }

@@ -1,5 +1,7 @@
 package projekat.demo.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -65,18 +67,18 @@ public class ProjectionServiceImpl implements ProjectionService {
 	}
 
 	@Override
-	public Iterable<Projection> findAllByPlaceId(int id) {
+	public Iterable<Projection> findAllByPlaceId(long id) {
 		// TODO Auto-generated method stub
-		Place p = placeRepository.findById((long)id);
+		Place p = placeRepository.findById(id);
 		
 		return projectionRepository.findByPlace(p);
 		
 	}
 
 	@Override
-	public Iterable<Term> findTermByProjectionId(int id) {
+	public Iterable<Term> findTermByProjectionId(long id) {
 		// prvo pronadjemo projekciju
-		Projection p = projectionRepository.findById((long)id);
+		Projection p = projectionRepository.findById(id);
 		return termRepository.findByProjection(p);
 	}
 	
@@ -100,5 +102,15 @@ public class ProjectionServiceImpl implements ProjectionService {
 		Arena a = arenaRepository.findById(id);
 		
 		return termRepository.findByArena(a);
+	}
+
+	@Override
+	public Term createTerm(Term t) {
+		Optional<Term> findTerm = this.termRepository.findById(t.getId());
+		if (!findTerm.isPresent()) {
+			return this.termRepository.save(t);
+		}
+		return this.termRepository.save(t);
+		
 	}
 }

@@ -3,6 +3,7 @@ package projekat.demo.model;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,14 +12,16 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
+
 public class Projection implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -63,7 +66,7 @@ public class Projection implements Serializable {
 	private String description;
 
 	@JsonBackReference(value = "terms")
-	@OneToMany(mappedBy = "projection")
+	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "projection")
 	private Set<Term> terms;
 	
 	@JsonBackReference(value = "ads")

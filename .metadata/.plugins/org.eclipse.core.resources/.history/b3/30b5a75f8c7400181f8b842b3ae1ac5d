@@ -1,0 +1,26 @@
+
+$(document).ready(function(){
+	$.ajax({
+		type : 'GET',
+		url : '../users/exists',
+		dataType : 'json',
+		success : function(data){
+			var loginUser = data.user;
+			
+			if (loginUser == null) {
+				$('#update_cinema_button').hide();
+				$('#update_schedule_button').hide();
+				$('#myAccount').hide();
+				$('#log-out').hide();
+				 
+			} else {
+				$('#myAccount').show();
+				$('#log-out').show();
+				if (loginUser.role != "CINEMA_THEATER_ADMIN") {
+					$('#modal_trigger_place').show();
+					$('#modal_trigger_projection').hide();
+				}
+			}
+		}
+	})
+});

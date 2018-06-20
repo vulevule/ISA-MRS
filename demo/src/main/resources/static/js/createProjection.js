@@ -86,19 +86,6 @@ function create_projection(){
 	
 	projection["type"] = "MOVIE";
 	
-	$('#terms_section li').each(function() {
-		var term = {};
-		var res = $(this).find("#dateTimeEdit").val();
-		var x = res.split("T");
-		term["projectionDate"] = x[0];
-		term["projectionTime"] = x[1];
-		term["price"] = $(this).find("#price").val();
-		//term["arena"] = {};
-		//term["arena"]["name"] = $(this).find("selectArena").value;
-		//term["projection"] = projection;
-		terms.push(term);
-	});
-	
 	projection["terms"] = terms;
 		
 	$.ajax({
@@ -112,6 +99,23 @@ function create_projection(){
 		}, error : function(XMLHttpRequest, Textstatus, Errorthrown){
 			console.log("ajax error: " + Errorthrown + ", status: " + Textstatus);
 		}
+	});
+	
+	$('#terms_section li').each(function() {
+		var term = {};
+		var res = $(this).find("#dateTimeEdit").val();
+		var x = res.split("T");
+		term["projectionDate"] = x[0];
+		term["projectionTime"] = x[1];
+		term["price"] = $(this).find("#price").val();
+		term["reservations"] = [];
+		var arena = {};
+		arena["name"] = $(this).find("#selectArena").val();
+		term["arena"] = arena;
+		var proj = {};
+		proj["name"] = $("#name").val();
+		term["projection"] = proj;
+		terms.push(term);
 	});
 	
 }

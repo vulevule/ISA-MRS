@@ -6,6 +6,10 @@ import projekat.demo.model.Place;
 public interface PlaceService {
 	
 	Iterable<Place> findAllPlaces();
+	
+	Place findPlaceByNameAndAddress(String name, String address);
+	
+	Place findPlaceById(long id);
 
 	Place createPlace(PlaceDto placeDto);
 

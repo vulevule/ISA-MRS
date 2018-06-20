@@ -20,12 +20,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import projekat.demo.dto.PlaceDto;
 import projekat.demo.exceptions.ArenaException;
 import projekat.demo.exceptions.PlaceException;
 import projekat.demo.exceptions.ProjectionException;
 import projekat.demo.exceptions.UserException;
+import projekat.demo.model.Arena;
 import projekat.demo.model.Place;
 import projekat.demo.model.PlaceType;
 import projekat.demo.service.PlaceService;
@@ -47,6 +49,22 @@ public class PlaceController {
 		return new ResponseEntity<Iterable<Place>>(places, HttpStatus.OK);
 	}
 
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="/getPlace")
+	public ResponseEntity<Place> findPlaceById(@RequestParam("id") long id){
+		
+		logger.info(">> find place by id " + id);
+		Place p = placeService.findPlaceById(id);
+		logger.info("<< find place by id " + id);
+		
+		if(p == null) {
+			return new ResponseEntity<Place>(p, HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<Place>(p, HttpStatus.OK);
+		}
+		
+		
+	}
+	
 	@PostMapping(consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> createPlace(@RequestBody @Valid PlaceDto placeDto) {
 		logger.info("> adding cinema/theater started");

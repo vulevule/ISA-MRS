@@ -1,0 +1,34 @@
+
+$(document).ready(function(){
+	$.ajax({
+		type : 'GET',
+		url : '../users/exists',
+		dataType : 'json',
+		success : function(data){
+			var loginUser = data.user;
+			
+			if (loginUser != null) {
+				$('#modal_trigger').hide();
+				$('#modal_trigger1').hide();
+				$('#myAccount').show();
+				$('#log-out').show();
+				if (loginUser.role == "SYSTEM_ADMIN") {
+					$('#modal_trigger_place').show();
+					$('#modal_trigger_projection').hide();
+				}else if (loginUser.role == "VISITOR"){
+					//dodati u meni friends i reservation kartice
+					var li1 = $("<li> <a href='./reservation/reservation.html'> Add Reservation </a> </li>");
+					var li3 = $("<li> <a href='./reservation/reservation.html'> View Reservation </a> </li>");
+					var li2 = $("<li> <a href='myFriends.html'> Friends </a> </li>");
+					$("#menu_list").append(li1);
+					$("#menu_list").append(li3);
+					$("#menu_list").append(li2);
+					
+					showFriends();
+					showReservation();
+					
+				}
+			}
+		}
+	})
+});

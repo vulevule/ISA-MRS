@@ -16,9 +16,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
-public class Term implements Serializable {
+
+public class Term implements Serializable, Comparable<Term> {
 
 	private static final long serialVersionUID = -7156861256132077357L;
 
@@ -35,7 +39,7 @@ public class Term implements Serializable {
 	@Column(nullable = false)
 	private double price;
 
-	@JsonBackReference
+	@JsonBackReference(value = "arena")
 	@ManyToOne(optional = false)
 	private Arena arena; // sala u kojoj se odrzava film ili predstava
 
@@ -43,7 +47,8 @@ public class Term implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "term")
 	private Set<Reservation> reservations;
 
-	@ManyToOne
+	@JsonManagedReference(value = "term-projection")
+	@ManyToOne(optional = false)
 	private Projection projection;
 
 	public Term() {
@@ -132,6 +137,16 @@ public class Term implements Serializable {
 		return serialVersionUID;
 	}
 
-	
+	@Override
+	public int compareTo(Term compTerm) {
+		if (getProjectionDate() == null || getProjectionTime() == null || compTerm.getProjectionDate() == null || compTerm.getProjectionTime() == null) {
+			return 0;
+		}
+		
+		Date thisDate = new Date(getProjectionDate().getTime() + getProjectionTime().getTime());
+		Date compDate = new Date(compTerm.getProjectionDate().getTime() + compTerm.getProjectionTime().getTime());
+		
+		return thisDate.compareTo(compDate);
+	}
 
 }

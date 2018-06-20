@@ -68,6 +68,23 @@ public class ArenaController {
 		return new ResponseEntity<Iterable<Arena>>(arenas, HttpStatus.OK);
 	}
 	
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="/arenaByPlaceId")
+	public ResponseEntity<Iterable<Arena>> getArenasByPlaceId(@RequestParam("id") long id) {
+
+		logger.info("> getArenas");
+		
+		Iterable<Arena> allArenas = arenaService.findAllArenas();
+		ArrayList<Arena> retVal = new ArrayList<Arena>();
+		for(Arena a : allArenas) {
+			if(a.getId() == id) {
+				retVal.add(a);
+			}
+		}
+		
+		logger.info("< getArenas");
+		return new ResponseEntity<Iterable<Arena>>(retVal, HttpStatus.OK);
+	}
+	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="/availableArenas")
 	public ResponseEntity<Iterable<Arena>> getAvailableAreans(@RequestParam("date") String datetime, @RequestParam("duration") int duration, HttpSession s) throws ParseException {
 		

@@ -13,9 +13,9 @@ function showPlaces() {
 				var li = $('<li class="span3"> </li>');
 				var div4 = $('<div class="product-box" id="cinema_theater"> </div>');
 				var span1 = $('<span class="sale_tag"> </span>');
-				var p1 = $('<p><a href="product_detail.html"><img src="./themes/images/cinemas/croped.jpg" alt="" /></a></p> ');
-				var a1 = $('<a href="product_detail.html" class="title">' + place.name + '</a><br/>');
-				var a2 = $('<a href="products.html" class="category">' + place.address + '</a>');
+				var p1 = $('<p><a href="place.html?id=' + place.id + '"><img src="./themes/images/cinemas/croped.jpg" alt="" /></a></p> ');
+				var a1 = $('<a href="place.html?id=' + place.id + '" class="title">' + place.name + '</a><br/>');
+				var a2 = $('<a href="place.html?id=' + place.id + '" class="category">' + place.address + '</a>');
 				
 				div4.append(span1);
 				div4.append(p1);

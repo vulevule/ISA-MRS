@@ -16,20 +16,18 @@ public class TermDto implements Serializable {
 	private Time projectionTime;
 	private double price;
 	private ArenaDto arena;
-	private int freeSeats;
 	private ProjectionDto projection;
 
 	@JsonCreator
 	public TermDto(@JsonProperty("id") Long id, @JsonProperty("projectionDate") Date projectionDate,
 			@JsonProperty("projectionTime") Time projectionTime, @JsonProperty("price") double price,
-			@JsonProperty("arena") ArenaDto arena, @JsonProperty("freeSeats") int freeSeats,
+			@JsonProperty("arena") ArenaDto arena,
 			@JsonProperty("projection") ProjectionDto projection) {
 		this.id = id;
 		this.projectionDate = projectionDate;
 		this.projectionTime = projectionTime;
 		this.price = price;
 		this.arena = arena;
-		this.freeSeats = freeSeats;
 		this.projection = projection;
 	}
 
@@ -73,13 +71,6 @@ public class TermDto implements Serializable {
 		this.arena = arena;
 	}
 
-	public int getFreeSeats() {
-		return freeSeats;
-	}
-
-	public void setFreeSeats(int freeSeats) {
-		this.freeSeats = freeSeats;
-	}
 
 	public ProjectionDto getProjection() {
 		return projection;

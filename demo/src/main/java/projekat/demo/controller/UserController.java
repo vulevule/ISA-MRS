@@ -24,6 +24,7 @@ import projekat.demo.exceptions.FriendshipException;
 import projekat.demo.exceptions.UserException;
 import projekat.demo.model.Friendship;
 import projekat.demo.model.LoginUser;
+import projekat.demo.model.PlaceAdmin;
 import projekat.demo.model.RoleType;
 import projekat.demo.model.User;
 import projekat.demo.model.Visitor;
@@ -185,6 +186,10 @@ public class UserController {
 			Visitor updateV = new Visitor(user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword(),
 					user.getAddress(), user.getPhone(), true, user.getType());
 			updateUser = this.userService.updateUser(updateV);
+		} else if (sessionUser.getRole() == RoleType.CINEMA_THEATER_ADMIN) {
+			PlaceAdmin temp = (PlaceAdmin)sessionUser;
+			PlaceAdmin updateA = new PlaceAdmin(user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword(), user.getAddress(), user.getPhone(), sessionUser.getRole(), temp.getPlace(), false);
+			updateUser = this.userService.updateUser(updateA);
 		}
 		ue.setUser(updateUser);
 
