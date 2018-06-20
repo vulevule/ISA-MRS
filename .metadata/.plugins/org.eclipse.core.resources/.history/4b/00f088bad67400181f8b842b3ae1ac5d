@@ -136,7 +136,9 @@ public class ReservationServiceImp implements ReservationService {
 	@Override
 	public Reservation cancelReservation(long id) {
 		// pronadjemo trazenu rezervaciju pogladom vreme i onda vidimo da li moze brisanje ili ne
-
+<<<<<<< HEAD
+Reservation findRes = resRepo.findById(id);
+=======
 		Reservation findRes = resRepo.findById(id);
 		
 		Calendar cal = Calendar.getInstance();
@@ -153,6 +155,26 @@ public class ReservationServiceImp implements ReservationService {
 		}
 				
 		return null;
+>>>>>>> 982fa03f01aa07faa734526e89352bc748b45ebf
+		
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MINUTE, 30);
+		Date temp = new Date(cal.getTimeInMillis());
+		
+<<<<<<< HEAD
+		Date comp = new Date(findRes.getTerm().getProjectionDate().getTime() + findRes.getTerm().getProjectionTime().getTime());
+		
+		if(temp.before(comp)){
+			//brisemo rezervaciju
+			this.resRepo.delete(findRes);	
+			
+			return findRes;
+		}
+				
+		return null;
+=======
+		
+>>>>>>> 982fa03f01aa07faa734526e89352bc748b45ebf
 	}
 	@Override
 	public Reservation findResById(long id) {

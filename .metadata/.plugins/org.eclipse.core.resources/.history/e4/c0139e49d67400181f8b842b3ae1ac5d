@@ -3,6 +3,10 @@ package projekat.demo.model;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
+<<<<<<< HEAD
+import java.util.Set;
+=======
+>>>>>>> 982fa03f01aa07faa734526e89352bc748b45ebf
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -42,7 +46,12 @@ public class Term implements Serializable, Comparable<Term> {
 	@ManyToOne(optional = false)
 	private Arena arena; // sala u kojoj se odrzava film ili predstava
 
+<<<<<<< HEAD
 	@JsonManagedReference(value = "term-projection")
+=======
+
+	@JsonManagedReference("projection")
+>>>>>>> 982fa03f01aa07faa734526e89352bc748b45ebf
 	@ManyToOne(optional = false)
 	private Projection projection;
 
@@ -110,6 +119,11 @@ public class Term implements Serializable, Comparable<Term> {
 		this.arena = arena;
 	}
 
+<<<<<<< HEAD
+=======
+	
+
+>>>>>>> 982fa03f01aa07faa734526e89352bc748b45ebf
 	public Projection getProjection() {
 		return projection;
 	}

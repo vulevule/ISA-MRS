@@ -104,7 +104,13 @@ public class UserControllerTest {
 			this.mockMvc.perform(post(URL_LOGIN).contentType(contentType).content(json)).andExpect(status().isOk());
 		}
 
-	
+	//logovanje korisnika koji nije aktiviran
+	@Test
+	public void testLoginNotActivateUser() throws Exception{
+		LoginUser lu = new LoginUser("maram@yahoo.com", "maramarkovic");
+		String json = TestUtil.json(lu);
+		this.mockMvc.perform(post(URL_LOGIN).contentType(contentType).content(json)).andExpect(status().isNotFound());
+	}
 	
 	
 	//izmene korisnickog naloga 

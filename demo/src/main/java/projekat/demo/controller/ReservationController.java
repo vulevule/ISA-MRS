@@ -56,19 +56,15 @@ public class ReservationController {
 	    }
 						
 		Visitor v = (Visitor)session.getAttribute("loginUser");
-		ArrayList<Reservation> allReservation = null;
-		ReservationException re = null;
-		//ovde try/catch blok7
-		synchronized (object.getObject(v.getEmail())) {
-			try{
-				allReservation = resService.save(reservation, v);
-				re = new ReservationException(allReservation,"Successful reservation");
-			}catch (Exception e){
+		ArrayList<Reservation> allReservation = resService.save(reservation, v);
+		ReservationException re = new ReservationException(allReservation, "");
+		
+		if (allReservation == null){
 				re.setMessage("Can not reservation selected seats");
 				return new ResponseEntity<ReservationException>(re, HttpStatus.BAD_REQUEST);
-			}
 		}
 		
+		re.setMessage("Successful reservation");
 		//kada prodju rezervacije treba poslati mejlove
 		try {
 			emailService.sendReservation(re.getR(), v);

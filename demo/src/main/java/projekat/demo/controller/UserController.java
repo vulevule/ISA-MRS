@@ -1,5 +1,7 @@
 package projekat.demo.controller;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+
 import java.util.Collection;
 
 import javax.servlet.http.HttpSession;
@@ -144,15 +146,16 @@ public class UserController {
 	}
 
 	@GetMapping(value = "users/logOut", produces = MediaType.APPLICATION_JSON_VALUE)
-	public RedirectView logOut(HttpSession session) {
+	public ResponseEntity<User> logOut(HttpSession session) {
 		logger.info("log out");
 		User loginUser = (User) session.getAttribute("loginUser");
+	
 		if(loginUser != null){
 			session.setAttribute("loginUser", null);
-			return new RedirectView("http://localhost:8080");
+			return new ResponseEntity<User>(loginUser, HttpStatus.OK);
 			
 		}
-		return new RedirectView("http://localhost:8080");
+		return new ResponseEntity<User>(loginUser, HttpStatus.BAD_REQUEST);
 
 	}
 	

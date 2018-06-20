@@ -110,6 +110,11 @@ public class Term implements Serializable, Comparable<Term> {
 		this.arena = arena;
 	}
 
+<<<<<<< HEAD
+=======
+	
+
+>>>>>>> 982fa03f01aa07faa734526e89352bc748b45ebf
 	public Projection getProjection() {
 		return projection;
 	}

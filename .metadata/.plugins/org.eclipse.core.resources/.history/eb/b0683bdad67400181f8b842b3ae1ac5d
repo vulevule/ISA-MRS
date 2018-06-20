@@ -123,6 +123,11 @@
 										<input type="text" id="phone"/>
 										<br />
 										
+<<<<<<< HEAD
+=======
+										<br />
+										
+>>>>>>> 982fa03f01aa07faa734526e89352bc748b45ebf
 										<div class="action_btns">
 												<div class="one_half last"><input type="button" id="register_button" value="Register"></div>
 										</div>

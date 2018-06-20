@@ -3458,3 +3458,38 @@
 2018-06-20 23:58:19,512 [Worker-500] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 89 resources
 2018-06-20 23:58:19,529 [Worker-500] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
 2018-06-20 23:58:19,546 [Worker-500] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\Vule\MRS\ISA-MRS06\demo\src\test\resources
+2018-06-21 00:06:25,090 [Worker-505] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2018-06-21 00:06:25,104 [Worker-505] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2018-06-21 00:06:25,144 [Worker-505] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 89 resources
+2018-06-21 00:06:25,370 [Worker-505] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2018-06-21 00:06:25,370 [Worker-505] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\Vule\MRS\ISA-MRS06\demo\src\test\resources
+2018-06-21 00:07:14,488 [Worker-507] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2018-06-21 00:07:14,505 [Worker-507] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2018-06-21 00:07:14,569 [Worker-507] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 89 resources
+2018-06-21 00:07:14,599 [Worker-507] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2018-06-21 00:07:14,606 [Worker-507] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\Vule\MRS\ISA-MRS06\demo\src\test\resources
+2018-06-21 00:07:25,389 [Worker-501] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2018-06-21 00:07:25,409 [Worker-501] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2018-06-21 00:07:25,433 [Worker-501] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 89 resources
+2018-06-21 00:07:25,465 [Worker-501] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2018-06-21 00:07:25,465 [Worker-501] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\Vule\MRS\ISA-MRS06\demo\src\test\resources
+2018-06-21 00:07:35,018 [Worker-507] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2018-06-21 00:07:35,031 [Worker-507] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2018-06-21 00:07:35,052 [Worker-507] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 89 resources
+2018-06-21 00:07:35,064 [Worker-507] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2018-06-21 00:07:35,064 [Worker-507] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\Vule\MRS\ISA-MRS06\demo\src\test\resources
+2018-06-21 00:10:23,922 [Worker-504] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2018-06-21 00:10:23,935 [Worker-504] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2018-06-21 00:10:23,949 [Worker-504] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 89 resources
+2018-06-21 00:10:23,984 [Worker-504] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2018-06-21 00:10:23,985 [Worker-504] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\Vule\MRS\ISA-MRS06\demo\src\test\resources
+2018-06-21 00:11:05,515 [Worker-494] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2018-06-21 00:11:05,516 [Worker-494] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2018-06-21 00:11:05,521 [Worker-494] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2018-06-21 00:11:05,538 [Worker-494] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2018-06-21 00:11:05,553 [Worker-494] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\Vule\MRS\ISA-MRS06\demo\src\test\resources
+2018-06-21 00:11:16,983 [Worker-503] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2018-06-21 00:11:16,989 [Worker-503] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2018-06-21 00:11:16,997 [Worker-503] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2018-06-21 00:11:17,019 [Worker-503] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2018-06-21 00:11:17,019 [Worker-503] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\Vule\MRS\ISA-MRS06\demo\src\test\resources

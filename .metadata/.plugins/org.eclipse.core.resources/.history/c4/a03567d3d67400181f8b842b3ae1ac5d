@@ -123,6 +123,11 @@
 										<input type="text" id="phone"/>
 										<br />
 										
+<<<<<<< HEAD
+=======
+										<br />
+										
+>>>>>>> 982fa03f01aa07faa734526e89352bc748b45ebf
 										<div class="action_btns">
 												<div class="one_half last"><input type="button" id="register_button" value="Register"></div>
 										</div>
@@ -281,7 +286,22 @@
 							<div class="carousel-inner"> </div>
 							<ul class="thumbnails" id="cinema_theater">	</ul>
 						</div>
-
+<<<<<<< HEAD
+						<br/>
+						<div class="row" id="friends_list" style="display: none">
+							<div class="span12"> </div>
+							<h4 class="title">
+							<span class="pull-left"><span class="text"><span class="line"> Friends</span></span></span>
+							<span class="pull-right">
+							<a class="left button" href="#myCarouselFriends" data-slide="prev"></a><a class="right button" href="#myCarouselFriends" data-slide="next"></a>
+							</span></h4>
+							<div id="myCarouselFriends" class="myCarousel carousel slide"> </div>
+							<div class="carousel-inner"> </div>
+							<ul class="thumbnails" id="my_friends">	</ul>
+						</div>
+=======
+						
+>>>>>>> 982fa03f01aa07faa734526e89352bc748b45ebf
 						<br/>
 						<div class="row" id="reservation_list" style="display: none">
 							<div class="span12"> </div>
